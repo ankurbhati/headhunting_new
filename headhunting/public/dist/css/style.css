@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+.content-wrapper, .right-side {
+	background-color: #fff;
+}
+.content-wrapper .content-header {
+	background-color:#ecf0f5;
+	padding-bottom:15px;
+}
+.navbar-nav > .user-menu > .dropdown-menu > .user-body {
+	padding:10px 0;
+}
+.navbar-nav > .user-menu > .dropdown-menu > .user-body .right-border {
+	border-right:1px solid #333;
+}
+.navbar-nav > .user-menu > .dropdown-menu > .user-body .col-xs-6 a:hover{
+	color:#3c8dbc !important;
+}
+.user-view {
+	padding:10px;
+}
+.user-view .left-view{
+	padding-top:10px;
+}
+.user-view .left-view .image{
+	padding-top:10px;
+}
+.user-view .right-view{
+	padding-top:10px;
+}
+
+.user-view .right-view .row:nth-child(even){
+	background-color:#dddddd;
+}
+.user-view .right-view .row .col-sm-4 {
+	font-weight:700;
+}
+.user-view .right-view .row .col-sm-4, .user-view .right-view .row .col-sm-8 {
+	padding:15px;
+	font-size:14px;
+}
+.form-horizontal{
+	margin-top:15px;
+}
+
+.col-sm-8.input-group.date{
+	padding-left: 14px;
+    padding-right: 14px;
+}
+
+.errorlogin{
+	color: #FF0000;
+}
+
+.navbar-nav > .user-menu > .dropdown-menu > li.user-header {
+	min-height:70px;
+	height:auto;
+}
+
+.margin-left-15 {
+	margin-left:15px;
+}
+
+/*
+.skin-blue .main-header .logo, .skin-blue .main-header .navbar {
+	background-color: #a0a0a0;
+}
+
+.skin-blue .main-header .logo:hover {
+	background-color: #a0a0a0;
+}
+
+.main-header .sidebar-toggle {
+	background-color: #a0a0a0;
+	border-left:1px solid #000;
+}
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+	background-color: #a0a0a0;
+}
+*/
+
+.user-panel {
+	height:40px;
+}
+
+.user-panel .info {
+	left:0;
+}

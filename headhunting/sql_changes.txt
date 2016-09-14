@@ -1,0 +1,125 @@
+RENAME TABLE `headhunting`.`conpany_details` TO `headhunting`.`company_details` ;
+ALTER TABLE `clients` CHANGE `phone` `phone` VARCHAR( 20 ) NULL DEFAULT NULL ;
+ALTER TABLE `vendors` CHANGE `phone` `phone` VARCHAR( 20 ) NULL DEFAULT NULL ;
+ALTER TABLE `candidates` CHANGE `dob` `dob` DATE NULL DEFAULT NULL ;
+ALTER TABLE `cities` CHANGE `zip_code` `zip_code` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
+ALTER TABLE `candidate_resumes` CHANGE `resume` `resume` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+
+ALTER TABLE `candidate_resumes` DROP FOREIGN KEY `candidate_resumes_ibfk_1` ;
+
+ALTER TABLE `candidate_resumes` ADD CONSTRAINT `candidate_resumes_ibfk_1` FOREIGN KEY ( `candidate_id` ) REFERENCES `headhunting`.`candidates` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+ALTER TABLE `candidates` CHANGE `phone` `phone` VARCHAR( 20 ) NULL DEFAULT NULL ;
+
+
+CREATE TABLE IF NOT EXISTS `work_states` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(247) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+ALTER TABLE `candidates` ADD `work_state_id` INT NULL AFTER `ssn` ;
+ALTER TABLE candidates ADD CONSTRAINT fk_work_state_id FOREIGN KEY ( work_state_id ) REFERENCES work_states( id );
+
+ALTER TABLE `candidates` ADD `visa_expiry` DATE NULL DEFAULT NULL AFTER `visa_id` ;
+
+
+ALTER TABLE `candidates` DROP FOREIGN KEY `candidates_ibfk_3` ; # to remove vandidates
+ALTER TABLE `candidates` DROP `vendor_id`;
+
+ALTER TABLE `job_posts` DROP `client_name`;
+
+ALTER TABLE `job_posts` ADD `vendor_id` INT NULL DEFAULT NULL AFTER `client_id` ;
+
+ALTER TABLE job_posts ADD CONSTRAINT fk_client_id FOREIGN KEY ( client_id ) REFERENCES clients( id );
+ALTER TABLE job_posts ADD CONSTRAINT fk_vendor_id FOREIGN KEY ( vendor_id ) REFERENCES vendors( id );
+
+ALTER TABLE `job_posts` CHANGE `city` `city_id` INT( 11 ) NULL DEFAULT NULL ;
+ALTER TABLE `cities` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE job_posts ADD CONSTRAINT fk_city_id FOREIGN KEY ( city_id ) REFERENCES cities( id );
+
+
+ALTER TABLE `candidate_resumes` ADD `resume_path` VARCHAR( 255 ) NOT NULL AFTER `resume` ;
+ALTER TABLE `candidate_resumes` ADD UNIQUE (`candidate_id`);
+
+
+CREATE TABLE `mail_groups` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `model` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mail_group_members`
+--
+
+CREATE TABLE `mail_group_members` (
+  `id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mass_mails`
+--
+
+CREATE TABLE `mass_mails` (
+  `id` bigint(20) NOT NULL,
+  `mail_group_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '1 = > Mail need to be sent, 2=> under process, 3 => sent',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `mail_groups`
+--
+ALTER TABLE `mail_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mail_group_members`
+--
+ALTER TABLE `mail_group_members`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mass_mails`
+--
+ALTER TABLE `mass_mails`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `mail_groups`
+--
+ALTER TABLE `mail_groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `mail_group_members`
+--
+ALTER TABLE `mail_group_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `mass_mails`
+--
+ALTER TABLE `mass_mails`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
