@@ -1,6 +1,6 @@
 <?php
 
-class CandidateController extends \BaseController {
+class CandidateController extends HelperController {
 
 
 	private $resume_target_dir = 'uploads/resumes/';
@@ -75,17 +75,15 @@ class CandidateController extends \BaseController {
 						'first_name' => 'max:50',
 						'last_name' => 'max:50',
 						'phone' => 'max:14',
-						//'password' =>  'min:6',
-						//'confirm_password' =>  'min:6|same:password',
-						//'dob' => 'required',
 						'city' => 'max:100',
 						'country_id' => 'max:9',
 						'state_id' => 'max:9',
-						'zipcode' => 'max:10',
-						'address' => 'max:247',
+						'designation' => 'max:255',
+						'key_skills' => 'max:255',
+						'rate' => 'max:11',
+						'third_party_id' => 'max:11',
 						'ssn' => 'max:247|unique:candidates,ssn',
 						'visa_id' => 'max:1'
-						//'vendor_id' => 'required'
 				)
 			);
 
@@ -117,11 +115,10 @@ class CandidateController extends \BaseController {
 				$candidate->first_name = Input::get('first_name');
 				$candidate->last_name = Input::get('last_name');
 				$candidate->phone = Input::get('phone');
-				$candidate->dob = date('Y-m-d', strtotime(Input::get('dob')));
 				$candidate->country_id = Input::get('country_id');
 				$candidate->state_id = Input::get('state_id');
-				$candidate->zipcode = Input::get('zipcode');
-				$candidate->address = Input::get('address');
+				$candidate->designation = Input::get('designation');
+				$candidate->key_skills = Input::get('key_skills');
 				$candidate->ssn = !empty($ssn) ? $ssn : Null;
 				$candidate->visa_id = Input::get('visa_id');
 				$candidate->work_state_id = Input::get('work_state_id');
@@ -146,16 +143,18 @@ class CandidateController extends \BaseController {
 
 				}
 
-				/*$password = Input::get('password');
-				// Changing Password to Hash
-				if(isset($password) && !empty($password)) {
-					$candidate->password = Hash::make($password);
-				}*/
+				if($candidate->work_state_id == 3) {
+					$candidate->source_id = Input::get('third_party_id');
+				}
 
 
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+                        $candidate_rate = new CandidateRate();
+						$candidate_rate->value = Input::get('rate');
+						$candidate_rate->candidate_id = $candidate->id;
+						$candidate_rate->save();
 						//resume
 						if($fileType) {
 							list($msg, $target_file) = $this->upload_resume($candidate);
@@ -483,7 +482,7 @@ class CandidateController extends \BaseController {
 	}
 
 
-	private function read_doc($file){
+	public function read_doc($file){
 		$fileHandle = fopen($file, "r");
         $line = @fread($fileHandle, filesize($file));
         $lines = explode(chr(0x0D),$line);
@@ -500,7 +499,7 @@ class CandidateController extends \BaseController {
         //return $striped_content(htmlspecialchars_decode($outtext));
 	}
 
-	private function read_docx($file){
+	public function read_docx($file){
 
         $striped_content = '';
         $content = '';
@@ -535,7 +534,7 @@ class CandidateController extends \BaseController {
     }
 
 
-	private function check_resume_validity(){
+	public function check_resume_validity(){
 		$msg = false;
 		$fileType = pathinfo($_FILES["resume"]["name"],PATHINFO_EXTENSION);
 
@@ -552,7 +551,7 @@ class CandidateController extends \BaseController {
 		return array($msg, $fileType);
 	}
 
-	private function upload_resume($candidate) {
+	public function upload_resume($candidate) {
 		$msg = false;
 		$fileType = pathinfo($_FILES["resume"]["name"],PATHINFO_EXTENSION);
 		$target_dir = DOCROOT.$this->resume_target_dir.$candidate->id.'/';
@@ -597,4 +596,18 @@ class CandidateController extends \BaseController {
 			return Redirect::route('dashboard-view');
 		}
 	}
+
+	/**
+	 *
+	 * getThirdParty() : get getThirdParty
+	 *
+	 * @return Object : JSON
+	 *
+	 */
+	public function getThirdParty() {
+		$thirdparty = Thirdparty::all();
+		return $this->sendJsonResponseOnly($thirdparty);
+	}
+
+
 }

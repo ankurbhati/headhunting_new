@@ -29,17 +29,6 @@
             <span class='errorlogin email-login'>{{$errors->first('last_name');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-    <div class="form-group">
-        {{ Form::label('dob', 'Date Of Birth: ', array('class' => 'col-sm-3
-        control-label')); }}
-        <div class="col-sm-8 input-group date" data-provide="datepicker">{{ Form::text('dob', "", array('class' =>
-            'form-control', 'placeholder' => 'Enter Candidates date of birth')); }} 
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
-            </div>
-            <span class='errorlogin email-login'>{{$errors->first('dob');}}@if(!empty($message)){{$message}}@endIf</span>
-        </div>
-    </div>
     
     <div class="form-group">
         {{ Form::label('phone', 'Phone: ', array('class' => 'col-sm-3
@@ -74,19 +63,27 @@
         </div>
     </div>
     <div class="form-group">
-        {{ Form::label('zipcode', 'Zipcode: ', array('class' => 'col-sm-3
+        {{ Form::label('designation', 'Designation: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('zipcode', "", array('class' =>
-            'form-control', 'placeholder' => 'Enter Candidates zipcode')); }} 
-            <span class='errorlogin email-login'>{{$errors->first('zipcode');}}@if(!empty($message)){{$message}}@endIf</span>
+        <div class="col-sm-8">{{ Form::text('designation', "", array('class' =>
+            'form-control', 'placeholder' => 'Enter Candidates designation')); }} 
+            <span class='errorlogin email-login'>{{$errors->first('designation');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
     <div class="form-group">
-        {{ Form::label('address', 'Address: ', array('class' => 'col-sm-3
+        {{ Form::label('key_skills', 'Key Skills: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('address', "", array('class' =>
-            'form-control', 'placeholder' => 'Enter Candidates Address')); }} 
-            <span class='errorlogin email-login'>{{$errors->first('address');}}@if(!empty($message)){{$message}}@endIf</span>
+        <div class="col-sm-8">{{ Form::text('key_skills', "", array('class' =>
+            'form-control', 'placeholder' => 'Enter Candidates Key Skills')); }} 
+            <span class='errorlogin email-login'>{{$errors->first('key_skills');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+    <div class="form-group">
+        {{ Form::label('rate', 'Rate/hr: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::text('rate', "", array('class' =>
+            'form-control', 'placeholder' => 'ex. 20')); }}
+            <span class='errorlogin'>{{$errors->first('rate');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
     <div class="form-group">
@@ -102,6 +99,13 @@
         control-label')); }}
         <div class="col-sm-8">{{ Form::select('work_state_id', $work_state, null, array('class' => 'form-control')) }} 
             <span class='errorlogin email-login'>{{$errors->first('work_state_id');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+     <div class="form-group" id="third_party_view" style="display:none;">
+        {{ Form::label('third_party_id', 'Third Party: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::select('third_party_id', array("", 'Select Your Third Party'), '', array('class' => 'form-control')) }} 
+            <span class='errorlogin email-login'>{{$errors->first('third_party_id');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
     <div class="form-group">

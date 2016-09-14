@@ -44,7 +44,46 @@ $(function () {
 	    	$('#mentor_id_view').hide();
 	    }
   }
+
+  if($('select#work_state_id').val() !== undefined) {
+
+	  $('select#work_state_id').change(function() {
+		    var state_id = $(this).val();
+		    if(state_id == 3) {
+		    	$('#third_party_view').show();
+		    	getThirdParty();
+		    } else {
+		    	$('select#third_party_id').val('');
+		    	$('#third_party_view').hide();
+		    }
+		});
+	  
+	  var state_id = $('select#work_state_id').val();
+	    if(state_id == 3) {
+	    	$('#third_party_view').show();
+	    	getThirdParty();
+	    } else {
+	    	$('select#third_party_id').val('');
+	    	$('#third_party_view').hide();
+	    }
+  }
   
+  function getThirdParty() {
+	  $.ajax({
+	        url: '/third_party/'
+	    }).done(function(subcategories) {
+	        // subcategories is json, loop over it and populate the subcategory select
+
+	        var subcategoryItems = "";
+	        $.each(subcategories, function(i, item)
+	        {
+	               subcategoryItems+= "<option value='"+ item.id+ "'>" + item.email + "</option>";
+	        });
+	        $('select#third_party_id').html(subcategoryItems);
+	        $('select#third_party_id').val(subcategories[0].id);
+	    });
+  }
+
   function getPeer(role) {
 	  $.ajax({
 	        url: '/peers/' + role

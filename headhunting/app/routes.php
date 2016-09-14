@@ -555,5 +555,12 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'ThirdpartyController@deleteThirdparty'
 	));
 
+	/**
+	 * Routes For REST API for states
+	 */
+	Route::match(array('GET'), '/third_party/', array(
+			'as'    =>    'get-third-party',
+			'uses'    =>    'CandidateController@getThirdParty'
+	));
 	/** ANKUR BHATI **/
 });
