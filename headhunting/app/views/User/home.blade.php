@@ -28,6 +28,44 @@
                 </div><!-- /.box-body -->
               </div>
 
+              <div class="clock">
+                <div style="border-radius: 10px; margin: 10px; background: orange none repeat scroll 0% 0%;">
+                    <div class="date" id="Date_india"></div>
+                      <ul>
+                        <li id="hours_india"></li>
+                        <li id="point_india">:</li>
+                        <li id="min_india"></li>
+                        <li id="point_india">:</li>
+                        <li id="sec_india"></li>
+                      </ul>
+                      <span class="country">INDIA</span>
+                    </div>
+                <div style="border-radius: 10px; margin: 10px; background: pink none repeat scroll 0% 0%;">
+                    <div class="date" id="Date_gmt"></div>
+                        <ul>
+                          <li id="hours_gmt"></li>
+                          <li id="point_gmt">:</li>
+                          <li id="min_gmt"></li>
+                          <li id="point_gmt">:</li>
+                          <li id="sec_gmt"></li>
+                        </ul>
+                        <span class="country">GMT</span>
+                    </div>
+                <div style="border-radius: 10px; margin: 10px; background: deeppink none repeat scroll 0% 0%;">
+                    <div class="date" id="Date_usa"></div>
+                        <ul>
+                          <li id="hours_usa"></li>
+                          <li id="point_usa">:</li>
+                          <li id="min_usa"></li>
+                          <li id="point_usa">:</li>
+                          <li id="sec_usa"></li>
+                        </ul>
+                        <span class="country">United States</span>
+                    </div>
+              </div>
+
+
+
               <div id="myModal">
         <div class="modal">
           <div class="modal-dialog">

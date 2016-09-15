@@ -125,6 +125,63 @@ $(function () {
 	    });
   }
 
-  $('#datepicker').datepicker();
+ 	$('#datepicker').datepicker();
   
+	// Create two variable with the names of the months and days in an array
+	var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 
+	var dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+
+	// Create a newDate() object
+	var newDate_india = new Date();
+	var newDate_usa = new Date((newDate_india.getTime() - (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
+
+	// Extract the current date from Date object
+	//newDate_india.setDate(newDate_india.getDate());
+	//newDate_usa.setDate(newDate_usa.getDate());
+
+	// Output the day, date, month and year   
+	$('#Date_india').html(dayNames[newDate_india.getDay()] + " " + newDate_india.getDate() + ' ' + monthNames[newDate_india.getMonth()] + ' ' + newDate_india.getFullYear());
+	$('#Date_gmt').html(dayNames[newDate_india.getUTCDay()] + " " + newDate_india.getUTCDate() + ' ' + monthNames[newDate_india.getUTCMonth()] + ' ' + newDate_india.getUTCFullYear());
+	$('#Date_usa').html(dayNames[newDate_usa.getDay()] + " " + newDate_usa.getDate() + ' ' + monthNames[newDate_usa.getMonth()] + ' ' + newDate_usa.getFullYear());
+
+	setInterval( function() {
+		var newDate_india = new Date();
+		
+		var newDate_usa = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
+
+		var seconds_india = newDate_india.getSeconds();
+		var seconds_gmt = newDate_india.getUTCSeconds();
+		var seconds_usa = newDate_usa.getSeconds();
+		// Add a leading zero to seconds value
+		$("#sec_india").html(( seconds_india < 10 ? "0" : "" ) + seconds_india);
+		$("#sec_gmt").html(( seconds_gmt < 10 ? "0" : "" ) + seconds_gmt);
+		$("#sec_usa").html(( seconds_usa < 10 ? "0" : "" ) + seconds_usa);
+	},1000);
+		
+	setInterval( function() {
+		var newDate_india = new Date();
+		var newDate_usa = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
+
+		var minutes_india = newDate_india.getMinutes();
+		var minutes_gmt = newDate_india.getUTCMinutes();
+		var minutes_usa = newDate_usa.getMinutes();
+		// Add a leading zero to the minutes value
+		$("#min_india").html(( minutes_india < 10 ? "0" : "" ) + minutes_india);
+		$("#min_gmt").html(( minutes_gmt < 10 ? "0" : "" ) + minutes_gmt);
+		$("#min_usa").html(( minutes_usa < 10 ? "0" : "" ) + minutes_usa);
+	},1000);
+		
+	setInterval( function() {
+		var newDate_india = new Date();
+		var newDate_usa = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
+
+		var hours_india = newDate_india.getHours();
+		var hours_gmt = newDate_india.getUTCHours();
+		var hours_usa = newDate_usa.getHours();
+		// Add a leading zero to the hours value
+		$("#hours_india").html(( hours_india < 10 ? "0" : "" ) + hours_india);
+		$("#hours_gmt").html(( hours_gmt < 10 ? "0" : "" ) + hours_gmt);
+		$("#hours_usa").html(( hours_usa < 10 ? "0" : "" ) + hours_usa);
+	}, 1000);
+
 }(jQuery));

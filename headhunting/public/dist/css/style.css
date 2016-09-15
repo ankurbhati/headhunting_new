@@ -85,3 +85,44 @@
 .user-panel .info {
 	left:0;
 }
+
+.clock{
+	padding: 20px;
+	height: 100%;
+	width: 100%;
+}
+
+.clock > div {
+    float: left;
+    padding: 20px;
+}
+
+.clock ul {
+    width: 200px;
+    margin: 0 auto;
+    padding: 0px;
+    list-style: none;
+    text-align: center;
+}
+
+.clock li {
+    display: inline-block;
+    font-size: 3em;
+    text-align: center;
+    text-shadow: 0 0 5px #00c6ff;
+}
+
+.date {
+    font-size: 2em;
+    text-align: center;
+    text-shadow: 0 0 5px #00c6ff;
+}
+
+.country {
+    display: block;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 0 5px #00c6ff;
+}
