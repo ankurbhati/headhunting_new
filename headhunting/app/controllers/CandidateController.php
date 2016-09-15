@@ -357,7 +357,7 @@ class CandidateController extends HelperController {
 					if($msg){
 						# error
 						Session::flash('resume_error', $msg);
-						return Redirect::route('edit-candidate')->withInput();
+						return Redirect::route('edit-candidate', array('id' => $id))->withInput();
 					} else {
 						# No error
 						$resume_upload = true;
