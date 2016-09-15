@@ -35,9 +35,9 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Date Of Birth:
+	        Designation:
 	        </div><div class="col-sm-8">
-	        	{{$candidate->dob}}
+	        	{{$candidate->designation}}
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
@@ -59,15 +59,15 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Zipcode:
+	        Key Skills:
 	        </div><div class="col-sm-8">
-	        	{{$candidate->zipcode}}
+	        	{{$candidate->key_skills}}
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Address:
+	        Rate:
 	        </div><div class="col-sm-8">
-	        	{{$candidate->address}}
+	        	{{$rate->value}}
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
@@ -80,6 +80,7 @@
 	        Work State:
 	        </div><div class="col-sm-8">
 	        	@if($candidate->workstate){{$candidate->workstate->title}}@else{{"-"}}@endif
+	        	@if($candidate->workstate->id == 3 && $candidate->thirdparty)({{$candidate->thirdparty->email}})@else{{"-"}}@endif
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">

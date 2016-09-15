@@ -151,10 +151,14 @@ class CandidateController extends HelperController {
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
-                        $candidate_rate = new CandidateRate();
-						$candidate_rate->value = Input::get('rate');
-						$candidate_rate->candidate_id = $candidate->id;
-						$candidate_rate->save();
+                        $rate = Input::get('rate');
+						if(isset($rate) && !empty($rate)){
+							$candidate_rate = new CandidateRate();
+							$candidate_rate->value = $rate;
+							$candidate_rate->candidate_id = $candidate->id;
+							$candidate_rate->save();	
+						}
+						
 						//resume
 						if($fileType) {
 							list($msg, $target_file) = $this->upload_resume($candidate);
@@ -223,8 +227,9 @@ class CandidateController extends HelperController {
 			if(!$candidate->isEmpty()) {
 				$candidate = $candidate->first();
 				$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
+				$rate = CandidateRate::where('candidate_id', $candidate->id)->first();
 				return View::make('Candidate.viewCandidate')
-						   ->with(array('title' => 'View Candidate', 'candidate' => $candidate, 'resume' => $resume, 'jobId' => $jobId));
+						   ->with(array('title' => 'View Candidate', 'candidate' => $candidate, 'resume' => $resume, 'jobId' => $jobId, 'rate' => $rate));
 			} else {
 
 				return Redirect::route('dashboard-view');
@@ -248,20 +253,20 @@ class CandidateController extends HelperController {
 		if(Auth::user()->getRole() <= 3) {
 
 			$country = Country::all()->lists('country', 'id');
-			$visa = Visa::all()->lists('title', 'id');
-			$work_states = WorkStates::all()->lists('title', 'id');
-			//$vendor = Vendor::all()->lists('vendor_domain', 'id');
 
 			$candidate = Candidate::with(array('visa', 'createdby', 'city', 'state', 'country', 'workstate'))->where('id', '=', $id)->get();
+			$visa = Visa::all()->lists('title', 'id');
+			$work_states = WorkStates::all()->lists('title', 'id');
 
 			if(!$candidate->isEmpty()) {
 				$candidate = $candidate->first();
 				$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
+				$rate = CandidateRate::where('candidate_id', $candidate->id)->first();
 				return View::make('Candidate.editCandidate')
 						   ->with(
 						   		array('title' => 'Edit Candidate', 'candidate' => $candidate, 'resume' => $resume, 'country' => $country, 'visa' => $visa,
 						   			'work_state' => $work_states
-						   			//, 'vendor' => $vendor
+						   			, 'rate' => $rate
 				));
 			} else {
 
@@ -327,17 +332,15 @@ class CandidateController extends HelperController {
 						'first_name' => 'max:50',
 						'last_name' => 'max:50',
 						'phone' => 'max:14',
-						//'password' =>  'min:6',
-						//'confirm_password' =>  'min:6|same:password',
-						//'dob' => 'required',
 						'city' => 'max:100',
 						'country_id' => 'max:9',
 						'state_id' => 'max:9',
-						'zipcode' => 'max:10',
-						'address' => 'max:247',
+						'designation' => 'max:255',
+						'key_skills' => 'max:255',
+						'rate' => 'max:11',
+						'third_party_id' => 'max:11',
 						'ssn' => 'max:247',
-						'visa_id' => 'max:1',
-						//'vendor_id' => 'required'
+						'visa_id' => 'max:1'
 				)
 			);
 			if($validate->fails()) {
@@ -386,11 +389,10 @@ class CandidateController extends HelperController {
 				$candidate->first_name = Input::get('first_name');
 				$candidate->last_name = Input::get('last_name');
 				$candidate->phone = Input::get('phone');
-				$candidate->dob = date('Y-m-d', strtotime(Input::get('dob')));
 				$candidate->country_id = Input::get('country_id');
 				$candidate->state_id = Input::get('state_id');
-				$candidate->zipcode = Input::get('zipcode');
-				$candidate->address = Input::get('address');
+				$candidate->designation = Input::get('designation');
+				$candidate->key_skills = Input::get('key_skills');
 				$candidate->visa_id = Input::get('visa_id');
 				$candidate->work_state_id = Input::get('work_state_id');
 				$candidate->visa_expiry = date('Y-m-d', strtotime(Input::get('visa_expiry')));
@@ -414,16 +416,24 @@ class CandidateController extends HelperController {
 
 				}
 
-				/*$password = Input::get('password');
-				// Changing Password to Hash
-				if(isset($password) && !empty($password)) {
-					$candidate->password = Hash::make($password);
-				}*/
-
+				if($candidate->work_state_id == 3) {
+					$candidate->source_id = Input::get('third_party_id');
+				}
 
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+						$rate = Input::get('rate');
+						if(isset($rate) && !empty($rate)) {
+							$candidate_rate = CandidateRate::where('candidate_id', $candidate->id)->first();
+							if(!$candidate_rate) {
+								$candidate_rate = new CandidateRate();
+							}
+							$candidate_rate->value = $rate;
+							$candidate_rate->candidate_id = $candidate->id;
+							$candidate_rate->save();	
+						}
+						
 						//resume
 						if($fileType) {
 							list($msg, $target_file) = $this->upload_resume($candidate);
@@ -475,7 +485,10 @@ class CandidateController extends HelperController {
 		if(Auth::user()->getRole() <= 3) {
 			$candidate = Candidate::find($id);
 			$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
-			if($resume->removeFromIndex() && $resume->delete() && $candidate->delete()) {
+			if($resume && $resume->removeFromIndex() && $resume->delete() ){
+
+			}  
+			if($candidate->delete()) {
 				return Redirect::route('candidate-list');
 			}
 		}
