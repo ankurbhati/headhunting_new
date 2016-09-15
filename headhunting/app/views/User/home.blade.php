@@ -29,7 +29,7 @@
               </div>
 
               <div class="clock">
-                <div style="border-radius: 10px; margin: 10px; background: orange none repeat scroll 0% 0%;">
+                <div style="border-radius: 10px; margin: 10px; background: #aed6f1 none repeat scroll 0% 0%;">
                     <div class="date" id="Date_india"></div>
                       <ul>
                         <li id="hours_india"></li>
@@ -40,7 +40,7 @@
                       </ul>
                       <span class="country">INDIA</span>
                     </div>
-                <div style="border-radius: 10px; margin: 10px; background: pink none repeat scroll 0% 0%;">
+                <div style="border-radius: 10px; margin: 10px; background: #33fff9 none repeat scroll 0% 0%;">
                     <div class="date" id="Date_gmt"></div>
                         <ul>
                           <li id="hours_gmt"></li>
@@ -51,7 +51,7 @@
                         </ul>
                         <span class="country">GMT</span>
                     </div>
-                <div style="border-radius: 10px; margin: 10px; background: deeppink none repeat scroll 0% 0%;">
+                <div style="border-radius: 10px; margin: 10px; background: #d7dbdd none repeat scroll 0% 0%;">
                     <div class="date" id="Date_usa"></div>
                         <ul>
                           <li id="hours_usa"></li>
