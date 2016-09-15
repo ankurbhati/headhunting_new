@@ -133,11 +133,7 @@ $(function () {
 
 	// Create a newDate() object
 	var newDate_india = new Date();
-	var newDate_usa = new Date((newDate_india.getTime() - (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
-
-	// Extract the current date from Date object
-	//newDate_india.setDate(newDate_india.getDate());
-	//newDate_usa.setDate(newDate_usa.getDate());
+	var newDate_usa = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
 
 	// Output the day, date, month and year   
 	$('#Date_india').html(dayNames[newDate_india.getDay()] + " " + newDate_india.getDate() + ' ' + monthNames[newDate_india.getMonth()] + ' ' + newDate_india.getFullYear());

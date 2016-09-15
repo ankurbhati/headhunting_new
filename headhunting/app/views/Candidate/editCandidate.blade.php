@@ -47,7 +47,7 @@
     <div class="form-group">
         {{ Form::label('rate', 'Rate/hr: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('rate', $rate->value, array('class' =>
+        <div class="col-sm-8">{{ Form::text('rate', isset($rate->value)? $rate->value: "-", array('class' =>
             'form-control', 'placeholder' => 'ex. 20')); }}
             <span class='errorlogin'>{{$errors->first('rate');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
