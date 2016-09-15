@@ -39,6 +39,15 @@ ALTER TABLE `job_posts` ADD `vendor_id` INT NULL DEFAULT NULL AFTER `client_id` 
 ALTER TABLE job_posts ADD CONSTRAINT fk_client_id FOREIGN KEY ( client_id ) REFERENCES clients( id );
 ALTER TABLE job_posts ADD CONSTRAINT fk_vendor_id FOREIGN KEY ( vendor_id ) REFERENCES vendors( id );
 
+UPDATE `headhunting_new`.`work_states` SET `title` = 'W2',
+`created_at` = NULL WHERE `work_states`.`id` =1;
+
+UPDATE `headhunting_new`.`work_states` SET `title` = 'Ten99',
+`created_at` = NULL WHERE `work_states`.`id` =2;
+
+UPDATE `headhunting_new`.`work_states` SET `title` = 'C2C',
+`created_at` = NULL WHERE `work_states`.`id` =3;
+
 ALTER TABLE `job_posts` CHANGE `city` `city_id` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE `cities` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ;
 ALTER TABLE job_posts ADD CONSTRAINT fk_city_id FOREIGN KEY ( city_id ) REFERENCES cities( id );
@@ -137,6 +146,6 @@ CREATE TABLE `candidate_rates` (
 `value` int( 11 ) NOT NULL ,
 `created_at` datetime DEFAULT NULL ,
 `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE = InnoDB DEFAULT CHARSET = latin1
+) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
 ALTER TABLE `candidates` ADD `source_id` INT NULL AFTER `work_state_id` ;
