@@ -30,39 +30,50 @@
 
               <div class="clock">
                 <div style="border-radius: 10px; margin: 10px; background: #aed6f1 none repeat scroll 0% 0%;">
-                    <div class="date" id="Date_india"></div>
+                    <div class="date" id="Date_sans_francisco"></div>
                       <ul>
-                        <li id="hours_india"></li>
-                        <li id="point_india">:</li>
-                        <li id="min_india"></li>
-                        <li id="point_india">:</li>
-                        <li id="sec_india"></li>
+                        <li id="hours_sans_francisco"></li>
+                        <li id="point_sans_francisco">:</li>
+                        <li id="min_sans_francisco"></li>
+                        <li id="point_sans_francisco">:</li>
+                        <li id="sec_sans_francisco"></li>
                       </ul>
-                      <span class="country">INDIA</span>
-                    </div>
+                      <span class="country">San Francisco</span>
+                </div>
                 <div style="border-radius: 10px; margin: 10px; background: #33fff9 none repeat scroll 0% 0%;">
-                    <div class="date" id="Date_gmt"></div>
+                    <div class="date" id="Date_denver"></div>
                         <ul>
-                          <li id="hours_gmt"></li>
-                          <li id="point_gmt">:</li>
-                          <li id="min_gmt"></li>
-                          <li id="point_gmt">:</li>
-                          <li id="sec_gmt"></li>
+                          <li id="hours_denver"></li>
+                          <li id="point_denver">:</li>
+                          <li id="min_denver"></li>
+                          <li id="point_denver">:</li>
+                          <li id="sec_denver"></li>
                         </ul>
-                        <span class="country">GMT</span>
-                    </div>
+                        <span class="country">Denver</span>
+                </div>
                 <div style="border-radius: 10px; margin: 10px; background: #d7dbdd none repeat scroll 0% 0%;">
-                    <div class="date" id="Date_usa"></div>
+                    <div class="date" id="Date_new_york"></div>
                         <ul>
-                          <li id="hours_usa"></li>
-                          <li id="point_usa">:</li>
-                          <li id="min_usa"></li>
-                          <li id="point_usa">:</li>
-                          <li id="sec_usa"></li>
+                          <li id="hours_new_york"></li>
+                          <li id="point_new_york">:</li>
+                          <li id="min_new_york"></li>
+                          <li id="point_new_york">:</li>
+                          <li id="sec_new_york"></li>
                         </ul>
-                        <span class="country">United States</span>
+                        <span class="country">New York</span>
+                </div>
+                <div style="border-radius: 10px; margin: 10px; background: #7d7d7d none repeat scroll 0% 0%;">
+                    <div class="date" id="Date_chicago"></div>
+                        <ul>
+                          <li id="hours_chicago"></li>
+                          <li id="point_chicago">:</li>
+                          <li id="min_chicago"></li>
+                          <li id="point_chicago">:</li>
+                          <li id="sec_chicago"></li>
+                        </ul>
+                        <span class="country">Chicago</span>
                     </div>
-              </div>
+                </div>
 
 
 
