@@ -707,6 +707,7 @@ class UserController extends HelperController {
 				$mass_mail = new MassMail();
 				$mass_mail->mail_group_id = Input::get('mail_group_id');
 				$mass_mail->description = Input::get('description');
+				$mass_mail->send_by = Auth::user()->id;
 				if($mass_mail->save()) {
 					return Redirect::route('dashboard-view');
 				} else {
@@ -731,13 +732,17 @@ class UserController extends HelperController {
 		$mass_mails = MassMail::with(array('mailgroup'))->where('status', '=', '1')->get();
 		foreach($mass_mails as $mass_mail) {
 			$mass_mail->status = 2;
+			$mass_mail->setConnection('master');
 			$mass_mail->save();
+			$authUser = User::find($mass_mail->send_by);
 			$model = $mass_mail->mailgroup->model;
 			$users = MailGroupMember::where('group_id', '=', $mass_mail->mailgroup->id)->lists('user_id');
 			$user_list = $model::whereIn('id', $users)->get();
 			foreach($user_list as $user) {
-				Config::set('mail.username', Auth::user()->email);
-       			Config::set('mail.password', Auth::user()->email_password);
+				Config::set('mail.username', $authUser->email);
+				Config::set('mail.from.address', $authUser->email);
+				Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
+       			Config::set('mail.password', $authUser->email_password);
 
 				Mail::queue([], [], function($message) use(&$mass_mail, &$user)
 				{
@@ -745,9 +750,11 @@ class UserController extends HelperController {
 				    ->subject('Head hunting')
 				    ->setBody($mass_mail->description, 'text/html');
 				});
-
 			}
+			$mass_mail->status = 3;
+			$mass_mail->save();
 		}
 	}
+	// */1 * * * * /usr/bin/curl -k http://apetan.portal.com/send-mail-from-cron
 
 }

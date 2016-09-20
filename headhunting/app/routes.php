@@ -20,6 +20,14 @@ Route::match(array('GET'), '/', array(
 ));
 
 /**
+ * Routes For REST API forsendMailFromCron
+ */
+Route::match(array('GET'), '/send-mail-from-cron', array(
+		'as'    =>    'send-mail-from-cron',
+		'uses'    =>    'UserController@sendMailFromCron'
+));
+
+/**
  * Routes For REST API for New Payment Form.
  */
 Route::match(array('GET'), 'login', array(
@@ -491,13 +499,6 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'UserController@massMail'
 	));
 
-	/**
-	 * Routes For REST API forsendMailFromCron
-	 */
-	Route::match(array('GET'), '/send-mail-from-cron', array(
-			'as'    =>    'send-mail-from-cron',
-			'uses'    =>    'UserController@sendMailFromCron'
-	));
 
 	/**
 	 * Routes For REST API for new Vendor
