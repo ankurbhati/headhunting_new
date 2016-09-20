@@ -21,12 +21,27 @@
                         <th>Designation</th>
                         <th>Roles</th>
                         @if($jobPostId > 0)
-                        <th>Action</th>
+                          <th>Action</th>
                         @endif
                       </tr>
                     </thead>
                     <tbody>
-	                    @forelse($users as $user)
+                      @foreach($managerUsers as $managerUser)
+                          <tr>
+                            <td>{{$managerUser->first_name. " ".$managerUser->last_name }}</td>
+                            <td>{{$managerUser->email}}</td>
+                            <td>{{$managerUser->designation}}</td>
+                            <td>{{$managerUser->userRoles[0]->roles->role}}</td>
+                            @if($jobPostId > 0 && $jobPost->jobsAssignedToId($managerUser->id)->count() == 0)
+                              <th><a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $managerUser->id )) }}" title="Assign To {{$managerUser->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a></th>
+                            @else
+                              @if($jobPostId > 0)
+                                <th>Already Assigned</th>
+                              @endif
+                            @endif
+                          </tr> 
+                      @endforeach
+	                    @foreach($users as $user)
 		                      <tr>
 		                        <td>{{$user->peer->first_name. " ".$user->peer->last_name }}</td>
 		                        <td>{{$user->peer->email}}</td>
@@ -37,10 +52,8 @@
                             @else
                               <th>Already Assigned</th>
                             @endif
-		                      </tr>
-	                   	@empty
-	                   		<p>No users</p>
-						@endforelse
+		                      </tr> 
+						          @endforeach
                     </tbody>
                     <tfoot>
                       <tr>
