@@ -88,6 +88,10 @@ class ThirdpartyController extends \BaseController {
 				
 				// Checking Authorised or not
 				if($thirdparty->save()) {
+					$mail_group = new MailGroupMember();
+					$mail_group->group_id = 3;
+					$mail_group->user_id = $thirdparty->id;
+					$mail_group->save();
 					if($thirdparty->document_type != 0 && isset($_FILES['upload_document']['tmp_name']) && !empty($_FILES['upload_document']['tmp_name'])) {
 						list($msg, $fileType) = $this->check_resume_validity();
 						if($msg){
@@ -301,7 +305,8 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function deleteThirdparty($id) {
 		if(Auth::user()->getRole() <= 3) {
-			if(Thirdparty::find($id)->delete()) {
+			$thirdparty = Thirdparty::find($id);
+			if(MailGroupMember::where('user_id', '=', $thirdparty->id)->where('group_id', '=', 3)->delete() && $thirdparty->delete()) {
 				return Redirect::route('third-party-list');
 			}
 		}

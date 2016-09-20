@@ -86,6 +86,10 @@ class VendorController extends \BaseController {
 
 				// Checking Authorised or not
 				if($vendor->save()) {
+					$mail_group = new MailGroupMember();
+					$mail_group->group_id = 2;
+					$mail_group->user_id = $vendor->id;
+					$mail_group->save();
 					return Redirect::to('vendors');
 				} else {
 					return Redirect::to('add-vendor')->withInput();
@@ -264,7 +268,8 @@ class VendorController extends \BaseController {
 	 */
 	public function deleteVendor($id) {
 		if(Auth::user()->getRole() <= 3) {
-			if(Vendor::find($id)->delete()) {
+			$vendor = Vendor::find($id);
+			if(MailGroupMember::where('user_id', '=', $vendor->id)->where('group_id', '=', 2)->delete() && $vendor->delete()) {
 				return Redirect::route('vendor-list');
 			}
 		}

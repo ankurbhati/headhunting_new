@@ -171,3 +171,4 @@ ALTER TABLE `clients` DROP FOREIGN KEY `clients_ibfk_1` ;
 ALTER TABLE `clients` CHANGE `company_id` `company_name` INT( 11 ) NOT NULL ;
 ALTER TABLE `clients` CHANGE `company_name` `company_name` VARCHAR( 247 ) NOT NULL ;
 
+INSERT INTO `headhunting_new`.`mail_groups` (`id`, `name`, `model`) VALUES (NULL, 'third_party', 'Thirdparty');
