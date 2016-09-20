@@ -23,7 +23,7 @@
 		                      <tr>
 		                        <td>{{$client->first_name. " ".$client->last_name }}</td>
 		                        <td>{{$client->email}}</td>
-		                        <td>{{$client->company->company_name}}</td>
+		                        <td>{{$client->company_name}}</td>
 		                        <td>{{$client->phone}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-client', array('id' => $client->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>

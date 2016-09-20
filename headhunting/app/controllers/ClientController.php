@@ -10,10 +10,7 @@ class ClientController extends \BaseController {
 	 */
 	public function create()
 	{
-		//$company = CompanyDetail::all();
-		$companies = CompanyDetail::all()->lists('company_name', 'id');
-
-		return View::make('Client.newClient')->with(array('title' => 'Add Client', 'companies' => $companies));
+		return View::make('Client.newClient')->with(array('title' => 'Add Client'));
 	}
 
 
@@ -69,14 +66,9 @@ class ClientController extends \BaseController {
 							'first_name' => 'required|max:50',
 							'last_name' => 'required|max:50',
 							'phone' => 'max:14',
-							'company' =>  'required|min:1|Exists:company_details,id',
+							'company_name' =>  'max:100',
 					)
 			);
-// Teamviewer: 204594095
-// Password: 1103
-
-// User: crm / admin@345
-// root / admin@789
 
 			if($validate->fails()) {
 
@@ -90,7 +82,7 @@ class ClientController extends \BaseController {
 				$client->last_name = Input::get('last_name');
 				$client->email = Input::get('email');
 				$client->phone = Input::get('phone');
-				$client->company_id = Input::get('company');
+				$client->company_name = Input::get('company_name');
 				$client->created_by = Auth::user()->id;
 
 				// Checking Authorised or not
@@ -112,7 +104,7 @@ class ClientController extends \BaseController {
 	 *
 	 */
 	public function clientList() {
-		$clients = Client::with(array('company'))->get();
+		$clients = Client::with(array())->get();
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}
 
@@ -128,7 +120,7 @@ class ClientController extends \BaseController {
 
 		if(Auth::user()->getRole() <= 3) {
 
-			$client = Client::with(array('company', 'createdby'))->where('id', '=', $id)->get();
+			$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
 
 			if(!$client->isEmpty()) {
 				$client = $client->first();
@@ -155,20 +147,13 @@ class ClientController extends \BaseController {
 	public function editClient($id) {
 
 		if(Auth::user()->getRole() <= 3) {
-			$companies = CompanyDetail::all()->lists('company_name', 'id');
-			/*
-			$company = CompanyDetail::all();
-			$companies = array();
-			foreach( $company as $key => $value) {
-				$companies[$value->id] = $value->company_name;
-			}*/
-
-			$client = Client::with(array('company'))->where('id', '=', $id)->get();
+			
+			$client = Client::with(array())->where('id', '=', $id)->get();
 
 			if(!$client->isEmpty()) {
 				$client = $client->first();
 				return View::make('Client.editClient')
-						   ->with(array('title' => 'Edit Client', 'client' => $client, 'companies' => $companies));
+						   ->with(array('title' => 'Edit Client', 'client' => $client));
 			} else {
 
 				return Redirect::route('dashboard');
@@ -233,7 +218,7 @@ class ClientController extends \BaseController {
 							'first_name' => 'required|max:50',
 							'last_name' => 'required|max:50',
 							'phone' => 'max:14',
-							'company' =>  'required|min:1|Exists:company_details,id',
+							'company_name' =>  'max:100',
 					)
 			);
 			if($validate->fails()) {
@@ -258,7 +243,7 @@ class ClientController extends \BaseController {
 				$client->first_name = Input::get('first_name');
 				$client->last_name = Input::get('last_name');
 				$client->phone = Input::get('phone');
-				$client->company_id = Input::get('company');
+				$client->company_name = Input::get('company_name');
 
 				// Checking Authorised or not
 				if($client->save()) {

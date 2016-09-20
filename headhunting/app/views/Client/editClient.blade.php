@@ -32,10 +32,10 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label('company', 'Company: ', array('class' => 'col-sm-3
+        {{ Form::label('company_name', 'Company: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('company', $companies, $client->company->company_name, array('class' => 'form-control')) }} 
-            <span class='errorlogin email-login'>{{$errors->first('company');}}@if(!empty($message)){{$message}}@endIf</span>
+        <div class="col-sm-8">{{ Form::text('company_name', $client->company_name, array('class' => 'form-control')) }} 
+            <span class='errorlogin email-login'>{{$errors->first('company_name');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
     <div class="form-group">

@@ -154,3 +154,20 @@ INSERT INTO `work_states` (`id`, `title`, `created_at`, `updated_at`) VALUES
 (1, 'W2', NULL, '2016-08-09 16:17:35'),
 (2, 'Ten99', NULL, '2016-08-09 16:17:35'),
 (3, 'C2C', NULL, '2016-08-09 16:17:47');
+
+
+
+
+
+
+ALTER TABLE `clients` DROP FOREIGN KEY `clients_ibfk_1` ;
+
+ALTER TABLE `clients` ADD CONSTRAINT `clients_ibfk_1` FOREIGN KEY ( `company_id` ) REFERENCES `headhunting_new`.`company_details` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+ALTER TABLE `clients` DROP FOREIGN KEY `clients_ibfk_1` ;
+
+ALTER TABLE `clients` CHANGE `company_id` `company_name` INT( 11 ) NOT NULL ;
+ALTER TABLE `clients` CHANGE `company_name` `company_name` VARCHAR( 247 ) NOT NULL ;
+

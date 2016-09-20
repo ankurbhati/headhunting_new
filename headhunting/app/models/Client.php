@@ -33,18 +33,6 @@ class Client extends Eloquent {
      *
      * @return Object belongs to Relation client company.
      */
-    public function company() {
-    
-    	return $this->belongsTo('CompanyDetail','company_id','id');
-    }
-
-
-    /**
-     *
-     * countries : Relation between client & company.
-     *
-     * @return Object belongs to Relation client company.
-     */
     public function createdby() {
     
     	return $this->belongsTo('User','created_by','id');
