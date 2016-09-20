@@ -85,7 +85,7 @@ return array(
 		'master' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'headhunting_new',
+			'database'  => 'headhunting',
 			'username'  => 'root',
 			'password'  => 'root',
 			'charset'   => 'utf8',
@@ -95,7 +95,7 @@ return array(
 		'slave' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'headhunting_new',
+			'database'  => 'headhunting',
 			'username'  => 'root',
 			'password'  => 'root',
 			'charset'   => 'utf8',

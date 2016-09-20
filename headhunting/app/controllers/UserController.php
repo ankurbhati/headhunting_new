@@ -102,11 +102,30 @@ class UserController extends HelperController {
 	public function getTeam($id = 0) {
 
 		$jobPost = "";
+		$managerUsers = array();
+		$users = array();
+		$currentUserRole = Auth::user()->getRole();
+		if($currentUserRole === 1) {
+			$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
+				    $q->where('role_id', '<', 6)
+				      ->where('user_id', '!=', Auth::user()->id);
+			})->get();
+		} else {
+			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->get();
+		}
+
 		if($id > 0) {
 			$jobPost = JobPost::find($id);
+			if($currentUserRole === 2 || $currentUserRole === 3 || $currentUserRole === 5) {
+				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
+				    $q->where('role_id', '<=', 5)
+				      ->where('role_id', '>=', 4);
+				})->get();
+			}
 		}
-		$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->get();
-		return View::make('User.teamList')->with(array('title' => 'Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost));
+
+		
+		return View::make('User.teamList')->with(array('title' => 'Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost, 'managerUsers' => $managerUsers));
 	}
 
 	/**
