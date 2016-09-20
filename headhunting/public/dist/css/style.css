@@ -126,3 +126,6 @@
     text-align: center;
     text-shadow: 0 0 5px #00c6ff;
 }
+.todo-list > li .tools {
+    display: inline-block !important;
+}
