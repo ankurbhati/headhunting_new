@@ -87,6 +87,10 @@ class ClientController extends \BaseController {
 
 				// Checking Authorised or not
 				if($client->save()) {
+					$mail_group = new MailGroupMember();
+					$mail_group->group_id = 1;
+					$mail_group->user_id = $client->id;
+					$mail_group->save();
 					return Redirect::to('clients');
 				} else {
 					return Redirect::to('add-client')->withInput();
@@ -267,7 +271,8 @@ class ClientController extends \BaseController {
 	 */
 	public function deleteClient($id) {
 		if(Auth::user()->getRole() <= 3) {
-			if(Client::find($id)->delete()) {
+			$client = Client::find($id);
+			if(MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
 				return Redirect::route('client-list');
 			}
 		}

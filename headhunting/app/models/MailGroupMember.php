@@ -25,4 +25,10 @@ class MailGroupMember extends Eloquent {
      * @var string
      */
     protected $table = 'mail_group_members';
+    
+    /**
+     *
+     * @param $timestamp : Disabling Time Stamp to False for stoping Auto Updating time.
+     */
+    public $timestamps = false;
 }
