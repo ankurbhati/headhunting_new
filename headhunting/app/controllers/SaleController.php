@@ -28,7 +28,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function postRequirementView() {
-		if(Auth::user()->getRole() <= 2) {
+		if(Auth::user()->getRole() <= 3) {
 			$jobPost = new JobPost();
 			$country = Country::all();
 

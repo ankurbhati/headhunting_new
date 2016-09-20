@@ -46,30 +46,21 @@
               </ul>
             </li>
             @endif
-            @if(Auth::user()->getRole() <= 3)
+            
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-bookmark-o"></i> <span>Requirements</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('list-requirement') }}"><i class="fa fa-level-down"></i>Posted Requirements</a></li>
-                <li><a href="{{ URL::route('post-requirement') }}"><i class="fa fa-plus"></i>Post Requirement</a></li>
+                @if(Auth::user()->getRole() <= 3)
+                  <li><a href="{{ URL::route('post-requirement') }}"><i class="fa fa-plus"></i>Post Requirement</a></li>
+                @endif
                 <li><a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}"><i class="fa fa-upload"></i>Assigned Requirement</a></li>
               </ul>
             </li>
-            @else
-	            <li class="treeview">
-	              <a href="#">
-	                <i class="fa fa-bookmark-o"></i> <span>Requirements</span> <i class="fa fa-angle-left pull-right"></i>
-	              </a>
-	              <ul class="treeview-menu">
-	                <li><a href="{{ URL::route('list-requirement') }}"><i class="fa fa-level-down"></i>Posted Requirements</a></li>
-	                <li><a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}"><i class="fa fa-upload"></i>Assigned Requirement</a></li>
-	              </ul>
-	            </li>
-            @endif
-            @if(Auth::user()->getRole() <= 3)
-              <li class="treeview">
+            
+            <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> <span>Candidates</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
@@ -78,8 +69,7 @@
                 <li><a href="{{ URL::route('add-candidate') }}"><i class="fa fa-user-plus"></i>Add Candidate</a></li>
               </ul>
             </li>
-            @endif
-	    @if(Auth::user()->getRole() <= 3)
+	          @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5))
               <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> <span>Third Party</span> <i class="fa fa-angle-left pull-right"></i>

@@ -26,7 +26,7 @@ class ThirdpartyController extends \BaseController {
 	public function createThirdparty()
 	{
 
-		if(Auth::user()->getRole() <= 3) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -141,7 +141,7 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function viewThirdparty($id) {
 
-		if(Auth::user()->getRole() <= 3) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 
 			$thirdparty = Thirdparty::with(array('createdby'))->where('id', '=', $id)->get();
 
@@ -169,7 +169,7 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function editThirdparty($id) {
 
-		if(Auth::user()->getRole() <= 3) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 
 			$thirdparty = Thirdparty::with(array('createdby'))->where('id', '=', $id)->get();
 
@@ -197,7 +197,7 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function updateThirdparty($id)
 	{
-		if(Auth::user()->getRole() <= 3) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -304,7 +304,7 @@ class ThirdpartyController extends \BaseController {
 	 *
 	 */
 	public function deleteThirdparty($id) {
-		if(Auth::user()->getRole() <= 3) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 			$thirdparty = Thirdparty::find($id);
 			if(MailGroupMember::where('user_id', '=', $thirdparty->id)->where('group_id', '=', 3)->delete() && $thirdparty->delete()) {
 				return Redirect::route('third-party-list');
