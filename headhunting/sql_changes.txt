@@ -172,3 +172,12 @@ ALTER TABLE `clients` CHANGE `company_id` `company_name` INT( 11 ) NOT NULL ;
 ALTER TABLE `clients` CHANGE `company_name` `company_name` VARCHAR( 247 ) NOT NULL ;
 
 INSERT INTO `headhunting_new`.`mail_groups` (`id`, `name`, `model`) VALUES (NULL, 'third_party', 'Thirdparty');
+
+
+
+
+
+ALTER TABLE `job_posts` CHANGE `comments` `comment` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+ALTER TABLE `sources` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone` ;
+ALTER TABLE `clients` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone` ;
+ALTER TABLE `users` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone_no` ;
