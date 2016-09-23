@@ -296,12 +296,12 @@ class ClientController extends \BaseController {
 	public function deleteClient($id) {
 		if(Auth::user()->getRole() <= 3) {
 			if(Auth::user()->hasRole(1)) {
-				$client = Client::where('id', '=', $id)->get();
+				$client = Client::where('id', '=', $id)->get()->first();
 			} else {
-				$client = Client::where('id', '=', $id)->where('createdby', '=', Auth::user()->id)->get();
+				$client = Client::where('id', '=', $id)->where('createdby', '=', Auth::user()->id)->get()->first();
 			}
-
-			if($client && MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
+			
+			if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
 				return Redirect::route('client-list');
 			}
 		}
