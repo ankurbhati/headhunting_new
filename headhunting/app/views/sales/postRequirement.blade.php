@@ -19,8 +19,16 @@
     <div class="form-group">
         {{ Form::label('type_of_employment', 'Type Of Employment: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('type_of_employment', array(1=>"Contratual", 2=> "Permanent"), $jobPost->type_of_employment, array('class' => 'form-control')) }}
+        <div class="col-sm-8">{{ Form::select('type_of_employment', array(1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"), $jobPost->type_of_employment, array('class' => 'form-control')) }}
             <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
+    <div class="form-group" id="duration_id">
+        {{ Form::label('duration', 'Duration(In months): ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::text('duration', $jobPost->duration, array('class' => 'form-control')) }}
+            <span class='errorlogin'>{{$errors->first('duration');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 
@@ -56,15 +64,14 @@
             <span class='errorlogin'>{{$errors->first('client_id');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
     <div class="form-group">
-        {{ Form::label('vendor_id', 'Vendor: ', array('class' => 'col-sm-3
+        {{ Form::label('mode_of_interview', 'Mode Of Interview: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('vendor_id', $vendor, $jobPost->vendor_id, array('class' => 'form-control', 'id' => 'vendor_id')) }}
-            <span class='errorlogin'>{{$errors->first('vendor_id');}}@if(!empty($message)){{$message}}@endIf</span>
+        <div class="col-sm-8">{{ Form::text('mode_of_interview', $jobPost->mode_of_interview, array('class' =>
+            'form-control', 'placeholder' => 'Mode Of Interviewp')); }}
+            <span class='errorlogin'>{{$errors->first('rate');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
 	<div class="form-group">
         {{ Form::label('rate', 'Rate/hr: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -78,8 +85,16 @@
         {{ Form::label('description', 'Description: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::textarea('description', $jobPost->description, array('class' =>
-            'form-control', 'placeholder' => 'ex. 20')); }}
+            'form-control')); }}
             <span class='errorlogin'>{{$errors->first('description');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+    <div class="form-group">
+        {{ Form::label('comment', 'Comment: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::textarea('comment', $jobPost->comment, array('class' =>
+            'form-control')); }}
+            <span class='errorlogin'>{{$errors->first('comment');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 

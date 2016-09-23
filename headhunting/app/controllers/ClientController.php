@@ -66,7 +66,8 @@ class ClientController extends \BaseController {
 							'first_name' => 'required|max:50',
 							'last_name' => 'required|max:50',
 							'phone' => 'max:14',
-							'company_name' =>  'max:100',
+							'phone_ext' => 'max:10',
+							'company_name' =>  'max:100'
 					)
 			);
 
@@ -82,6 +83,7 @@ class ClientController extends \BaseController {
 				$client->last_name = Input::get('last_name');
 				$client->email = Input::get('email');
 				$client->phone = Input::get('phone');
+				$client->phone_ext = Input::get('phone_ext');
 				$client->company_name = Input::get('company_name');
 				$client->created_by = Auth::user()->id;
 
@@ -108,7 +110,11 @@ class ClientController extends \BaseController {
 	 *
 	 */
 	public function clientList() {
-		$clients = Client::with(array())->get();
+		if(Auth::user()->hasRole(1)) {
+			$clients = Client::with(array('createdby'))->get();
+		} else {
+			$clients = Client::with(array('createdby'))->where('created_by', '=', Auth::user()->id)->get();
+		}
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}
 
@@ -124,8 +130,11 @@ class ClientController extends \BaseController {
 
 		if(Auth::user()->getRole() <= 3) {
 
-			$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
-
+			if(Auth::user()->hasRole(1)) {
+				$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
+			} else {
+				$client = Client::with(array('createdby'))->where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
+			}
 			if(!$client->isEmpty()) {
 				$client = $client->first();
 				return View::make('Client.viewClient')
@@ -152,7 +161,11 @@ class ClientController extends \BaseController {
 
 		if(Auth::user()->getRole() <= 3) {
 			
-			$client = Client::with(array())->where('id', '=', $id)->get();
+			if(Auth::user()->hasRole(1)) {
+				$client = Client::where('id', '=', $id)->get();
+			} else {
+				$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
+			}
 
 			if(!$client->isEmpty()) {
 				$client = $client->first();
@@ -222,7 +235,8 @@ class ClientController extends \BaseController {
 							'first_name' => 'required|max:50',
 							'last_name' => 'required|max:50',
 							'phone' => 'max:14',
-							'company_name' =>  'max:100',
+							'phone_ext' => 'max:10',
+							'company_name' =>  'max:247',
 					)
 			);
 			if($validate->fails()) {
@@ -232,7 +246,16 @@ class ClientController extends \BaseController {
 								->withInput();
 			} else {
 
-				$client = Client::find($id);
+
+				if(Auth::user()->hasRole(1)) {
+					$client = Client::find($id);
+				} else {
+					$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
+				}
+
+				if(!$client) {
+					return Redirect::route('dashboard');			
+				}
 
 				$email = Input::get('email');
 				if($email && $email != $client->email){
@@ -247,6 +270,7 @@ class ClientController extends \BaseController {
 				$client->first_name = Input::get('first_name');
 				$client->last_name = Input::get('last_name');
 				$client->phone = Input::get('phone');
+				$client->phone_ext = Input::get('phone_ext');
 				$client->company_name = Input::get('company_name');
 
 				// Checking Authorised or not
@@ -271,8 +295,13 @@ class ClientController extends \BaseController {
 	 */
 	public function deleteClient($id) {
 		if(Auth::user()->getRole() <= 3) {
-			$client = Client::find($id);
-			if(MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
+			if(Auth::user()->hasRole(1)) {
+				$client = Client::where('id', '=', $id)->get();
+			} else {
+				$client = Client::where('id', '=', $id)->where('createdby', '=', Auth::user()->id)->get();
+			}
+
+			if($client && MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
 				return Redirect::route('client-list');
 			}
 		}

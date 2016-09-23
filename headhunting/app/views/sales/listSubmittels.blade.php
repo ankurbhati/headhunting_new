@@ -23,7 +23,7 @@
                     	@forelse($candidateApplications as $candidateApplication)
 		                      <tr>
 		                        <td>{{$candidateApplication->requirement->title}}</td>
-            								<td>{{($candidateApplication->requirement->type_of_employment == 1)?"Contractual":"Permanent";}}</td>
+            								<td>{{($candidateApplication->requirement->type_of_employment == 1)?"Contractual": ($candidateApplication->requirement->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
             								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
             								<td>{{$candidateApplication->candidate->email}}</td>
             								<td>{{($candidateApplication->status == 1)?"Not Interviewed":"PO";}}</td>

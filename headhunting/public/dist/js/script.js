@@ -68,6 +68,27 @@ $(function () {
 	    }
   }
   
+  if($('select#type_of_employment').val() !== undefined) {
+
+	  $('select#type_of_employment').change(function() {
+		    var type_of_employment_id = $(this).val();
+		    if(type_of_employment_id == 3 || type_of_employment_id == 1) {
+		    	$('#duration_id').show();
+		    } else {
+		    	$('#duration').val('');
+		    	$('#duration_id').hide();
+		    }
+		});
+	  
+	  var type_of_employment_id = $('select#type_of_employment').val();
+	    if(type_of_employment_id == 3 || type_of_employment_id == 1) {
+	    	$('#duration_id').show();
+	    } else {
+	    	$('select#type_of_employment').val('');
+	    	$('#duration_id').hide();
+	    }
+  }
+  
   function getThirdParty() {
 	  $.ajax({
 	        url: '/third_party/'

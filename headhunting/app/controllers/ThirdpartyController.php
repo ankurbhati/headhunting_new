@@ -69,6 +69,7 @@ class ThirdpartyController extends \BaseController {
 							'email' =>  'required|max:50|email|unique:sources,email',
 							'poc' => 'max:50',
 							'phone' => 'max:14',
+							'phone_ext' => 'max:10',
 							'document_type' => 'max:1'
 					)
 			);
@@ -83,6 +84,7 @@ class ThirdpartyController extends \BaseController {
 				$thirdparty->poc = Input::get('poc');
 				$thirdparty->email = Input::get('email');
 				$thirdparty->phone = Input::get('phone');
+				$thirdparty->phone_ext = Input::get('phone_ext');
 				$thirdparty->document_type = Input::get('document_type');
 				$thirdparty->created_by = Auth::user()->id;
 				
@@ -240,6 +242,7 @@ class ThirdpartyController extends \BaseController {
 					'email' =>  'required|max:50|email',
 					'poc' => 'max:50',
 					'phone' => 'max:14',
+					'phone_ext' => 'max:10',
 					'document_type' => 'max:1'
 				)
 			);
@@ -264,6 +267,7 @@ class ThirdpartyController extends \BaseController {
 				
 				$thirdparty->poc = Input::get('poc');
 				$thirdparty->phone = Input::get('phone');
+				$thirdparty->phone_ext = Input::get('phone_ext');
 				$thirdparty->document_type = Input::get('document_type');
 				$thirdparty->created_by = Auth::user()->id;
 				if($thirdparty->document_type != 0 && isset($_FILES['upload_document']['tmp_name']) && !empty($_FILES['upload_document']['tmp_name'])) {

@@ -34,6 +34,12 @@
 	        	{{$client->phone}}
 	        </div>
 	    </div>
+	    <div class="row"><div class="col-sm-4">
+	        Phone Extension:
+	        </div><div class="col-sm-8">
+	        	{{$client->phone_ext}}
+	        </div>
+	    </div>
 		<div class="row"><div class="col-sm-4">
 	        Created By:
 	        </div><div class="col-sm-8">

@@ -41,9 +41,13 @@
     <div class="form-group">
         {{ Form::label('phone', 'Phone: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('phone', $client->phone, array('class' =>
+        <div class="col-sm-4">{{ Form::text('phone', $client->phone, array('class' =>
             'form-control', 'placeholder' => 'Enter Client Phone Number', 'required', "data-inputmask"=>'"mask": "(999) 999-9999"', "data-mask")); }} 
             <span class='errorlogin'>{{$errors->first('phone');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+        <div class="col-sm-4">{{ Form::text('phone_ext', $client->phone_ext, array('class' =>
+            'form-control', 'placeholder' => 'Enter Client Phone Extension', 'required')); }} 
+            <span class='errorlogin'>{{$errors->first('phone_ext');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 

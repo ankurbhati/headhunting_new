@@ -23,7 +23,7 @@
                     	@forelse($jobPost as $jobPosts)
 		                      <tr>
 		                        <td>{{$jobPosts->title}}</td>
-								<td>{{($jobPosts->type_of_employment == 1)?"Contractual":"Permanent";}}</td>
+								<td>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
 								<td>{{$jobPosts->city->name}}, {{$jobPosts->country->country}}</td>
 								<td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
 								<td>{{($jobPosts->status == 1)?"Closed":"Open";}}</td>

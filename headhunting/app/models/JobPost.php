@@ -106,17 +106,6 @@ class JobPost extends Eloquent {
 
     /**
      *
-     * vendor : Relation between Vendor & Job Posts.
-     *
-     * @return Object belongs to Relation User Job Posts.
-     */
-    public function vendor() {
-
-        return $this->belongsTo('Vendor','vendor_id','id');
-    }
-
-    /**
-     *
      * comments : Relation between comments & Job Posts.
      *
      * @return Object belongs to Relation User Job Posts comments.

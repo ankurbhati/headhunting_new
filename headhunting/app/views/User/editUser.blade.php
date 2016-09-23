@@ -80,9 +80,12 @@
     <div class="form-group">
         {{ Form::label('phone_no', 'Phone: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('phone_no', $user->phone_no, array('class' =>
+        <div class="col-sm-4">{{ Form::text('phone_no', $user->phone_no, array('class' =>
             'form-control', 'placeholder' => 'Enter Employee Phone Number', 'required', "data-inputmask"=>'"mask": "(999) 999-9999"', "data-mask")); }} 
             <span class='errorlogin'>{{$errors->first('phone_no');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+        <div class="col-sm-4">{{ Form::text('phone_ext', $user->phone_ext, array('class' => 'form-control', 'placeholder' => 'ex. (121)')); }} 
+            <span class='errorlogin email-login'>{{$errors->first('phone_ext');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
         <div class="form-group">

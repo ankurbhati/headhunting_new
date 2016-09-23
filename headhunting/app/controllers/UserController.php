@@ -388,6 +388,7 @@ class UserController extends HelperController {
 							'first_name' => 'required|max:50',
 							'last_name' => 'required|max:50',
 							'phone_no' => 'max:14',
+							'phone_ext' => 'max:10',
 							'designation' => 'required|max:50',
 							'gender' => 'required',
 					)
@@ -591,7 +592,8 @@ class UserController extends HelperController {
 							'email' =>  'required|max:50|email|unique:users,email',
 							'first_name' => 'required|max:50',
 							'last_name' => 'required|max:50',
-							'phone' => 'max:10',
+							'phone_no' => 'max:14',
+							'phone_ext' => 'max:10',
 							'designation' => 'required|max:50',
 							'password' =>  'required|min:6',
 							'confirm_password' =>  'required|min:6|same:password',

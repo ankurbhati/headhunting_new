@@ -100,6 +100,12 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
+	        Phone Extension:
+	        </div><div class="col-sm-8">
+	        	{{$user->phone_ext}}
+	        </div>
+	    </div>
+	    <div class="row"><div class="col-sm-4">
 	        Gender:
 	        </div><div class="col-sm-8">
 	        	{{($user->gender == 0)?"Female":"Male"}}

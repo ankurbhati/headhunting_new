@@ -364,62 +364,6 @@ Route::group(array('before' => 'auth'), function() {
 
 
 	/**
-	 * Routes For REST API for new Vendor
-	 */
-	Route::match(array('GET'), '/add-vendor', array(
-			'as'    =>    'add-vendor',
-			'uses'    =>    'VendorController@create'
-	));
-
-	/**
-	 * Routes For REST API for new Vendor
-	 */
-	Route::match(array('POST'), '/add-vendor', array(
-			'as'    =>    'add-vendor',
-			'uses'    =>    'VendorController@createVendor'
-	));
-
-	/**
-	 * Routes For REST API for new Vendor
-	 */
-	Route::match(array('GET'), '/vendors', array(
-			'as'    =>    'vendor-list',
-			'uses'    =>    'VendorController@vendorList'
-	));
-
-	/**
-	 * Routes For REST API for new Vendor
-	 */
-	Route::match(array('GET'), '/view-vendor/{id}', array(
-		'as'    =>    'view-vendor',
-		'uses'    =>    'VendorController@viewVendor'
-	));
-
-	/**
-	 * Routes For REST API for edit Vendor
-	 */
-	Route::match(array('GET'), '/edit-vendor/{id}', array(
-			'as'    =>    'edit-vendor',
-			'uses'    =>    'VendorController@editVendor'
-	));
-
-	/**
-	 * Routes For REST API for edit Vendor
-	 */
-	Route::match(array('POST'), '/edit-vendor/{id}', array(
-			'as'    =>    'update-vendor',
-			'uses'    =>    'VendorController@updateVendor'
-	));
-
-	/**
-	 * Routes For REST API for new Vendor
-	 */
-	Route::match(array('GET'), '/delete-vendor/{id}', array(
-			'as'    =>    'delete-vendor',
-			'uses'    =>    'VendorController@deleteVendor'
-	));
-
-	/**
 	 * Routes For REST API for new Candidate
 	 */
 	Route::match(array('GET'), '/add-candidate', array(
