@@ -35,17 +35,6 @@
               </ul>
             </li>
             @endif
-            @if(Auth::user()->getRole() <= 3)
-              <li class="treeview">
-              <a href="#">
-                <i class="fa fa-users"></i> <span>Vendors</span> <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ URL::route('vendor-list') }}"><i class="fa fa-user"></i>Vendor List</a></li>
-                <li><a href="{{ URL::route('add-vendor') }}"><i class="fa fa-user-plus"></i>Add Vendor</a></li>
-              </ul>
-            </li>
-            @endif
             
             <li class="treeview">
               <a href="#">
@@ -99,7 +88,7 @@
             @endif
             <li>
               <a href="{{ URL::route('list-submittel') }}">
-                <i class="fa fa-eye"></i> <span>Job Submittels</span>
+                <i class="fa fa-eye"></i> <span>Job Submittals</span>
               </a>
             </li>
           </ul>
