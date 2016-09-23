@@ -129,3 +129,7 @@
 .todo-list > li .tools {
     display: inline-block !important;
 }
+
+table.dataTable span.highlight {
+    background-color: #FFFF88;
+}

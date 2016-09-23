@@ -57,7 +57,7 @@
     <div class="form-group">
         {{ Form::label('gender', 'Gender: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('gender', array('Male', 'Female'), null, array('class' => 'form-control')) }} 
+        <div class="col-sm-8">{{ Form::select('gender', array('Female', 'Male'), null, array('class' => 'form-control')) }} 
             <span class='errorlogin email-login'>{{$errors->first('gender');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

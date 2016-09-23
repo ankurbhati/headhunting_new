@@ -41,6 +41,7 @@ class SearchController extends HelperController {
 	 */
 	public function searchResult($jobId = 0) {
 
+		$query = "";
 		if($query = Input::get('query', false)) {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try{
@@ -53,7 +54,8 @@ class SearchController extends HelperController {
 	    	// Show all posts if no query is set
 	    	$candidate_resumes = CandidateResume::all();
 	  	}
+
 	  	#return 'Done';
-		return View::make('search.searchResult')->with(array('title' => 'Search - Headhunting', 'candidate_resumes' => $candidate_resumes, 'jobId' => $jobId));
+		return View::make('search.searchResult')->with(array('title' => 'Search - Headhunting', 'candidate_resumes' => $candidate_resumes, 'jobId' => $jobId, 'query' => $query));
 	}
 }

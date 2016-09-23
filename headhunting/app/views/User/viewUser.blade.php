@@ -1,12 +1,7 @@
 @extends('layouts.adminLayout')
 @section('content')
-<div class="row user-view">
-	<div class="col-sm-4 left-view">
-		<div class="image text-center">
-			<img class="img-circle" alt="User Image" src="../dist/img/avatar5.png">
-		</div>
-	</div>
-	<div class="col-sm-8 right-view">
+<div class="row user-view" style="margin-top:0px;">
+	<div class="col-sm-5 right-view" style="padding-left:15px;">
 	    <div class="row"><div class="col-sm-4">
 	        Email:
 	        </div><div class="col-sm-8">
@@ -26,7 +21,6 @@
 	        	{{$user->last_name}}
 	        </div>
 	    </div>
-
 	    <div class="row"><div class="col-sm-4">
 	        Designation:
 	        </div><div class="col-sm-8">
@@ -57,11 +51,15 @@
 	        	{{$user->userRoles[0]->roles->role}}
 	        </div>
 	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Phone:
-	        </div><div class="col-sm-8">
-	        	{{$user->phone_no}}
+	    </div>
+	    <div class="col-sm-7 right-view" style="border-left:1px solid #000; padding-left:15px;">
+	    <div class="row">
+	    <div class="col-sm-4">
+	        Address
 	        </div>
+        <div class="col-sm-8">
+
+        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
 	        Country:
@@ -69,6 +67,7 @@
 	        	{{isset($user->country)?$user->country->country:""}}
 	        </div>
 	    </div>
+
 	    <div class="row"><div class="col-sm-4">
 	        State:
 	        </div><div class="col-sm-8">
@@ -92,6 +91,12 @@
 	        Zipcode:
 	        </div><div class="col-sm-8">
 	        	{{($user->zipcode != "")?$user->zipcode:"-"}}
+	        </div>
+	    </div>
+	    <div class="row"><div class="col-sm-4">
+	        Phone:
+	        </div><div class="col-sm-8">
+	        	{{$user->phone_no}}
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
