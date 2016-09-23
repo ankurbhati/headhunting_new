@@ -5,7 +5,7 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title col-sm-9">Search Results</h3>
+                  <h3 class="box-title col-sm-9">Search Results for <strong style="background-color:#d8d8d8; padding:0 15px;">{{$query}}</strong></h3>
                   <div class="col-sm-3">
                 				<a class="btn btn-primary pull-right" href="{{ URL::route('advance-search', array($jobId)) }}">
                 					<i class="fa fa-search"></i> <span>Back To Search Candidate</span>

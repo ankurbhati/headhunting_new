@@ -653,44 +653,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function massMail() {
-
 		if (Request::isMethod('post')) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
-
 			// Server Side Validation.
 			$validate=Validator::make (
 				Input::all(), array(

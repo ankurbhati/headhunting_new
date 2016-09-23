@@ -90,7 +90,7 @@
                 <i class="fa fa-users"></i> <span>My Team</span>
               </a>
             </li>
-            @if(Auth::user()->getRole() <= 3)
+            @if(Auth::user()->getRole() <= 6)
             <li>
               <a href="{{ URL::route('mass-mail') }}">
                 <i class="fa fa-users"></i> <span>Mass Mail</span>

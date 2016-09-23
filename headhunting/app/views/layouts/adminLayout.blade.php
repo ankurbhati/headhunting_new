@@ -49,6 +49,7 @@
         
         <!-- jQuery 2.1.4 -->
     	{{ HTML::script("plugins/jQuery/jQuery-2.1.4.min.js")}}
+    	{{ HTML::script("plugins/jQuery/jQuery-highlighter.js")}}
 	    <!-- jQuery UI 1.11.4 -->
 	    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 	    <script>
@@ -78,9 +79,15 @@
 	    <script>
 	      (function () {
 	          var employees = $('#employeeList');
-	          if(employees.attr('id')) {
-	        	  employees.DataTable();
-	          }
+	            if(employees.attr('id')) {
+	        		var table = employees.DataTable();
+			      	table.on( 'draw', function () {
+				        var body = $( table.table().body() );
+				 
+				        body.unhighlight();
+				        body.highlight( table.search() );  
+			    	});
+	            }
 	      })();
     </script>
     </body>
