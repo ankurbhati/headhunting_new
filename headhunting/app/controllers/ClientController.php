@@ -46,6 +46,10 @@ class ClientController extends \BaseController {
 					$client->company_name = $line[5];
 					$client->created_by = Auth::user()->id;
 					$client->save();
+					$mail_group = new MailGroupMember();
+					$mail_group->group_id = 1;
+					$mail_group->user_id = $client->id;
+					$mail_group->save();
 				}
 			} 
 			$count++;

@@ -17,6 +17,47 @@ class ThirdpartyController extends \BaseController {
 		return View::make('Thirdparty.newThirdparty')->with(array('title' => 'Add Third Party'));
 	}
 
+	/**
+	 * Show the form for creating a new client.
+	 *
+	 * @return Response
+	 */
+	public function thirdpartyUpload()
+	{
+		return View::make('Thirdparty.uploadThirdparty')->with(array('title' => 'Upload Third Party'));
+	}
+
+
+	/**
+	 * Show the form for creating a new client.
+	 *
+	 * @return Response
+	 */
+	public function uploadThirdpartyCsv()
+	{
+		$file = fopen($_FILES['third_party_csv']['tmp_name'], 'r');
+		$count = 0;
+		while (($line = fgetcsv($file)) !== FALSE) {
+			if ($count){
+				if(Thirdparty::where('email', '=', $line[1])->get()->isEmpty()) {
+					$third_party = new Thirdparty();
+					$third_party->poc = $line[0];
+					$third_party->email = $line[1];
+					$third_party->phone = $line[2];
+					$third_party->phone_ext = $line[3];
+					$third_party->created_by = Auth::user()->id;
+					$third_party->save();
+					$mail_group = new MailGroupMember();
+					$mail_group->group_id = 3;
+					$mail_group->user_id = $third_party->id;
+					$mail_group->save();
+				}
+			} 
+			$count++;
+		}
+		fclose($file);
+		return Redirect::route('third-party-list');
+	}
 
 	/**
 	 * Show the form for creating a new Thirdparty.

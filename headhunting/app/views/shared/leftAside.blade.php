@@ -32,7 +32,9 @@
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('client-list') }}"><i class="fa fa-user"></i>Client List</a></li>
                 <li><a href="{{ URL::route('add-client') }}"><i class="fa fa-user-plus"></i>Add Client</a></li>
+                @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
                 <li><a href="{{ URL::route('client-upload') }}"><i class="fa fa-user"></i>Upload Clients</a></li>
+                @endif
               </ul>
             </li>
             @endif
@@ -69,6 +71,7 @@
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('third-party-list') }}"><i class="fa fa-user"></i>Third Party List</a></li>
                 <li><a href="{{ URL::route('add-third-party') }}"><i class="fa fa-user-plus"></i>Add Third Party</a></li>
+                <li><a href="{{ URL::route('vendor-third-party') }}"><i class="fa fa-user"></i>Upload Third Party</a></li>
               </ul>
             </li>
             @endif
