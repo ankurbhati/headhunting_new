@@ -167,7 +167,13 @@ class CandidateController extends HelperController {
 							} else {
 								$candidate_resume = new CandidateResume();
 								$candidate_resume->candidate_id = $candidate->id;
-								$candidate_resume->resume = ($fileType == "doc") ? $this->read_doc($target_file) : $this->read_docx($target_file);
+								if ($fileType == "doc") {
+									$candidate_resume->resume = $this->read_doc($target_file);
+								} else if($fileType == "docx") {
+									$candidate_resume->resume = $this->read_docx($target_file);
+								} else {
+									$candidate_resume->resume = $this->read_pdf($target_file);
+								}
 								$tmp = explode("/", $target_file);
 								$candidate_resume->resume_path = end($tmp);
 								if(!$candidate_resume->save()){
@@ -447,7 +453,13 @@ class CandidateController extends HelperController {
 									$candidate_resume = new CandidateResume();
 								}
 								$candidate_resume->candidate_id = $candidate->id;
-								$candidate_resume->resume = ($fileType == "doc") ? $this->read_doc($target_file) : $this->read_docx($target_file);
+								if ($fileType == "doc") {
+									$candidate_resume->resume = $this->read_doc($target_file);
+								} else if($fileType == "docx") {
+									$candidate_resume->resume = $this->read_docx($target_file);
+								} else {
+									$candidate_resume->resume = $this->read_pdf($target_file);
+								}
 								$tmp = explode("/", $target_file);
 								$candidate_resume->resume_path = end($tmp);
 
@@ -550,6 +562,14 @@ class CandidateController extends HelperController {
     }
 
 
+    public function read_pdf($file) {
+    	$parser = new \Smalot\PdfParser\Parser();
+		$pdf    = $parser->parseFile($file);
+		$text = $pdf->getText();
+		return $text;
+    }
+
+
 	public function check_resume_validity(){
 		$msg = false;
 		$fileType = pathinfo($_FILES["resume"]["name"],PATHINFO_EXTENSION);
@@ -560,8 +580,8 @@ class CandidateController extends HelperController {
 		}
 
 		// Allow certain file formats
-		if($fileType != "doc" && $fileType != "docx") {
-		    $msg = "Sorry, only doc, docx files are allowed.";
+		if($fileType != "doc" && $fileType != "docx" && $fileType != "pdf") {
+		    $msg = "Sorry, only doc, docx and pdf files are allowed.";
 		}
 
 		return array($msg, $fileType);
