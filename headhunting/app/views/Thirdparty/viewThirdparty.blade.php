@@ -28,28 +28,30 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Document Type:
+	        NCA Document:
 	        </div><div class="col-sm-8">
-	        	@if($thirdparty->document_type == 1)
-					<td>NCA</td>
-				@elseif($thirdparty->document_type == 2)
-					<td>MSA</td>
+	        	@if($thirdparty->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document)))
+					<a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>	
 				@else
-					<td>-</td>
+					{{"-"}}
 				@endif
 	        </div>
 	    </div>
-	    @if($thirdparty->document_type != 0 && $thirdparty->document_url && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->document_url)))
 	    <div class="row"><div class="col-sm-4">
-	        Document:
-	        </div><div class="col-sm-8">
-	        	<a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->document_url}}" title="Download Document" target="_blank"><i class="glyphicon glyphicon-download"></i>Download Document</a>
+	        MSA Document:
+	        </div>
+	        <div class="col-sm-8">
+	        	@if($thirdparty->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document)))
+					<a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
+				@else
+					{{"-"}}
+				@endif
 	        </div>
 	    </div>
-	    @endif
 		<div class="row"><div class="col-sm-4">
 	        Created By:
-	        </div><div class="col-sm-8">
+	        </div>
+	        <div class="col-sm-8">
 	        	{{$thirdparty->createdby->first_name. " ".$thirdparty->createdby->last_name }}
 	        </div>
 	    </div>

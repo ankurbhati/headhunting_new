@@ -69,8 +69,7 @@ class ThirdpartyController extends \BaseController {
 							'email' =>  'required|max:50|email|unique:sources,email',
 							'poc' => 'max:50',
 							'phone' => 'max:14',
-							'phone_ext' => 'max:10',
-							'document_type' => 'max:1'
+							'phone_ext' => 'max:10'
 					)
 			);
 			
@@ -85,32 +84,52 @@ class ThirdpartyController extends \BaseController {
 				$thirdparty->email = Input::get('email');
 				$thirdparty->phone = Input::get('phone');
 				$thirdparty->phone_ext = Input::get('phone_ext');
-				$thirdparty->document_type = Input::get('document_type');
 				$thirdparty->created_by = Auth::user()->id;
 				
 				// Checking Authorised or not
 				if($thirdparty->save()) {
+				//if(1) {
 					$mail_group = new MailGroupMember();
 					$mail_group->group_id = 3;
 					$mail_group->user_id = $thirdparty->id;
 					$mail_group->save();
-					if($thirdparty->document_type != 0 && isset($_FILES['upload_document']['tmp_name']) && !empty($_FILES['upload_document']['tmp_name'])) {
-						list($msg, $fileType) = $this->check_resume_validity();
+					
+					if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+						list($msg, $fileType) = $this->check_resume_validity("nca_document");
 						if($msg){
 							# error
-							Session::flash('upload_document_error', $msg);
+							Session::flash('nca_document_error', $msg);
 							return Redirect::route('add-third-party')->withInput();
 						} else {
 							# No error					
-							list($msg, $target_file) = $this->upload_document($thirdparty);
+							list($msg, $target_file) = $this->upload_document($thirdparty, "nca_document");
 							if($msg) {
 								//error, delete candidate or set flash message
 							} else {
 								$tmp = explode("/", $target_file);
-								$thirdparty->document_url = end($tmp);
+								$thirdparty->nca_document = end($tmp);
 							}
 						}
 					}
+
+					if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
+						list($msg, $fileType) = $this->check_resume_validity("msa_document");
+						if($msg){
+							# error
+							Session::flash('msa_document_error', $msg);
+							return Redirect::route('add-third-party')->withInput();
+						} else {
+							# No error					
+							list($msg, $target_file) = $this->upload_document($thirdparty, "msa_document");
+							if($msg) {
+								//error, delete candidate or set flash message
+							} else {
+								$tmp = explode("/", $target_file);
+								$thirdparty->msa_document = end($tmp);
+							}
+						}
+					}
+
 					$thirdparty->save();
 					return Redirect::to('third-parties');
 				} else {
@@ -249,7 +268,7 @@ class ThirdpartyController extends \BaseController {
 			if($validate->fails()) {
 
 				return Redirect::route('edit-third-party', array('id' => $id))
-								->withErrors($validate)
+								->wifthErrors($validate)
 								->withInput();
 			} else {
 
@@ -268,22 +287,40 @@ class ThirdpartyController extends \BaseController {
 				$thirdparty->poc = Input::get('poc');
 				$thirdparty->phone = Input::get('phone');
 				$thirdparty->phone_ext = Input::get('phone_ext');
-				$thirdparty->document_type = Input::get('document_type');
 				$thirdparty->created_by = Auth::user()->id;
-				if($thirdparty->document_type != 0 && isset($_FILES['upload_document']['tmp_name']) && !empty($_FILES['upload_document']['tmp_name'])) {
-					list($msg, $fileType) = $this->check_resume_validity();
+
+				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+					list($msg, $fileType) = $this->check_resume_validity("nca_document");
 					if($msg){
 						# error
-						Session::flash('upload_document_error', $msg);
+						Session::flash('nca_document_error', $msg);
 						return Redirect::route('add-third-party')->withInput();
 					} else {
 						# No error					
-						list($msg, $target_file) = $this->upload_document($thirdparty);
+						list($msg, $target_file) = $this->upload_document($thirdparty, "nca_document");
 						if($msg) {
 							//error, delete candidate or set flash message
 						} else {
 							$tmp = explode("/", $target_file);
-							$thirdparty->document_url = end($tmp);
+							$thirdparty->nca_document = end($tmp);
+						}
+					}
+				}
+
+				if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
+					list($msg, $fileType) = $this->check_resume_validity("msa_document");
+					if($msg){
+						# error
+						Session::flash('msa_document_error', $msg);
+						return Redirect::route('add-third-party')->withInput();
+					} else {
+						# No error					
+						list($msg, $target_file) = $this->upload_document($thirdparty, "msa_document");
+						if($msg) {
+							//error, delete candidate or set flash message
+						} else {
+							$tmp = explode("/", $target_file);
+							$thirdparty->msa_document = end($tmp);
 						}
 					}
 				}
@@ -292,7 +329,7 @@ class ThirdpartyController extends \BaseController {
 				if($thirdparty->save()) {					
 					return Redirect::route('third-party-list');
 				} else {
-
+					print "In else";
 					return Redirect::route('edit-client')->withInput();
 				}
 			}
@@ -317,12 +354,12 @@ class ThirdpartyController extends \BaseController {
 	}
 	
 	
-	private function check_resume_validity(){
+	private function check_resume_validity($doc_param) {
 		$msg = false;
-		$fileType = pathinfo($_FILES["upload_document"]["name"],PATHINFO_EXTENSION);
+		$fileType = pathinfo($_FILES[$doc_param]["name"],PATHINFO_EXTENSION);
 
 		// Check file size
-		if ($_FILES["upload_document"]["size"] > $this->document_size) {
+		if ($_FILES[$doc_param]["size"] > $this->document_size) {
 		    $msg = "Sorry, your file is too large.";
 		}
 
@@ -334,9 +371,9 @@ class ThirdpartyController extends \BaseController {
 		return array($msg, $fileType);
 	}
 
-	private function upload_document($thirdparty) {
+	private function upload_document($thirdparty, $doc_param) {
 		$msg = false;
-		$fileType = pathinfo($_FILES["upload_document"]["name"],PATHINFO_EXTENSION);
+		$fileType = pathinfo($_FILES[$doc_param]["name"],PATHINFO_EXTENSION);
 		$target_dir = DOCROOT.$this->resume_target_dir.$thirdparty->id.'/';
 		$target_file = $target_dir . uniqid() . "." . $fileType;
 
@@ -345,7 +382,7 @@ class ThirdpartyController extends \BaseController {
 		}
 
 		// if everything is ok, try to upload file
-	    if (!move_uploaded_file($_FILES["upload_document"]["tmp_name"], $target_file)) {
+	    if (!move_uploaded_file($_FILES[$doc_param]["tmp_name"], $target_file)) {
 	        $msg = "Sorry, there was an error uploading your file.";
 	    }
 

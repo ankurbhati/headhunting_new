@@ -19,6 +19,47 @@ class ClientController extends \BaseController {
 	 *
 	 * @return Response
 	 */
+	public function clientUpload()
+	{
+		return View::make('Client.uploadClient')->with(array('title' => 'Upload Client'));
+	}
+
+
+	/**
+	 * Show the form for creating a new client.
+	 *
+	 * @return Response
+	 */
+	public function uploadClientCsv()
+	{
+		$file = fopen($_FILES['client_csv']['tmp_name'], 'r');
+		$count = 0;
+		while (($line = fgetcsv($file)) !== FALSE) {
+			if ($count){
+				if(Client::where('email', '=', $line[0])->get()->isEmpty()) {
+					$client = new Client();
+					$client->email = $line[0];
+					$client->first_name = $line[1];
+					$client->last_name = $line[2];
+					$client->phone = $line[3];
+					$client->phone_ext = $line[4];
+					$client->company_name = $line[5];
+					$client->created_by = Auth::user()->id;
+					$client->save();
+				}
+			} 
+			$count++;
+		}
+		fclose($file);
+		return Redirect::route('client-list');
+	}
+	
+
+	/**
+	 * Show the form for creating a new client.
+	 *
+	 * @return Response
+	 */
 	public function createClient()
 	{
 
@@ -111,9 +152,9 @@ class ClientController extends \BaseController {
 	 */
 	public function clientList() {
 		if(Auth::user()->hasRole(1)) {
-			$clients = Client::with(array('createdby'))->get();
+			$clients = Client::all();
 		} else {
-			$clients = Client::with(array('createdby'))->where('created_by', '=', Auth::user()->id)->get();
+			$clients = Client::where('created_by', '=', Auth::user()->id)->get();
 		}
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}
@@ -131,9 +172,9 @@ class ClientController extends \BaseController {
 		if(Auth::user()->getRole() <= 3) {
 
 			if(Auth::user()->hasRole(1)) {
-				$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
+				$client = Client::with(array('created_by'))->where('id', '=', $id)->get();
 			} else {
-				$client = Client::with(array('createdby'))->where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
+				$client = Client::with(array('created_by'))->where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
 			}
 			if(!$client->isEmpty()) {
 				$client = $client->first();
@@ -298,7 +339,7 @@ class ClientController extends \BaseController {
 			if(Auth::user()->hasRole(1)) {
 				$client = Client::where('id', '=', $id)->get()->first();
 			} else {
-				$client = Client::where('id', '=', $id)->where('createdby', '=', Auth::user()->id)->get()->first();
+				$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get()->first();
 			}
 			
 			if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
@@ -306,6 +347,5 @@ class ClientController extends \BaseController {
 			}
 		}
 	}
-
 
 }

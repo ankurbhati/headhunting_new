@@ -362,6 +362,21 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'ClientController@deleteClient'
 	));
 
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('GET'), '/client-upload', array(
+			'as'    =>    'client-upload',
+			'uses'    =>    'ClientController@clientUpload'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('POST'), '/upload-client-csv', array(
+			'as'    =>    'upload-client-csv',
+			'uses'    =>    'ClientController@uploadClientCsv'
+	));
 
 	/**
 	 * Routes For REST API for new Candidate

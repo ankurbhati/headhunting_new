@@ -34,19 +34,23 @@
     </div>
     
     <div class="form-group">
-        {{ Form::label('document_type', 'Document Type: ', array('class' => 'col-sm-3
+        {{ Form::label('nca_document', 'Upload Nca Document: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('document_type', array(0=>"No Document Required", 1=>"NCA", 2=>"MSA"), null, array('class' => 'form-control')) }} 
-            <span class='errorlogin email-login'>{{$errors->first('document_type');}}@if(!empty($message)){{$message}}@endIf</span>
+        <div class="col-sm-8"><input type="file" name="nca_document" />
+        @if(Session::has('nca_document_error'))
+            <span class="errorlogin email-login">
+                {{ Session::get('nca_document_error') }}
+            </span>
+        @endif
         </div>
     </div>
 	<div class="form-group">
-        {{ Form::label('upload_document', 'Upload Document: ', array('class' => 'col-sm-3
+        {{ Form::label('msa_document', 'Upload Msa Document: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8"><input type="file" name="upload_document" />
-        @if(Session::has('resume_error'))
+        <div class="col-sm-8"><input type="file" name="msa_document" />
+        @if(Session::has('msa_document_error'))
             <span class="errorlogin email-login">
-                {{ Session::get('upload_document_error') }}
+                {{ Session::get('msa_document_error') }}
             </span>
         @endif
         </div>

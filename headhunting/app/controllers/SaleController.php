@@ -36,8 +36,11 @@ class SaleController extends HelperController {
 			foreach( $country as $key => $value) {
 				$count[$value->id] = $value->country;
 			}
-
-			$clients = Client::all();
+			if(Auth::user()->hasRole(1)){
+				$clients = Client::all();
+			} else {
+				$clients = Client::where('created_by', '=', Auth::user()->id)->get();	
+			}
 			$client = array();
 			foreach( $clients as $key => $value) {
 				$client[$value->id] = $value->first_name."-".$value->email;
@@ -116,7 +119,7 @@ class SaleController extends HelperController {
 			    $q->where('assigned_to_id','=', $id);
 			})->get();
 		}
-		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));
+		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
 	}
 
 	/**

@@ -14,7 +14,8 @@
                         <th>Email</th>
                         <th>Point Of Contact</th>
                         <th>Phone</th>
-                        <th>Document Type</th>
+                        <th>NCA Document</th>
+                        <th>MSA Document</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -24,13 +25,20 @@
 								<td>{{$thirdparty->email}}</td>
 									<td>{{$thirdparty->poc}}</td>
 									<td>{{$thirdparty->phone}}</td>
-								@if($thirdparty->document_type == 1)
-									<td>NCA</td>
-								@elseif($thirdparty->document_type == 2)
-									<td>MSA</td>
-								@else
-									<td>-</td>
-								@endif
+                @if($thirdparty->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document)))
+                  <td>
+                    <a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
+                  </td>
+                @else
+                  <td>-</td>
+                @endif
+								@if($thirdparty->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document)))
+                  <td>
+                    <a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
+                  </td>
+                @else
+                  <td>-</td>
+                @endif
 									<td>
 										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
 								  @if(Auth::user()->getRole() <= 3)
@@ -39,11 +47,8 @@
 										@if(Auth::user()->getRole() <= 3)
 											<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 										@endif
-								@if($thirdparty->document_type != 0 && $thirdparty->document_url && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->document_url)))
-									<a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->document_url}}" title="Download Document" target="_blank"><i class="glyphicon glyphicon-download"></i></a>
-								@endif
 								</td>
-	                      </tr>
+	              </tr>
 	                   	@empty
 	                   		<p>No Third Party</p>
 						@endforelse
@@ -53,7 +58,8 @@
                         <th>Email</th>
                         <th>Point Of Contact</th>
                         <th>Phone</th>
-                        <th>Document Type</th>
+                        <th>NCA Document</th>
+                        <th>MSA Document</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

@@ -181,3 +181,11 @@ ALTER TABLE `job_posts` CHANGE `comments` `comment` TEXT CHARACTER SET latin1 CO
 ALTER TABLE `sources` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone` ;
 ALTER TABLE `clients` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone` ;
 ALTER TABLE `users` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone_no` ;
+
+
+
+
+
+
+ALTER TABLE `sources` CHANGE `document_type` `nca_document` VARCHAR( 247 ) NULL DEFAULT NULL ;
+ALTER TABLE `sources` CHANGE `document_url` `msa_document` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;

@@ -32,6 +32,7 @@
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('client-list') }}"><i class="fa fa-user"></i>Client List</a></li>
                 <li><a href="{{ URL::route('add-client') }}"><i class="fa fa-user-plus"></i>Add Client</a></li>
+                <li><a href="{{ URL::route('client-upload') }}"><i class="fa fa-user"></i>Upload Clients</a></li>
               </ul>
             </li>
             @endif
@@ -41,7 +42,9 @@
                 <i class="fa fa-bookmark-o"></i> <span>Requirements</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
+                @if(Auth::user()->getRole() != 4)
                 <li><a href="{{ URL::route('list-requirement') }}"><i class="fa fa-level-down"></i>Posted Requirements</a></li>
+                @endif
                 @if(Auth::user()->getRole() <= 3)
                   <li><a href="{{ URL::route('post-requirement') }}"><i class="fa fa-plus"></i>Post Requirement</a></li>
                 @endif
