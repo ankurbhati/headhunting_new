@@ -36,20 +36,24 @@ class ClientController extends \BaseController {
 		$count = 0;
 		while (($line = fgetcsv($file)) !== FALSE) {
 			if ($count){
-				if(Client::where('email', '=', $line[0])->get()->isEmpty()) {
-					$client = new Client();
-					$client->email = $line[0];
-					$client->first_name = $line[1];
-					$client->last_name = $line[2];
-					$client->phone = $line[3];
-					$client->phone_ext = $line[4];
-					$client->company_name = $line[5];
-					$client->created_by = Auth::user()->id;
-					$client->save();
-					$mail_group = new MailGroupMember();
-					$mail_group->group_id = 1;
-					$mail_group->user_id = $client->id;
-					$mail_group->save();
+				try{
+					if(Client::where('email', '=', $line[0])->get()->isEmpty()) {
+						$client = new Client();
+						$client->email = $line[0];
+						$client->first_name = $line[1];
+						$client->last_name = $line[2];
+						$client->phone = $line[3];
+						$client->phone_ext = $line[4];
+						$client->company_name = $line[5];
+						$client->created_by = Auth::user()->id;
+						$client->save();
+						$mail_group = new MailGroupMember();
+						$mail_group->group_id = 1;
+						$mail_group->user_id = $client->id;
+						$mail_group->save();
+					}
+				} catch(Exception $e){
+					print "failing for ".$line[1];
 				}
 			} 
 			$count++;
