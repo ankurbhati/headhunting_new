@@ -13,6 +13,15 @@
     </div>
 
     <div class="form-group">
+        {{ Form::label('subject', 'Subject: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::text('subject', '', array('class' =>
+            'form-control', 'placeholder' => 'subject')); }}
+            <span class='errorlogin'>{{$errors->first('subject');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
+    <div class="form-group">
         {{ Form::label('description', 'Text: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::textarea('description', '', array('class' =>

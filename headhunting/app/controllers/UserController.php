@@ -670,6 +670,7 @@ class UserController extends HelperController {
 							   ->withInput();
 			} else {
 				$mass_mail = new MassMail();
+				$mass_mail->subject = Input::get('subject');
 				$mass_mail->mail_group_id = Input::get('mail_group_id');
 				$mass_mail->description = Input::get('description');
 				$mass_mail->send_by = Auth::user()->id;
@@ -712,7 +713,7 @@ class UserController extends HelperController {
 				Mail::queue([], [], function($message) use(&$mass_mail, &$user)
 				{
 				    $message->to($user->email, $user->first_name . " " . $user->last_name)
-				    ->subject('Head hunting')
+				    ->subject($mass_mail->subject)
 				    ->setBody($mass_mail->description, 'text/html');
 				});
 			}

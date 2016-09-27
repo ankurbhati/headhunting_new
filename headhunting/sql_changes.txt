@@ -189,3 +189,9 @@ ALTER TABLE `users` ADD `phone_ext` VARCHAR( 10 ) NULL DEFAULT NULL AFTER `phone
 
 ALTER TABLE `sources` CHANGE `document_type` `nca_document` VARCHAR( 247 ) NULL DEFAULT NULL ;
 ALTER TABLE `sources` CHANGE `document_url` `msa_document` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+
+
+
+
+
+ALTER TABLE `mass_mails` ADD `subject` VARCHAR( 256 ) NULL DEFAULT NULL AFTER `mail_group_id` ;
