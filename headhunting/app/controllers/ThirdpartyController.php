@@ -39,18 +39,22 @@ class ThirdpartyController extends \BaseController {
 		$count = 0;
 		while (($line = fgetcsv($file)) !== FALSE) {
 			if ($count){
-				if(Thirdparty::where('email', '=', $line[1])->get()->isEmpty()) {
-					$third_party = new Thirdparty();
-					$third_party->poc = $line[0];
-					$third_party->email = $line[1];
-					$third_party->phone = $line[2];
-					$third_party->phone_ext = $line[3];
-					$third_party->created_by = Auth::user()->id;
-					$third_party->save();
-					$mail_group = new MailGroupMember();
-					$mail_group->group_id = 3;
-					$mail_group->user_id = $third_party->id;
-					$mail_group->save();
+				try{
+					if(Thirdparty::where('email', '=', $line[1])->get()->isEmpty()) {
+						$third_party = new Thirdparty();
+						$third_party->poc = $line[0];
+						$third_party->email = $line[1];
+						$third_party->phone = $line[2];
+						$third_party->phone_ext = $line[3];
+						$third_party->created_by = Auth::user()->id;
+						$third_party->save();
+						$mail_group = new MailGroupMember();
+						$mail_group->group_id = 3;
+						$mail_group->user_id = $third_party->id;
+						$mail_group->save();
+					}
+				} catch(Exception $e){
+					print "failing for ".$line[1];
 				}
 			} 
 			$count++;
