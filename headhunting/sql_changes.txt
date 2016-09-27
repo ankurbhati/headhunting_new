@@ -195,3 +195,5 @@ ALTER TABLE `sources` CHANGE `document_url` `msa_document` VARCHAR( 255 ) CHARAC
 
 
 ALTER TABLE `mass_mails` ADD `subject` VARCHAR( 256 ) NULL DEFAULT NULL AFTER `mail_group_id` ;
+UPDATE `headhunting_new1`.`mail_groups` SET `name` = 'Thirdparty' WHERE `mail_groups`.`id` =3;
+Delete FROM `mail_groups`  where id=2;

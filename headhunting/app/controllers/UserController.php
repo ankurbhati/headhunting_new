@@ -660,7 +660,8 @@ class UserController extends HelperController {
 			$validate=Validator::make (
 				Input::all(), array(
 						'mail_group_id' =>  'required',
-						'description' => 'required'
+						'description' => 'required',
+						'subject' => 'max:257'
 				)
 			);
 
@@ -681,7 +682,11 @@ class UserController extends HelperController {
 				}
 			}
 		} else {
-			$mail_groups = MailGroup::all()->lists('name', 'id');
+			if( Auth::user()->hasRole(2) || Auth::user()->hasRole(3) ) {			
+				$mail_groups = MailGroup::all()->lists('name', 'id');
+			} else {
+				$mail_groups = MailGroup::where("name", "!=", 'Clients')->lists('name', 'id');
+			}
 			return View::make('User.massMail')->with(array('title' => 'Mass Mail', 'mail_groups'=> $mail_groups));
 		}
 	}
@@ -703,7 +708,11 @@ class UserController extends HelperController {
 			$authUser = User::find($mass_mail->send_by);
 			$model = $mass_mail->mailgroup->model;
 			$users = MailGroupMember::where('group_id', '=', $mass_mail->mailgroup->id)->lists('user_id');
-			$user_list = $model::whereIn('id', $users)->get();
+			if($model == 'Client') {
+				$user_list = $model::whereIn('id', $users)->where('created_by', '=', $authUser->id)->get();
+			} else {
+				$user_list = $model::whereIn('id', $users)->get();	
+			}
 			foreach($user_list as $user) {
 				Config::set('mail.username', $authUser->email);
 				Config::set('mail.from.address', $authUser->email);
