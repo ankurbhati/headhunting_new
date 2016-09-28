@@ -538,5 +538,21 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'upload-third-party-csv',
 			'uses'    =>    'ThirdpartyController@uploadThirdpartyCsv'
 	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('GET'), '/settings', array(
+			'as'    =>    'settings',
+			'uses'    =>    'UserController@settings'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('POST'), '/settings', array(
+			'as'    =>    'settings',
+			'uses'    =>    'UserController@saveSettings'
+	));
 	/** ANKUR BHATI **/
 });

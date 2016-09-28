@@ -97,6 +97,13 @@
                 <i class="fa fa-eye"></i> <span>Job Submittals</span>
               </a>
             </li>
+            @if(Auth::user()->hasRole(1))
+            <li>
+              <a href="{{ URL::route('settings') }}">
+                <i class="fa fa-eye"></i> <span>Settings</span>
+              </a>
+            </li>
+            @endif
           </ul>
         </section>
         <!-- /.sidebar -->

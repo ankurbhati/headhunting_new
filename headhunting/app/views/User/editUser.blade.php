@@ -132,6 +132,14 @@
             <span class='errorlogin'>{{$errors->first('gender');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+    <div class="form-group">
+        {{ Form::label('signature', 'Signature: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::textarea('signature', $user->signature, array('class' =>
+            'form-control', 'placeholder' => 'Enter Employee Signature')); }}  
+            <span class='errorlogin'>{{$errors->first('signature');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
     <div class="form-group" id="mentor_id_view" style="display:none;">
         {{ Form::label('mentor_id', 'Mentor: ', array('class' => 'col-sm-3
         control-label')); }}

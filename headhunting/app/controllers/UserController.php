@@ -39,6 +39,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function addEmployee() {
+
 		$roles = Role::all();
 		$rols = array();
 		foreach( $roles as $key => $value) {
@@ -399,7 +400,7 @@ class UserController extends HelperController {
 								->withErrors($validate)
 								->withInput();
 			} else {
-				$inputs = Input::except(array('_token', 'roles', 'doj', 'dor', 'mentor_id'));
+				$inputs = Input::except(array('_token', 'roles', 'doj', 'dor', 'mentor_id', '_wysihtml5_mode'));
 				$user = User::find($id);
 
 				if(Input::has("email") && Input::get('email') != $user->email){
@@ -713,23 +714,127 @@ class UserController extends HelperController {
 			} else {
 				$user_list = $model::whereIn('id', $users)->get();	
 			}
+
+			$setting = Setting::where('type', '=', 'disclaimer')->get()->first();
+			$disclaimer = $setting->value;
 			foreach($user_list as $user) {
 				Config::set('mail.username', $authUser->email);
 				Config::set('mail.from.address', $authUser->email);
 				Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
        			Config::set('mail.password', $authUser->email_password);
 
+       			$body_content = $mass_mail->description."<br />".$authUser->signature."<br />".$disclaimer;
+
 				Mail::queue([], [], function($message) use(&$mass_mail, &$user)
 				{
 				    $message->to($user->email, $user->first_name . " " . $user->last_name)
 				    ->subject($mass_mail->subject)
-				    ->setBody($mass_mail->description, 'text/html');
+				    ->setBody($body_content, 'text/html');
 				});
 			}
 			$mass_mail->status = 3;
 			$mass_mail->save();
 		}
 	}
+
+
+	/**
+	 *
+	 * saveSettings() : saveSettings
+	 *
+	 * @return Object : saveSettings
+	 *
+	 */
+	public function settings() {
+		$setting = Setting::where('type', '=', 'disclaimer')->get();
+		if(!$setting->isEmpty()) {
+			$setting = $setting->first();
+		}
+		return View::make('User.settings')->with(array('title' => 'Portal Settings', 'setting' => $setting));
+	}
+
+		/**
+	 *
+	 * loginView() : saveSettings
+	 *
+	 * @return Object : saveSettings
+	 *
+	 */
+	public function saveSettings() {
+
+
+		if(Auth::user()->hasRole(1)) {
+			Validator::extend('has', function($attr, $value, $params) {
+
+				if(!count($params)) {
+
+					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
+				}
+
+				foreach ($params as $param) {
+					switch ($param) {
+						case 'num':
+							$regex = '/\pN/';
+							break;
+						case 'letter':
+							$regex = '/\pL/';
+							break;
+						case 'lower':
+							$regex = '/\p{Ll}/';
+							break;
+						case 'upper':
+							$regex = '/\p{Lu}/';
+							break;
+						case 'special':
+							$regex = '/[\pP\pS]/';
+							break;
+						default:
+							$regex = $param;
+					}
+
+					if(! preg_match($regex, $value)) {
+						return false;
+					}
+				}
+
+				return true;
+			});
+
+			// Server Side Validation.
+			$validate=Validator::make (
+					Input::all(), array(
+							'disclaimer' =>  'required'
+					)
+			);
+			if($validate->fails()) {
+
+				return Redirect::route('settings', array())
+								->withErrors($validate)
+								->withInput();
+			} else {
+				$setting = Setting::where('type', '=', 'disclaimer')->get();
+				if(!$setting->isEmpty()) {
+					$setting = $setting->first();
+				} else {
+					$setting = new Setting();
+					$setting->type = 'disclaimer';
+				}
+				
+				$setting->value = Input::get('disclaimer');
+				// Checking Authorised or not
+				if($setting->save()) {
+
+					return Redirect::route('dashboard-view');
+				} else {
+
+					return Redirect::route('settings', array())
+								->withErrors($validate)
+								->withInput();
+				}
+			}
+		}
+	}
+	
 	// */1 * * * * /usr/bin/curl -k http://apetan.portal.com/send-mail-from-cron
 
 }

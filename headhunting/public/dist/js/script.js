@@ -122,6 +122,9 @@ $(function () {
   }
 
   $("#description").wysihtml5();
+  $("#disclaimer").wysihtml5();
+  $("#signature").wysihtml5();
+
   function getState(country){
 	    $.ajax({
 	        url: '/states/' + country

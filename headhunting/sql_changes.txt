@@ -196,4 +196,19 @@ ALTER TABLE `sources` CHANGE `document_url` `msa_document` VARCHAR( 255 ) CHARAC
 
 ALTER TABLE `mass_mails` ADD `subject` VARCHAR( 256 ) NULL DEFAULT NULL AFTER `mail_group_id` ;
 UPDATE `headhunting_new1`.`mail_groups` SET `name` = 'Thirdparty' WHERE `mail_groups`.`id` =3;
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(247) NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `users` ADD `signature` TEXT NULL DEFAULT NULL AFTER `address` ;
+
+
 Delete FROM `mail_groups`  where id=2;
