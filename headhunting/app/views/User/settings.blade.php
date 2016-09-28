@@ -8,7 +8,7 @@
         {{ Form::label('disclaimer', 'Mail Disclaimer: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::textarea('disclaimer', $setting->value, array('class' =>
-            'form-control', 'placeholder' => 'ex. 20')); }}
+            'form-control', 'placeholder' => 'ex. Disclaimer')); }}
             <span class='errorlogin'>{{$errors->first('disclaimer');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

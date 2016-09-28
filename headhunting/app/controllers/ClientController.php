@@ -180,9 +180,9 @@ class ClientController extends \BaseController {
 		if(Auth::user()->getRole() <= 3) {
 
 			if(Auth::user()->hasRole(1)) {
-				$client = Client::with(array('created_by'))->where('id', '=', $id)->get();
+				$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
 			} else {
-				$client = Client::with(array('created_by'))->where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
+				$client = Client::with(array('createdby'))->where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
 			}
 			if(!$client->isEmpty()) {
 				$client = $client->first();

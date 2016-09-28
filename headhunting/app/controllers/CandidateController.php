@@ -4,7 +4,7 @@ class CandidateController extends HelperController {
 
 
 	private $resume_target_dir = 'uploads/resumes/';
-	private $resume_size = 500000;
+	private $resume_size = 5000000;
 
 
 	/**

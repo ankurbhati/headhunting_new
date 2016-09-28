@@ -749,6 +749,8 @@ class UserController extends HelperController {
 		$setting = Setting::where('type', '=', 'disclaimer')->get();
 		if(!$setting->isEmpty()) {
 			$setting = $setting->first();
+		} else {
+			$setting = new Setting();
 		}
 		return View::make('User.settings')->with(array('title' => 'Portal Settings', 'setting' => $setting));
 	}
