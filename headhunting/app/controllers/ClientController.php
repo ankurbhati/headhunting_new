@@ -83,7 +83,7 @@ class ClientController extends \BaseController {
 							'company_name' =>  'max:100'
 					), 
 					array(
-        				'email.unique'=>'This client is already working with '.Client::where('email', 'like', Input::get('email'))->first()->createdby->first_name,
+        				'email.unique'=>Client::where('email', 'like', Input::get('email'))->exists()?'This client is already working with '.Client::where('email', 'like', Input::get('email'))->first()->createdby->first_name:"Email is already in use.",
 				    )
 			);
 
@@ -245,7 +245,7 @@ class ClientController extends \BaseController {
 						return Redirect::route('edit-client', array('id' => $id))
 						               ->withInput()
 									   ->withErrors(array(
-					        				'email'=>'This client is already working with '.Client::where('email', 'like', Input::get('email'))->first()->createdby->first_name,
+					        				'email'=>Client::where('email', 'like', Input::get('email'))->exists()?'This client is already working with '.Client::where('email', 'like', Input::get('email'))->first()->createdby->first_name:"Email is already in use."
 									    ));
 					}
 					$client->email = $email;
