@@ -15,6 +15,7 @@
                         <th>Type Of Employment</th>
                         <th>City, Country</th>
                         <th>Client</th>
+                        <th>Added By</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -25,7 +26,8 @@
 		                        <td>{{$jobPosts->title}}</td>
 								<td>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
 								<td>{{$jobPosts->city->name}}, {{$jobPosts->country->country}}</td>
-								<td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
+                <td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
+								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>
 								<td>{{($jobPosts->status == 1)?"Closed":"Open";}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $jobPosts->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
@@ -53,6 +55,7 @@
                         <th>Type Of Employment</th>
                         <th>City, State, Country</th>
                         <th>Client</th>
+                        <th>Added By</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>

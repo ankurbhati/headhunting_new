@@ -24,7 +24,7 @@
               </ul>
             </li>
             @endif
-            @if(Auth::user()->getRole() <= 3)
+            @if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
               <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> <span>Clients</span> <i class="fa fa-angle-left pull-right"></i>
@@ -47,7 +47,7 @@
                 @if(Auth::user()->getRole() != 4)
                 <li><a href="{{ URL::route('list-requirement') }}"><i class="fa fa-level-down"></i>Posted Requirements</a></li>
                 @endif
-                @if(Auth::user()->getRole() <= 3)
+                @if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
                   <li><a href="{{ URL::route('post-requirement') }}"><i class="fa fa-plus"></i>Post Requirement</a></li>
                 @endif
                 <li><a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}"><i class="fa fa-upload"></i>Assigned Requirement</a></li>

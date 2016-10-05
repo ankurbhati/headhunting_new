@@ -708,11 +708,17 @@ class UserController extends HelperController {
 			$mass_mail->save();
 			$authUser = User::find($mass_mail->send_by);
 			$model = $mass_mail->mailgroup->model;
+			$user_list = array();
 			$users = MailGroupMember::where('group_id', '=', $mass_mail->mailgroup->id)->lists('user_id');
 			if($model == 'Client') {
 				$user_list = $model::whereIn('id', $users)->where('created_by', '=', $authUser->id)->get();
+			} else if($model == 'Thirdparty') {
+				$thirdparties = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', $authUser->id)->get(); 
+				if(!$thirdparties->isEmpty()) {
+					$user_list = $thirdparties->first()->vendors;
+				}	
 			} else {
-				$user_list = $model::whereIn('id', $users)->get();	
+				$user_list = $model::whereIn('id', $users)->get();
 			}
 
 			$setting = Setting::where('type', '=', 'disclaimer')->get()->first();

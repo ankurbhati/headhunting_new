@@ -212,3 +212,34 @@ ALTER TABLE `users` ADD `signature` TEXT NULL DEFAULT NULL AFTER `address` ;
 
 
 Delete FROM `mail_groups`  where id=2;
+
+
+
+
+
+create table third_party_users (id int auto_increment,
+  user_id int,
+  source_id int,
+  created_at datetime,
+  updated_at timestamp,
+  primary key(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (source_id) REFERENCES sources(id) 
+)
+
+ALTER TABLE third_party_users ADD CONSTRAINT uc_user_source UNIQUE (user_id, source_id)
+
+
+ALTER TABLE `third_party_users` DROP FOREIGN KEY `third_party_users_ibfk_1` ;
+
+ALTER TABLE `third_party_users` ADD CONSTRAINT `third_party_users_ibfk_1` FOREIGN KEY ( `user_id` ) REFERENCES `headhunting_new1`.`users` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+ALTER TABLE `third_party_users` DROP FOREIGN KEY `third_party_users_ibfk_2` ;
+
+ALTER TABLE `third_party_users` ADD CONSTRAINT `third_party_users_ibfk_2` FOREIGN KEY ( `source_id` ) REFERENCES `headhunting_new1`.`sources` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+

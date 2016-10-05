@@ -28,7 +28,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function postRequirementView() {
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			$jobPost = new JobPost();
 			$country = Country::all();
 
@@ -85,7 +85,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function deleteRequirement($id) {
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			$jobPost = JobPost::find($id)->delete();
 		}
 		return Redirect::route('list-requirement');
@@ -112,9 +112,9 @@ class SaleController extends HelperController {
 	 */
 	public function listRequirement($id=0) {
 		if($id == 0) {
-			$jobPost = JobPost::all();
+			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->get();
 		} else {
-			$jobPost = JobPost::with(array('country', 'state', 'client'))->whereHas('jobsAssigned', function($q) use ($id)
+			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
 			})->get();
@@ -133,7 +133,7 @@ class SaleController extends HelperController {
 	 */
 	public function postRequirement() {
 
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			// Server Side Validation.
 			$validate=Validator::make (
 					Input::all(), array(
@@ -203,7 +203,7 @@ class SaleController extends HelperController {
 		if($id != "") {
 			$jobPost = JobPost::find($id);
 		}
-		if(Auth::user()->getRole() <= 3 && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
+		if((Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
 			// Server Side Validation.
 			$validate=Validator::make (
 					Input::all(), array(
@@ -270,7 +270,7 @@ class SaleController extends HelperController {
 		if($id != "") {
 			$jobPost = JobPost::find($id);
 		}
-		if(Auth::user()->getRole() <= 2 && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
+		if((Auth::user()->hasRole(1)|| Auth::user()->hasRole(2)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
 			$country = Country::all();
 			$count = array();
 			foreach( $country as $key => $value) {

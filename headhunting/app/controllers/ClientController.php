@@ -71,7 +71,7 @@ class ClientController extends \BaseController {
 	public function createClient()
 	{
 
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -117,11 +117,11 @@ class ClientController extends \BaseController {
 							'phone' => 'max:14',
 							'phone_ext' => 'max:10',
 							'company_name' =>  'max:100'
-					)
+					), array('email.unique'=>'Already used by some other user')
 			);
 
-			if($validate->fails()) {
 
+			if($validate->fails()) {
 				return Redirect::to('add-client')
 							   ->withErrors($validate)
 							   ->withInput();
@@ -177,7 +177,7 @@ class ClientController extends \BaseController {
 	 */
 	public function viewClient($id) {
 
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 
 			if(Auth::user()->hasRole(1)) {
 				$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
@@ -208,7 +208,8 @@ class ClientController extends \BaseController {
 	 */
 	public function editClient($id) {
 
-		if(Auth::user()->getRole() <= 3) {
+		//if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(1)) {
 			
 			if(Auth::user()->hasRole(1)) {
 				$client = Client::where('id', '=', $id)->get();
@@ -240,7 +241,7 @@ class ClientController extends \BaseController {
 	 */
 	public function updateClient($id)
 	{
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -343,17 +344,21 @@ class ClientController extends \BaseController {
 	 *
 	 */
 	public function deleteClient($id) {
-		if(Auth::user()->getRole() <= 3) {
+		//if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			if(Auth::user()->hasRole(1)) {
 				$client = Client::where('id', '=', $id)->get()->first();
-			} else {
-				$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get()->first();
+				if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
+					return Redirect::route('client-list');
+				}
 			}
+			//else {
+			//	$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get()->first();
+			//}
 			
-			if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
-				return Redirect::route('client-list');
-			}
-		}
+			//if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
+			//	return Redirect::route('client-list');
+			//}
+		//}
 	}
 
 }

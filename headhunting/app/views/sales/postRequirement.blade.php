@@ -76,7 +76,7 @@
         {{ Form::label('rate', 'Rate/hr: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('rate', $jobPost->rate, array('class' =>
-            'form-control', 'placeholder' => 'ex. 20')); }}
+            'form-control', 'placeholder' => '$ per hour')); }}
             <span class='errorlogin'>{{$errors->first('rate');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

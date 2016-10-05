@@ -29,7 +29,7 @@
                             <td>{{$client->createdby->first_name. " ".$client->createdby->last_name }}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-client', array('id' => $client->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
-                              @if(Auth::user()->getRole() <= 3)
+                              @if(Auth::user()->hasRole(1))
 		                        	  <a href="{{ URL::route('edit-client', array($client->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
 		                        		<a href="{{ URL::route('delete-client', array($client->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 		                        	@endif
