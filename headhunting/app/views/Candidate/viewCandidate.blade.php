@@ -67,7 +67,7 @@
 	    <div class="row"><div class="col-sm-4">
 	        Rate:
 	        </div><div class="col-sm-8">
-	        	{{$rate->value}}
+	        	@if($candidate->value){{$candidate->value}}@else{{"-"}}@endif
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">

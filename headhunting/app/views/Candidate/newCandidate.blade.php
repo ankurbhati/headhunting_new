@@ -104,7 +104,7 @@
      <div class="form-group" id="third_party_view" style="display:none;">
         {{ Form::label('third_party_id', 'Third Party: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('third_party_id', array("", 'Select Your Third Party'), '', array('class' => 'form-control')) }} 
+        <div class="col-sm-8">{{ Form::text('third_party_id', "", array('class' => 'form-control', 'placeholder' => 'Enter third party')); }} 
             <span class='errorlogin email-login'>{{$errors->first('third_party_id');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

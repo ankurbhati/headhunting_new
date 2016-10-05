@@ -51,9 +51,9 @@ $(function () {
 		    var state_id = $(this).val();
 		    if(state_id == 3) {
 		    	$('#third_party_view').show();
-		    	getThirdParty();
+		    	//getThirdParty();
 		    } else {
-		    	$('select#third_party_id').val('');
+		    	$('input#third_party_id').val('');
 		    	$('#third_party_view').hide();
 		    }
 		});
@@ -61,9 +61,9 @@ $(function () {
 	  var state_id = $('select#work_state_id').val();
 	    if(state_id == 3) {
 	    	$('#third_party_view').show();
-	    	getThirdParty();
+	    	//getThirdParty();
 	    } else {
-	    	$('select#third_party_id').val('');
+	    	$('input#third_party_id').val('');
 	    	$('#third_party_view').hide();
 	    }
   }
@@ -88,7 +88,7 @@ $(function () {
 	    	$('#duration_id').hide();
 	    }
   }
-  
+ /* 
   function getThirdParty() {
 	  $.ajax({
 	        url: '/third_party/'
@@ -103,7 +103,7 @@ $(function () {
 	        $('select#third_party_id').html(subcategoryItems);
 	        $('select#third_party_id').val(subcategories[0].id);
 	    });
-  }
+  }*/
 
   function getPeer(role) {
 	  $.ajax({

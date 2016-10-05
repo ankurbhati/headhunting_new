@@ -243,3 +243,4 @@ ALTER TABLE `third_party_users` ADD CONSTRAINT `third_party_users_ibfk_2` FOREIG
 ) ON DELETE CASCADE ON UPDATE CASCADE ;
 
 
+ALTER TABLE `candidates` ADD FOREIGN KEY (`source_id` ) REFERENCES `sources` (`id` );

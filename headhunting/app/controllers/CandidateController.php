@@ -32,42 +32,7 @@ class CandidateController extends HelperController {
 	{
 
 		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
-
+			
 			// Server Side Validation.
 			$validate=Validator::make (
 				Input::all(), array(
@@ -81,7 +46,7 @@ class CandidateController extends HelperController {
 						'designation' => 'max:255',
 						'key_skills' => 'max:255',
 						'rate' => 'max:11',
-						'third_party_id' => 'max:11',
+						'third_party_id' => 'max:247',
 						'ssn' => 'max:247|unique:candidates,ssn',
 						'visa_id' => 'max:1'
 				)
@@ -144,7 +109,23 @@ class CandidateController extends HelperController {
 				}
 
 				if($candidate->work_state_id == 3) {
-					$candidate->source_id = Input::get('third_party_id');
+					$thirdparty = Thirdparty::where('email', '=', Input::get('third_party_id'))->get();
+					if(!$thirdparty->isEmpty()) {
+						$candidate->source_id = $thirdparty->first()->id;
+					} else {
+						$thirdparty = new Thirdparty();
+						$thirdparty->email = Input::get('third_party_id');
+						$thirdparty->save();
+						$mail_group = new MailGroupMember();
+						$mail_group->group_id = 3;
+						$mail_group->user_id = $thirdparty->id;
+						$mail_group->save();
+						$thirdpartyuser = new Thirdpartyuser();
+						$thirdpartyuser->user_id = Auth::user()->id;
+						$thirdpartyuser->source_id = $thirdparty->id;
+						$thirdpartyuser->save();
+						$candidate->source_id = $thirdparty->id;
+					}
 				}
 
 
@@ -295,41 +276,6 @@ class CandidateController extends HelperController {
 	public function updateCandidate($id)
 	{
 		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
 
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -344,7 +290,7 @@ class CandidateController extends HelperController {
 						'designation' => 'max:255',
 						'key_skills' => 'max:255',
 						'rate' => 'max:11',
-						'third_party_id' => 'max:11',
+						'third_party_id' => 'max:247',
 						'ssn' => 'max:247',
 						'visa_id' => 'max:1'
 				)
@@ -423,9 +369,25 @@ class CandidateController extends HelperController {
 				}
 
 				if($candidate->work_state_id == 3) {
-					$candidate->source_id = Input::get('third_party_id');
+					$thirdparty = Thirdparty::where('email', '=', Input::get('third_party_id'))->get();
+					if(!$thirdparty->isEmpty()) {
+						$candidate->source_id = $thirdparty->first()->id;
+					} else {
+						$thirdparty = new Thirdparty();
+						$thirdparty->email = Input::get('third_party_id');
+						$thirdparty->save();
+						$mail_group = new MailGroupMember();
+						$mail_group->group_id = 3;
+						$mail_group->user_id = $thirdparty->id;
+						$mail_group->save();
+						$thirdpartyuser = new Thirdpartyuser();
+						$thirdpartyuser->user_id = Auth::user()->id;
+						$thirdpartyuser->source_id = $thirdparty->id;
+						$thirdpartyuser->save();
+						$candidate->source_id = $thirdparty->id;
+					}
 				}
-
+				
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {

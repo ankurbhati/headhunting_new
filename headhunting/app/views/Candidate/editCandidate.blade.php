@@ -48,7 +48,7 @@
         {{ Form::label('rate', 'Rate/hr: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('rate', isset($rate->value)? $rate->value: "-", array('class' =>
-            'form-control', 'placeholder' => 'ex. 20')); }}
+            'form-control', 'placeholder' => '$ per hour')); }}
             <span class='errorlogin'>{{$errors->first('rate');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
@@ -102,7 +102,7 @@
     <div class="form-group" id="third_party_view" style="display:none;">
         {{ Form::label('third_party_id', 'Third Party: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('third_party_id', array("", 'Select Your Third Party'), $candidate->source_id, array('class' => 'form-control')) }} 
+        <div class="col-sm-8">{{ Form::text('third_party_id', $candidate->source_id?Thirdparty::find($candidate->source_id)->email:"" , array('class' => 'form-control', 'placeholder' => 'Enter third party')); }}
             <span class='errorlogin email-login'>{{$errors->first('third_party_id');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
