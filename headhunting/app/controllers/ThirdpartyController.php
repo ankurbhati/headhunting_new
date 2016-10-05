@@ -206,10 +206,15 @@ class ThirdpartyController extends \BaseController {
 	 *
 	 */
 	public function thirdpartyList() {
-		$thirdparties = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', Auth::user()->id)->get(); 
-		if(!$thirdparties->isEmpty()) {
-				$thirdparties = $thirdparties->first()->vendors;
+		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {
+			$thirdparties = Thirdparty::whereHas('thirdPartyUsers', function($q)
+				{
+				    $q->where('user_id','=', Auth::user()->id);
+				})->get();
+		} else {
+			$thirdparties = Thirdparty::all();
 		}
+
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));
 	}
 
