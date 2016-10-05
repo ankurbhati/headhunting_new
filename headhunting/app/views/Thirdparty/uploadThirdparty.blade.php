@@ -25,6 +25,12 @@
             btn-info pull-right', 'id' => 'login-button') ); }}
         </div>
    </div>
+   @if(Session::has('upload_result'))
+   <hr>
+   <div style="height: 500px; overflow: scroll;">
+        {{ Session::get('upload_result') }}
+   </div>
+   @endif
 {{ Form::close() }}
 </div>
 @stop

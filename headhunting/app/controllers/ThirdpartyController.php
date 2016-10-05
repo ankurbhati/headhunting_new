@@ -37,30 +37,56 @@ class ThirdpartyController extends \BaseController {
 	{
 		$file = fopen($_FILES['third_party_csv']['tmp_name'], 'r');
 		$count = 0;
+		$failed = 0;
+		$user_id = Auth::user()->id;
+		$message = '';
+		$already_exist = '';
 		while (($line = fgetcsv($file)) !== FALSE) {
-			if ($count){
-				try{
-					if(Thirdparty::where('email', '=', $line[1])->get()->isEmpty()) {
-						$third_party = new Thirdparty();
-						$third_party->poc = $line[0];
-						$third_party->email = $line[1];
-						$third_party->phone = $line[2];
-						$third_party->phone_ext = $line[3];
-						$third_party->created_by = Auth::user()->id;
-						$third_party->save();
-						$mail_group = new MailGroupMember();
-						$mail_group->group_id = 3;
-						$mail_group->user_id = $third_party->id;
-						$mail_group->save();
+			if ($count == 0){
+				$count++;
+				continue;
+			}
+			try{
+				$thirdparty = Thirdparty::where('email', '=', $line[1])->get();
+				if(!$thirdparty->isEmpty()) {
+					$thirdparty = $thirdparty->first();
+					$thirdpartyuser = Thirdpartyuser::where('source_id', '=', $thirdparty->id)->where('user_id', '=', $user_id)->get();
+					if(!$thirdpartyuser->isEmpty()) {
+						$thirdpartyuser = $thirdpartyuser->first();
+						$failed++;
+						$already_exist .= $line[1]." Already belongs to you<br />";
+					} else {
+						$thirdpartyuser = new Thirdpartyuser();
+						$thirdpartyuser->user_id = $user_id;
+						$thirdpartyuser->source_id = $thirdparty->id;
+						$thirdpartyuser->save();
 					}
-				} catch(Exception $e){
-					print "failing for ".$line[1];
+				} else {
+					$third_party = new Thirdparty();
+					$third_party->poc = $line[0];
+					$third_party->email = $line[1];
+					$third_party->phone = $line[2];
+					$third_party->phone_ext = $line[3];
+					$third_party->created_by = $user_id;
+					$third_party->save();
+					$mail_group = new MailGroupMember();
+					$mail_group->group_id = 3;
+					$mail_group->user_id = $third_party->id;
+					$mail_group->save();
+					$thirdpartyuser = new Thirdpartyuser();
+					$thirdpartyuser->user_id = Auth::user()->id;
+					$thirdpartyuser->source_id = $third_party->id;
+					$thirdpartyuser->save();
 				}
+			} catch(Exception $e){
+				$message .= "Error while adding email: ".$line[1]."<br />";
 			} 
 			$count++;
 		}
 		fclose($file);
-		return Redirect::route('third-party-list');
+		$message = $already_exist.$message.'<b><br />Report : '.$failed.' already exists out of '.($count-1)."</b>";
+		Session::flash('upload_result', $message);
+		return Redirect::route('vendor-third-party');
 	}
 
 	/**
@@ -72,46 +98,11 @@ class ThirdpartyController extends \BaseController {
 	{
 
 		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
 
 			// Server Side Validation.
 			$validate=Validator::make (
 					Input::all(), array(
-							'email' =>  'required|max:50|email|unique:sources,email',
+							'email' =>  'required|max:50|email',
 							'poc' => 'max:50',
 							'phone' => 'max:14',
 							'phone_ext' => 'max:10'
@@ -124,61 +115,83 @@ class ThirdpartyController extends \BaseController {
 							   ->withErrors($validate)
 							   ->withInput();
 			} else {
-				$thirdparty = new Thirdparty();
-				$thirdparty->poc = Input::get('poc');
-				$thirdparty->email = Input::get('email');
-				$thirdparty->phone = Input::get('phone');
-				$thirdparty->phone_ext = Input::get('phone_ext');
-				$thirdparty->created_by = Auth::user()->id;
-				
-				// Checking Authorised or not
-				if($thirdparty->save()) {
-				//if(1) {
-					$mail_group = new MailGroupMember();
-					$mail_group->group_id = 3;
-					$mail_group->user_id = $thirdparty->id;
-					$mail_group->save();
-					
-					if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
-						list($msg, $fileType) = $this->check_resume_validity("nca_document");
-						if($msg){
-							# error
-							Session::flash('nca_document_error', $msg);
-							return Redirect::route('add-third-party')->withInput();
-						} else {
-							# No error					
-							list($msg, $target_file) = $this->upload_document($thirdparty, "nca_document");
-							if($msg) {
-								//error, delete candidate or set flash message
-							} else {
-								$tmp = explode("/", $target_file);
-								$thirdparty->nca_document = end($tmp);
-							}
-						}
+				$email = Input::get('email');
+				$user_id = Auth::user()->id;
+				$thirdparty = Thirdparty::where('email', '=', $email)->get();
+				if(!$thirdparty->isEmpty()) {
+					$thirdparty = $thirdparty->first();
+					$thirdpartyuser = Thirdpartyuser::where('source_id', '=', $thirdparty->id)->where('user_id', '=', $user_id)->get();
+					if(!$thirdpartyuser->isEmpty()) {
+						$thirdpartyuser = $thirdpartyuser->first();
+						Session::flash('email_error',  $email.' already belongs to you');
+						return Redirect::to('add-third-party')->withInput();
+					} else {
+						$thirdpartyuser = new Thirdpartyuser();
+						$thirdpartyuser->user_id = $user_id;
+						$thirdpartyuser->source_id = $thirdparty->id;
+						$thirdpartyuser->save();
 					}
-
-					if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
-						list($msg, $fileType) = $this->check_resume_validity("msa_document");
-						if($msg){
-							# error
-							Session::flash('msa_document_error', $msg);
-							return Redirect::route('add-third-party')->withInput();
-						} else {
-							# No error					
-							list($msg, $target_file) = $this->upload_document($thirdparty, "msa_document");
-							if($msg) {
-								//error, delete candidate or set flash message
-							} else {
-								$tmp = explode("/", $target_file);
-								$thirdparty->msa_document = end($tmp);
-							}
-						}
-					}
-
-					$thirdparty->save();
-					return Redirect::to('third-parties');
 				} else {
-					return Redirect::to('add-third-party')->withInput();
+					$thirdparty = new Thirdparty();
+					$thirdparty->poc = Input::get('poc');
+					$thirdparty->email = $email;
+					$thirdparty->phone = Input::get('phone');
+					$thirdparty->phone_ext = Input::get('phone_ext');
+					$thirdparty->created_by = $user_id;
+					
+					// Checking Authorised or not
+					if($thirdparty->save()) {
+
+						$mail_group = new MailGroupMember();
+						$mail_group->group_id = 3;
+						$mail_group->user_id = $thirdparty->id;
+						$mail_group->save();
+						
+						if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+							list($msg, $fileType) = $this->check_resume_validity("nca_document");
+							if($msg){
+								# error
+								Session::flash('nca_document_error', $msg);
+								return Redirect::route('add-third-party')->withInput();
+							} else {
+								# No error					
+								list($msg, $target_file) = $this->upload_document($thirdparty, "nca_document");
+								if($msg) {
+									//error, delete candidate or set flash message
+								} else {
+									$tmp = explode("/", $target_file);
+									$thirdparty->nca_document = end($tmp);
+								}
+							}
+						}
+
+						if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
+							list($msg, $fileType) = $this->check_resume_validity("msa_document");
+							if($msg){
+								# error
+								Session::flash('msa_document_error', $msg);
+								return Redirect::route('add-third-party')->withInput();
+							} else {
+								# No error					
+								list($msg, $target_file) = $this->upload_document($thirdparty, "msa_document");
+								if($msg) {
+									//error, delete candidate or set flash message
+								} else {
+									$tmp = explode("/", $target_file);
+									$thirdparty->msa_document = end($tmp);
+								}
+							}
+						}
+
+						$thirdparty->save();
+						$thirdpartyuser = new Thirdpartyuser();
+						$thirdpartyuser->user_id = Auth::user()->id;
+						$thirdpartyuser->source_id = $thirdparty->id;
+						$thirdpartyuser->save();
+						return Redirect::to('third-parties');
+					} else {
+						return Redirect::to('add-third-party')->withInput();
+					}
 				}
 			}
 		}
@@ -193,7 +206,10 @@ class ThirdpartyController extends \BaseController {
 	 *
 	 */
 	public function thirdpartyList() {
-		$thirdparties = Thirdparty::all();
+		$thirdparties = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', Auth::user()->id)->get(); 
+		if(!$thirdparties->isEmpty()) {
+				$thirdparties = $thirdparties->first()->vendors;
+		}
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));
 	}
 
@@ -209,10 +225,10 @@ class ThirdpartyController extends \BaseController {
 
 		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 
-			$thirdparty = Thirdparty::with(array('createdby'))->where('id', '=', $id)->get();
-
+			$thirdparty = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', Auth::user()->id)->where('source_id', '=', $id)->get();
+			
 			if(!$thirdparty->isEmpty()) {
-				$thirdparty = $thirdparty->first();
+				$thirdparty = $thirdparty->first()->vendors[0];
 				return View::make('Thirdparty.viewThirdparty')
 						   ->with(array('title' => 'View Third Party', 'thirdparty' => $thirdparty));
 			} else {
@@ -237,10 +253,11 @@ class ThirdpartyController extends \BaseController {
 
 		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 
-			$thirdparty = Thirdparty::with(array('createdby'))->where('id', '=', $id)->get();
+			//$thirdparty = Thirdparty::with(array('createdby'))->where('id', '=', $id)->get();
+			$thirdparty = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', Auth::user()->id)->where('source_id', '=', $id)->get();
 
 			if(!$thirdparty->isEmpty()) {
-				$thirdparty = $thirdparty->first();
+				$thirdparty = $thirdparty->first()->vendors[0];
 				return View::make('Thirdparty.editThirdparty')
 						   ->with(array('title' => 'Third Party', 'thirdparty' => $thirdparty));
 			} else {
@@ -264,42 +281,6 @@ class ThirdpartyController extends \BaseController {
 	public function updateThirdparty($id)
 	{
 		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
-
 			// Server Side Validation.
 			$validate=Validator::make (
 				Input::all(), array(
@@ -319,7 +300,7 @@ class ThirdpartyController extends \BaseController {
 
 				$thirdparty = Thirdparty::find($id);
 
-				$email = Input::get('email');
+				/*$email = Input::get('email');
 				if($email && $email != $thirdparty->email){
 					if(!Thirdparty::where('email', '=', $email)->get()->isEmpty()) {
 						return Redirect::route('edit-third-party', array('id' => $id))
@@ -327,12 +308,11 @@ class ThirdpartyController extends \BaseController {
 									   ->withErrors(array('email' => "Email is already in use"));
 					}
 					$thirdparty->email = $email;
-				}
+				}*/
 				
 				$thirdparty->poc = Input::get('poc');
 				$thirdparty->phone = Input::get('phone');
 				$thirdparty->phone_ext = Input::get('phone_ext');
-				$thirdparty->created_by = Auth::user()->id;
 
 				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
 					list($msg, $fileType) = $this->check_resume_validity("nca_document");
@@ -374,7 +354,6 @@ class ThirdpartyController extends \BaseController {
 				if($thirdparty->save()) {					
 					return Redirect::route('third-party-list');
 				} else {
-					print "In else";
 					return Redirect::route('edit-client')->withInput();
 				}
 			}

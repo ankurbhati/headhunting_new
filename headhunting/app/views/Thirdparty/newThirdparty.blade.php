@@ -9,7 +9,11 @@
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('email', "", array('class' =>
             'form-control', 'placeholder' => 'Enter Vendor Email')); }} 
-            <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
+            <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf
+                @if(Session::has('email_error'))
+                    {{ Session::get('email_error') }}
+                @endif
+            </span>
         </div>
     </div>
     

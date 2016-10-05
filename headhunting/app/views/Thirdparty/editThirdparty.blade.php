@@ -9,7 +9,7 @@
         control-label')); }}
         <div class="col-sm-8">
         {{ Form::text('email', $thirdparty->email, array('class' =>
-            'form-control', 'placeholder' => 'Enter Thirdparty Email', 'required')); }}
+            'form-control', 'placeholder' => 'Enter Thirdparty Email', 'required', 'readonly')); }}
         <span class='errorlogin'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
