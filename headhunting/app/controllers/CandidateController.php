@@ -45,7 +45,7 @@ class CandidateController extends HelperController {
 						'state_id' => 'max:9',
 						'designation' => 'max:255',
 						'key_skills' => 'max:255',
-						'rate' => 'max:11',
+						'rate' => 'numeric|max:11',
 						'third_party_id' => 'max:247',
 						'ssn' => 'max:247|unique:candidates,ssn',
 						'visa_id' => 'max:1'
@@ -289,7 +289,7 @@ class CandidateController extends HelperController {
 						'state_id' => 'max:9',
 						'designation' => 'max:255',
 						'key_skills' => 'max:255',
-						'rate' => 'max:11',
+						'rate' => 'numeric|max:11',
 						'third_party_id' => 'max:247',
 						'ssn' => 'max:247',
 						'visa_id' => 'max:1'
