@@ -72,41 +72,6 @@ class ClientController extends \BaseController {
 	{
 
 		if(Auth::user()->getRole() <= 3) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
 
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -117,7 +82,10 @@ class ClientController extends \BaseController {
 							'phone' => 'max:14',
 							'phone_ext' => 'max:10',
 							'company_name' =>  'max:100'
-					)
+					), 
+					array(
+        				'email.unique'=>'This client is already working with '.Client::where('email', 'like', Input::get('email'))->first()->createdby->first_name,
+				    )
 			);
 
 			if($validate->fails()) {
@@ -241,41 +209,6 @@ class ClientController extends \BaseController {
 	public function updateClient($id)
 	{
 		if(Auth::user()->getRole() <= 3) {
-			Validator::extend('has', function($attr, $value, $params) {
-
-				if(!count($params)) {
-
-					throw new \InvalidArgumentException('The has validation rule expects at least one parameter, 0 given.');
-				}
-
-				foreach ($params as $param) {
-					switch ($param) {
-						case 'num':
-							$regex = '/\pN/';
-							break;
-						case 'letter':
-							$regex = '/\pL/';
-							break;
-						case 'lower':
-							$regex = '/\p{Ll}/';
-							break;
-						case 'upper':
-							$regex = '/\p{Lu}/';
-							break;
-						case 'special':
-							$regex = '/[\pP\pS]/';
-							break;
-						default:
-							$regex = $param;
-					}
-
-					if(! preg_match($regex, $value)) {
-						return false;
-					}
-				}
-
-				return true;
-			});
 
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -311,7 +244,9 @@ class ClientController extends \BaseController {
 					if(!Client::where('email', '=', $email)->get()->isEmpty()) {
 						return Redirect::route('edit-client', array('id' => $id))
 						               ->withInput()
-									   ->withErrors(array('email' => "Email is already in use"));
+									   ->withErrors(array(
+					        				'email'=>'This client is already working with '.Client::where('email', 'like', Input::get('email'))->first()->createdby->first_name,
+									    ));
 					}
 					$client->email = $email;
 				}
