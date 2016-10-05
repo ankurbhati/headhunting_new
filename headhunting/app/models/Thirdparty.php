@@ -37,4 +37,15 @@ class Thirdparty extends Eloquent {
     	return $this->belongsTo('User','created_by','id');
     }
 
+    /**
+     *
+     * thirdPartyUsers : Relation between Third Party.
+     *
+     * @return Object hasMany Relation with Third Party Users.
+     */
+    public function thirdPartyUsers() {
+
+        return $this->hasMany('Thirdpartyuser','source_id','id');
+    }
+
 }
