@@ -534,7 +534,7 @@ class CandidateController extends HelperController {
 
 	public function check_resume_validity(){
 		$msg = false;
-		$fileType = pathinfo($_FILES["resume"]["name"],PATHINFO_EXTENSION);
+		$fileType = strtolower(pathinfo($_FILES["resume"]["name"],PATHINFO_EXTENSION));
 
 		// Check file size
 		if ($_FILES["resume"]["size"] > $this->resume_size) {
