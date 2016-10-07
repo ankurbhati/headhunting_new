@@ -34,11 +34,17 @@ class ClientController extends \BaseController {
 	{
 		$file = fopen($_FILES['client_csv']['tmp_name'], 'r');
 		$count = 0;
+		$message = '';
+		$already_exist = '';
 		while (($line = fgetcsv($file)) !== FALSE) {
 			if ($count){
 				try{
 					if(Client::where('email', '=', $line[0])->get()->isEmpty()) {
 						$client = new Client();
+						$line[0] = str_ireplace(",", "", str_ireplace(",", "", trim($line[0])));
+						if(!filter_var($line[0], FILTER_VALIDATE_EMAIL)) {
+						    continue;
+						}
 						$client->email = $line[0];
 						$client->first_name = $line[1];
 						$client->last_name = $line[2];
@@ -51,15 +57,19 @@ class ClientController extends \BaseController {
 						$mail_group->group_id = 1;
 						$mail_group->user_id = $client->id;
 						$mail_group->save();
+					} else {
+						$already_exist .= $line[0]." Already exists<br />";			
 					}
 				} catch(Exception $e){
-					print "failing for ".$line[1];
+					$message .= "Error while adding email: ".$line[0]."<br />";
 				}
 			} 
 			$count++;
 		}
 		fclose($file);
-		return Redirect::route('client-list');
+		$message = $already_exist.$message.'<b><br />';
+		Session::flash('upload_result', $message);
+		return Redirect::route('client-upload');
 	}
 	
 
