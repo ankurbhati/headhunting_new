@@ -139,6 +139,12 @@ class CandidateController extends HelperController {
 							$candidate_rate->candidate_id = $candidate->id;
 							$candidate_rate->save();	
 						}
+						$candidate_resume = new CandidateResume();
+						$candidate_resume->candidate_id = $candidate->id;
+						$candidate_resume->key_skills = $candidate->key_skills;
+						$candidate_resume->designation = $candidate->designation;
+						$candidate_resume->visa = $candidate->visa_id?Visa::find($candidate->visa_id)->title:"";
+						$candidate_resume->region = $candidate->state_id?State::find($candidate->state_id)->state:"";
 						
 						//resume
 						if($fileType) {
@@ -146,8 +152,6 @@ class CandidateController extends HelperController {
 							if($msg) {
 								//error, delete candidate or set flash message
 							} else {
-								$candidate_resume = new CandidateResume();
-								$candidate_resume->candidate_id = $candidate->id;
 								if ($fileType == "doc") {
 									$candidate_resume->resume = $this->read_doc($target_file);
 								} else if($fileType == "docx") {
@@ -157,12 +161,12 @@ class CandidateController extends HelperController {
 								}
 								$tmp = explode("/", $target_file);
 								$candidate_resume->resume_path = end($tmp);
-								if(!$candidate_resume->save()){
-									//error, delete candidate or set flash message
-								};
-								$candidate_resume->addToIndex();
 							}
 						}
+						if(!$candidate_resume->save()){
+							//error, delete candidate or set flash message
+						};
+						$candidate_resume->addToIndex();
 						return Redirect::route('candidate-list');
 					} else {
 
@@ -401,6 +405,17 @@ class CandidateController extends HelperController {
 							$candidate_rate->candidate_id = $candidate->id;
 							$candidate_rate->save();	
 						}
+						$resume_obj = '';
+						$candidate_resume = CandidateResume::where('candidate_id', '=', $candidate->id)->first();
+						if(!$candidate_resume) {
+							$resume_obj = "new";
+							$candidate_resume = new CandidateResume();
+						}
+						$candidate_resume->candidate_id = $candidate->id;
+						$candidate_resume->key_skills = $candidate->key_skills;
+						$candidate_resume->designation = $candidate->designation;
+						$candidate_resume->visa = $candidate->visa_id?Visa::find($candidate->visa_id)->title:"";
+						$candidate_resume->region = $candidate->state_id?State::find($candidate->state_id)->state:"";
 						
 						//resume
 						if($fileType) {
@@ -408,13 +423,6 @@ class CandidateController extends HelperController {
 							if($msg) {
 								//error, delete candidate or set flash message
 							} else {
-								$resume_obj = '';
-								$candidate_resume = CandidateResume::where('candidate_id', '=', $candidate->id)->first();
-								if(!$candidate_resume) {
-									$resume_obj = "new";
-									$candidate_resume = new CandidateResume();
-								}
-								$candidate_resume->candidate_id = $candidate->id;
 								if ($fileType == "doc") {
 									$candidate_resume->resume = $this->read_doc($target_file);
 								} else if($fileType == "docx") {
@@ -424,14 +432,12 @@ class CandidateController extends HelperController {
 								}
 								$tmp = explode("/", $target_file);
 								$candidate_resume->resume_path = end($tmp);
-
-								if(!$candidate_resume->save()){
-									//error, delete candidate or set flash message
-								};
-
-								($resume_obj == "new") ? $candidate_resume->addToIndex() : $candidate_resume->reindex();
 							}
 						}
+						if(!$candidate_resume->save()){
+							//error, delete candidate or set flash message
+						};
+						($resume_obj == "new") ? $candidate_resume->addToIndex() : $candidate_resume->reindex();
 
 						return Redirect::route('candidate-list');
 					} else {

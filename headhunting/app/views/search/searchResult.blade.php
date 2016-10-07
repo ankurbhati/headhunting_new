@@ -32,11 +32,11 @@
                                 {{$candidate->candidate->email}}
                             </td>
                             <td>
-                                <p>{{str_replace("<br />", "", substr($candidate->resume, 0, 80))."..."}}</p>
+                                <p>{{$candidate->resume?'"'.str_replace("<br />", "", substr($candidate->resume, 0, 80)).'..."':""}}</p>
                             </td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId )) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i>View </a>
-                              @if(Auth::user()->getRole() <= 3)
+                              @if(Auth::user()->getRole() <= 3 && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path)))
                               | <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"><i class="glyphicon glyphicon-download"></i>Download</a>
                               @endif
                               @if($jobId > 0)
@@ -49,10 +49,10 @@
 						@endforelse
                     </tbody>
                     <tfoot>
-                      <tr>
+                      <th>Name</th>
+                        <th>Email</th>
                         <th>Resume</th>
                         <th>Action</th>
-                      </tr>
                     </tfoot>
                   </table>
                 </div><!-- /.box-body -->

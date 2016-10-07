@@ -244,3 +244,10 @@ ALTER TABLE `third_party_users` ADD CONSTRAINT `third_party_users_ibfk_2` FOREIG
 
 
 ALTER TABLE `candidates` ADD FOREIGN KEY (`source_id` ) REFERENCES `sources` (`id` );
+
+
+
+alter table `candidate_resumes` add column key_skills varchar(255);
+alter table `candidate_resumes` add column designation varchar(247);
+alter table `candidate_resumes` add column visa varchar(255);
+alter table `candidate_resumes` add column region varchar(45);
