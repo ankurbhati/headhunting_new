@@ -64,7 +64,7 @@ class ThirdpartyController extends \BaseController {
 				} else {
 					$third_party = new Thirdparty();
 					$third_party->poc = $line[0];
-					$third_party->email = $line[1];
+					$third_party->email = str_ireplace(",", "", trim($line[1]));
 					$third_party->phone = $line[2];
 					$third_party->phone_ext = $line[3];
 					$third_party->created_by = $user_id;

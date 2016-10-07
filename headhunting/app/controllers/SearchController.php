@@ -41,19 +41,20 @@ class SearchController extends HelperController {
 	 */
 	public function searchResult($jobId = 0) {
 
-		$query = "";
-		$key_skills = "";
-    	$designation = "";
-    	$visa = "";
-    	$region = "";
-		if(($query = Input::get('query', false)) || ($key_skills = Input::get('key_skills', false)) || ($designation = Input::get('designation', false)) || ($visa = Input::get('visa', false)) || ($region = Input::get('region', false))) {
+		$query = Input::get('query', '');
+		$key_skills = Input::get('key_skills', '');
+    	$designation = Input::get('designation', '');
+    	$visa = Input::get('visa', '');
+    	$region = Input::get('region', '');
+		if($query || $key_skills || $designation || $visa || $region) {
 		    // Use the Elasticquent search method to search ElasticSearch
-		    try{
+		    try {
+		    	$searching_text = $key_skills." ".$designation." ".$visa." ".$region." ".$query;
 		    	$query = $query?str_ireplace(" and ", " ", $query): "";
-		    	$key_skills = str_ireplace(" and ", " ", $key_skills);
-		    	$designation = str_ireplace(" and ", " ", $designation);
-		    	$visa = str_ireplace(" and ", " ", $visa);
-		    	$region = str_ireplace(" and ", " ", $region);
+		    	$key_skills = $key_skills?str_ireplace(" and ", " ", $key_skills):"";
+		    	$designation = $designation?str_ireplace(" and ", " ", $designation):"";
+		    	$visa = $visa?str_ireplace(" and ", " ", $visa):"";
+		    	$region = $region?str_ireplace(" and ", " ", $region):"";
 		    	//$candidate_resumes = CandidateResume::searchByQuery(['match' => ['resume' => $query, 'key_skills' => $key_skills, 'designation' => $designation, 'visa' => $visa, 'region' => $region]]);
 		    	//$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match' => ['resume' => $query]], ['match' => ['key_skills' => $key_skills]], ['match' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);
 		    	$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match' => ['resume' => $query]], ['match' => ['key_skills' => $key_skills]], ['match' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);
@@ -66,6 +67,6 @@ class SearchController extends HelperController {
 	  	}
 
 	  	#return 'Done';
-		return View::make('search.searchResult')->with(array('title' => 'Search - Headhunting', 'candidate_resumes' => $candidate_resumes, 'jobId' => $jobId, 'query' => $query, 'key_skills' => $key_skills, 'designation' => $designation, 'visa' => $visa, 'region'=>$region));
+		return View::make('search.searchResult')->with(array('title' => 'Search - Headhunting', 'searching_text' => $searching_text, 'candidate_resumes' => $candidate_resumes, 'jobId' => $jobId, 'query' => $query, 'key_skills' => $key_skills, 'designation' => $designation, 'visa' => $visa, 'region'=>$region));
 	}
 }
