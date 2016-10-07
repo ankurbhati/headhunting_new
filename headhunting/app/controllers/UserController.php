@@ -713,27 +713,29 @@ class UserController extends HelperController {
 			if($model == 'Client') {
 				$user_list = $model::whereIn('id', $users)->where('created_by', '=', $authUser->id)->get();
 			} else if($model == 'Thirdparty') {
-				$thirdparties = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', $authUser->id)->get(); 
-				if(!$thirdparties->isEmpty()) {
-					$user_list = $thirdparties->first()->vendors;
-				}	
+				$user_list = Thirdparty::whereHas('thirdPartyUsers', function($q) use (&$authUser)
+				{
+				    $q->where('user_id','=', $authUser->id);
+				})->get();
 			} else {
 				$user_list = $model::whereIn('id', $users)->get();
 			}
 
-			$setting = Setting::where('type', '=', 'disclaimer')->get()->first();
-			$disclaimer = $setting->value;
+			$setting = Setting::where('type', '=', 'disclaimer');
+			$disclaimer = ($setting->exists())?$setting->first()->value:'';
+			$signature = ($authUser->signature)?$authUser->signature:"";
 			foreach($user_list as $user) {
 				Config::set('mail.username', $authUser->email);
 				Config::set('mail.from.address', $authUser->email);
 				Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
        			Config::set('mail.password', $authUser->email_password);
 
-       			$body_content = $mass_mail->description."<br />".$authUser->signature."<br />".$disclaimer;
+       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
 
-				Mail::queue([], [], function($message) use(&$mass_mail, &$user)
+				Mail::queue([], [], function($message) use(&$mass_mail, &$user, &$body_content)
 				{
-				    $message->to($user->email, $user->first_name . " " . $user->last_name)
+
+				    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
 				    ->subject($mass_mail->subject)
 				    ->setBody($body_content, 'text/html');
 				});
