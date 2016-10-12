@@ -251,3 +251,7 @@ alter table `candidate_resumes` add column key_skills varchar(255);
 alter table `candidate_resumes` add column designation varchar(247);
 alter table `candidate_resumes` add column visa varchar(255);
 alter table `candidate_resumes` add column region varchar(45);
+
+
+
+ALTER TABLE `mass_mails` ADD `limit_lower` INT(10) NULL DEFAULT '0' AFTER `status`, ADD `limit_upper` INT(10) NULL DEFAULT '1000' AFTER `limit_lower`;
