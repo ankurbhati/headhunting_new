@@ -16,16 +16,37 @@
         {{ Form::label('subject', 'Subject: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('subject', '', array('class' =>
-            'form-control', 'placeholder' => 'subject')); }}
+            'form-control', 'placeholder' => 'subject', 'required')); }}
             <span class='errorlogin'>{{$errors->first('subject');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+
+
+
+    <div class="form-group">
+        {{ Form::label('limit_lower', 'Lower Limit: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::number('limit_lower', 0, array('class' =>
+            'form-control', 'placeholder' => 'Set Lower Limit Restriction', 'required')); }}
+            <span class='errorlogin'>{{$errors->first('limit_lower');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('limit_lower', 'Upper Limit: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::number('limit_upper', 1000, array('class' =>
+            'form-control', 'placeholder' => 'Set Upper Limit Restriction', 'required')); }}
+            <span class='errorlogin'>{{$errors->first('limit_upper');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
 
     <div class="form-group">
         {{ Form::label('description', 'Text: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::textarea('description', '', array('class' =>
-            'form-control', 'placeholder' => 'ex. 20')); }}
+            'form-control', 'placeholder' => 'ex. Hello User,', 'required')); }}
             <span class='errorlogin'>{{$errors->first('description');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

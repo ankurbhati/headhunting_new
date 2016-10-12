@@ -64,7 +64,10 @@ class SearchController extends HelperController {
 	  	} else {
 	    	// Show all posts if no query is set
 	    	$candidate_resumes = CandidateResume::all();
-	  	}
+	    }
+		 // echo "<pre>". count($candidate_resumes);
+		 // print_r($candidate_resumes);
+		 // die;
 
 	  	#return 'Done';
 		return View::make('search.searchResult')->with(array('title' => 'Search - Headhunting', 'searching_text' => $searching_text, 'candidate_resumes' => $candidate_resumes, 'jobId' => $jobId, 'query' => $query, 'key_skills' => $key_skills, 'designation' => $designation, 'visa' => $visa, 'region'=>$region));

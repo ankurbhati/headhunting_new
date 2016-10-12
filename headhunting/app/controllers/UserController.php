@@ -384,15 +384,15 @@ class UserController extends HelperController {
 
 			// Server Side Validation.
 			$validate=Validator::make (
-					Input::all(), array(
-							'email' => 'required|email|max:50',
-							'first_name' => 'required|max:50',
-							'last_name' => 'required|max:50',
-							'phone_no' => 'max:14',
-							'phone_ext' => 'max:10',
-							'designation' => 'required|max:50',
-							'gender' => 'required',
-					)
+				Input::all(), array(
+					'email' => 'required|email|max:50',
+					'first_name' => 'required|max:50',
+					'last_name' => 'required|max:50',
+					'phone_no' => 'max:14',
+					'phone_ext' => 'max:10',
+					'designation' => 'required|max:50',
+					'gender' => 'required',
+				)
 			);
 
 			if($validate->fails()) {
@@ -656,14 +656,32 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function massMail() {
+
 		if (Request::isMethod('post')) {
+
+			Validator::extend('greater_than_field', function($attribute, $value, $parameters, $validator) {
+		      $min_field = $parameters[0];
+		      $data = $validator->getData();
+		      $min_value = $data[$min_field];
+		      return $value > $min_value && ($value - $min_value) <= 1000;
+		    });   
+
+		    // Validator::replacer('greater_than_field', function($message, $attribute, $rule, $parameters) {
+		    //   return str_replace(':field', $parameters[0], $message);
+		    // });
+
 			// Server Side Validation.
 			$validate=Validator::make (
 				Input::all(), array(
-						'mail_group_id' =>  'required',
-						'description' => 'required',
-						'subject' => 'max:257'
-				)
+					'mail_group_id' =>  'required',
+					'description' => 'required',
+					'subject' => 'required|max:257',
+					'limit_lower' => 'required|integer|min:0|digits_between: 1,4',
+  					'limit_upper' => 'required_with:limit_lower|integer|greater_than_field:limit_lower|digits_between:1,4'
+				), 
+				array(
+					'limit_upper.greater_than_field' => 'Upper Limit should be greater than Lower Limit and difference should be less than 1000'
+					)
 			);
 
 			if($validate->fails()) {
@@ -675,6 +693,8 @@ class UserController extends HelperController {
 				$mass_mail->subject = Input::get('subject');
 				$mass_mail->mail_group_id = Input::get('mail_group_id');
 				$mass_mail->description = Input::get('description');
+				$mass_mail->limit_lower = Input::get('limit_lower');
+				$mass_mail->limit_upper = Input::get('limit_upper');
 				$mass_mail->send_by = Auth::user()->id;
 				if($mass_mail->save()) {
 					return Redirect::route('dashboard-view');
@@ -701,29 +721,44 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function sendMailFromCron() {
-		$mass_mails = MassMail::with(array('mailgroup'))->where('status', '=', '1')->get();
-		foreach($mass_mails as $mass_mail) {
+
+		$mass_mail = MassMail::with(array('mailgroup'))->where('status', '=', '1');
+		if($mass_mail->exists()) {
+
+			$mass_mail = $mass_mail->first();
 			$mass_mail->status = 2;
 			$mass_mail->setConnection('master');
 			$mass_mail->save();
 			$authUser = User::find($mass_mail->send_by);
 			$model = $mass_mail->mailgroup->model;
 			$user_list = array();
-			$users = MailGroupMember::where('group_id', '=', $mass_mail->mailgroup->id)->lists('user_id');
+			$users = MailGroupMember::where('group_id', '=', $mass_mail->mail_group_id)->lists('user_id');
 			if($model == 'Client') {
-				$user_list = $model::whereIn('id', $users)->where('created_by', '=', $authUser->id)->get();
+				$user_list = $model::whereIn('id', $users)
+									->where('created_by', '=', $authUser->id)
+									->offset($mass_mail->limit_lower)
+				                	->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
+									->get();
 			} else if($model == 'Thirdparty') {
 				$user_list = Thirdparty::whereHas('thirdPartyUsers', function($q) use (&$authUser)
-				{
-				    $q->where('user_id','=', $authUser->id);
-				})->get();
+								{
+								    $q->where('user_id','=', $authUser->id);
+								})
+								->offset($mass_mail->limit_lower)
+				                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
+								->get();
+				$queries = DB::getQueryLog();
+				$last_query = end($queries);
+				Log::info(json_encode($last_query));
 			} else {
-				$user_list = $model::whereIn('id', $users)->get();
+				$user_list = $model::whereIn('id', $users)->offset($mass_mail->limit_lower)
+				                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)->get();
 			}
 
 			$setting = Setting::where('type', '=', 'disclaimer');
 			$disclaimer = ($setting->exists())?$setting->first()->value:'';
 			$signature = ($authUser->signature)?$authUser->signature:"";
+			Log::info("Limit Count : ".count($user_list));
 			foreach($user_list as $user) {
 				Config::set('mail.username', $authUser->email);
 				Config::set('mail.from.address', $authUser->email);
