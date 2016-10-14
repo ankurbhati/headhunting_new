@@ -46,6 +46,7 @@ class SearchController extends HelperController {
     	$designation = Input::get('designation', '');
     	$visa = Input::get('visa', '');
     	$region = Input::get('region', '');
+    	$searching_text = '';
 		if($query || $key_skills || $designation || $visa || $region) {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try {

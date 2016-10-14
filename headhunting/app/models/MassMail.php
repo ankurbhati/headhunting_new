@@ -36,4 +36,15 @@ class MassMail extends Eloquent {
     
     	return $this->belongsTo('MailGroup','mail_group_id','id');
     }
+
+    /**
+     *
+     * countries : Relation between mail & user.
+     *
+     * @return Object belongs to Relation mail & user..
+     */
+    public function sendby() {
+    
+        return $this->belongsTo('User','send_by','id');
+    }
 }

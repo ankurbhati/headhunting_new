@@ -650,6 +650,47 @@ class UserController extends HelperController {
 
 	/**
 	 *
+	 * employeeList() : mass Mail List
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function massMailList() {
+		if(Auth::user()->hasRole(1)){
+			$mass_mails = MassMail::with('sendby')->get();
+		} else {
+			$mass_mails = MassMail::with('sendby')->where('send_by', '=', Auth::user()->id)->get();
+		}
+		return View::make('User.massMailList')->with(array('title' => 'Mass Mail List', 'mass_mails' => $mass_mails));
+	}
+
+
+	/**
+	 *
+	 * viewMassMail() : View Mass Mail
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function viewMassMail($id) {
+
+		if(Auth::user()->hasRole(1)) {
+			$mass_mail = MassMail::with(array('sendby'))->where('id', '=', $id)->get();
+		} else {
+			$mass_mail = MassMail::with(array('sendby'))->where('id', '=', $id)->where('send_by', '=', Auth::user()->id)->get();
+		}
+		if(!$mass_mail->isEmpty()) {
+			$mass_mail = $mass_mail->first();
+			return View::make('User.viewMassMail')
+					   ->with(array('title' => 'View Mass Mail', 'mass_mail' => $mass_mail));
+		} else {
+			return Redirect::route('dashboard-view');
+		}
+	}
+
+
+	/**
+	 *
 	 * mass_mail() : mass mail view
 	 *
 	 * @return Object : View
@@ -697,7 +738,7 @@ class UserController extends HelperController {
 				$mass_mail->limit_upper = Input::get('limit_upper');
 				$mass_mail->send_by = Auth::user()->id;
 				if($mass_mail->save()) {
-					return Redirect::route('dashboard-view');
+					return Redirect::route('mass-mail-list');
 				} else {
 					return Redirect::route('mass-mail')->withInput();
 				}
