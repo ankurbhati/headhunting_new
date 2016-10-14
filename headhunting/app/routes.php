@@ -451,6 +451,22 @@ Route::group(array('before' => 'auth'), function() {
 	));
 
 	/**
+	 * Routes For GET API for mass mail
+	 */
+	Route::match(array('GET'), '/mass-mail-list/', array(
+			'as'    =>    'mass-mail-list',
+			'uses'    =>    'UserController@massMailList'
+	));
+
+	/**
+	 * Routes For REST API for new Employee
+	 */
+	Route::match(array('GET'), '/view-mass-mail/{id}', array(
+		'as'    =>    'view-mass-mail',
+		'uses'    =>    'UserController@viewMassMail'
+	));
+
+	/**
 	 * Routes For POST API for mass mail
 	 */
 	Route::match(array('POST'), '/mass-mail/', array(

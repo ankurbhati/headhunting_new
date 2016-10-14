@@ -92,6 +92,13 @@
               </a>
             </li>
             @endif
+            @if(Auth::user()->getRole() <= 6)
+            <li>
+              <a href="{{ URL::route('mass-mail-list') }}">
+                <i class="fa fa-users"></i> <span>Mail List</span>
+              </a>
+            </li>
+            @endif
             <li>
               <a href="{{ URL::route('list-submittel') }}">
                 <i class="fa fa-eye"></i> <span>Job Submittals</span>
