@@ -704,7 +704,7 @@ class UserController extends HelperController {
 		      $min_field = $parameters[0];
 		      $data = $validator->getData();
 		      $min_value = $data[$min_field];
-		      return $value > $min_value && ($value - $min_value) <= 1000;
+		      return $value > $min_value && ($value - $min_value) <= 500;
 		    });   
 
 		    // Validator::replacer('greater_than_field', function($message, $attribute, $rule, $parameters) {
@@ -721,7 +721,7 @@ class UserController extends HelperController {
   					'limit_upper' => 'required_with:limit_lower|integer|greater_than_field:limit_lower|digits_between:1,4'
 				), 
 				array(
-					'limit_upper.greater_than_field' => 'Upper Limit should be greater than Lower Limit and difference should be less than 1000'
+					'limit_upper.greater_than_field' => 'Upper Limit should be greater than Lower Limit and difference should not be more than 500 emails'
 					)
 			);
 

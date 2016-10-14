@@ -35,7 +35,7 @@
     <div class="form-group">
         {{ Form::label('limit_lower', 'Upper Limit: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::number('limit_upper', 1000, array('class' =>
+        <div class="col-sm-8">{{ Form::number('limit_upper', 500, array('class' =>
             'form-control', 'placeholder' => 'Set Upper Limit Restriction', 'required')); }}
             <span class='errorlogin'>{{$errors->first('limit_upper');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
