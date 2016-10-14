@@ -25,7 +25,7 @@
 		                      <tr>
 		                        <td>{{$mass_mail->sendby->first_name." ".$mass_mail->sendby->last_name}}</td>
 		                        <td>{{$mass_mail->subject}}</td>
-		                        <td>{{$mass_mail->description}}</td>
+		                        <td>{{(strlen($mass_mail->description)>100)?substr($mass_mail->description, 0, 97)."...":$mass_mail->description}}</td>
                             <td>{{$mass_mail->created_at}}</td>
                             <td>{{($mass_mail->mail_group_id == 1)?"Clients":"Third Party"}}</td>
 		                        <td>{{$mass_mail->limit_lower."/".$mass_mail->limit_upper}}</td>
