@@ -29,10 +29,10 @@
         </div>
     </div>
     <div class="form-group">
-        {{ Form::label('designation', 'Designation: ', array('class' => 'col-sm-3
+        {{ Form::label('designation', 'Job Title: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('designation', $candidate->designation, array('class' =>
-            'form-control', 'placeholder' => 'Enter Candidates designation')); }} 
+            'form-control', 'placeholder' => 'Enter Candidates Job Title')); }} 
             <span class='errorlogin email-login'>{{$errors->first('designation');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
@@ -85,14 +85,6 @@
         </div>
     </div>
     <div class="form-group">
-        {{ Form::label('ssn', 'SSN: ', array('class' => 'col-sm-3
-        control-label')); }}
-        <div class="col-sm-8">{{ Form::text('ssn', $candidate->ssn, array('class' =>
-            'form-control', 'placeholder' => 'Enter Candidates ssn')); }} 
-            <span class='errorlogin email-login'>{{$errors->first('ssn');}}@if(!empty($message)){{$message}}@endIf</span>
-        </div>
-    </div>
-    <div class="form-group">
         {{ Form::label('work_state_id', 'Work State: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::select('work_state_id', $work_state, $candidate->work_state_id, array('class' => 'form-control')) }} 
@@ -111,17 +103,6 @@
         control-label')); }}
         <div class="col-sm-8">{{ Form::select('visa_id', $visa, $candidate->visa_id, array('class' => 'form-control')) }} 
             <span class='errorlogin email-login'>{{$errors->first('visa_id');}}@if(!empty($message)){{$message}}@endIf</span>
-        </div>
-    </div>
-    <div class="form-group">
-        {{ Form::label('visa_expiry', 'Visa Expiry Date: ', array('class' => 'col-sm-3
-        control-label')); }}
-        <div class="col-sm-8 input-group date" data-provide="datepicker">{{ Form::text('visa_expiry', $candidate->visa_expiry, array('class' =>
-            'form-control', 'placeholder' => 'Enter Candidates Visa Expiry Date')); }} 
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
-            </div>
-            <span class='errorlogin email-login'>{{$errors->first('visa_expiry');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
     <div class="form-group">

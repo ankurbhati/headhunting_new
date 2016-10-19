@@ -35,7 +35,7 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Designation:
+	        Job Title:
 	        </div><div class="col-sm-8">
 	        	{{$candidate->designation}}
 	        </div>
@@ -71,12 +71,6 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Ssn:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->ssn}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
 	        Work State:
 	        </div><div class="col-sm-8">
 	        	@if($candidate->workstate){{$candidate->workstate->title}}@else{{"-"}}@endif
@@ -87,12 +81,6 @@
 	        Visa:
 	        </div><div class="col-sm-8">
 	        	@if($candidate->visa){{$candidate->visa->title}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Visa Expiry:
-	        </div><div class="col-sm-8">
-	        	{{($candidate->visa_expiry != "" && $candidate->visa_expiry != "0000-00-00")?date("Y-m-d", strtotime($candidate->visa_expiry)):"-"}}
 	        </div>
 	    </div>
 		<div class="row"><div class="col-sm-4">

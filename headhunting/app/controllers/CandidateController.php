@@ -47,7 +47,6 @@ class CandidateController extends HelperController {
 						'key_skills' => 'max:255',
 						'rate' => 'numeric',
 						'third_party_id' => 'max:247',
-						'ssn' => 'max:247|unique:candidates,ssn',
 						'visa_id' => 'max:1'
 				)
 			);
@@ -74,7 +73,6 @@ class CandidateController extends HelperController {
 					}
 				}
 
-				$ssn = Input::get('ssn');
 				$candidate = new Candidate();
 				$candidate->email = Input::get('email');
 				$candidate->first_name = Input::get('first_name');
@@ -84,11 +82,8 @@ class CandidateController extends HelperController {
 				$candidate->state_id = Input::get('state_id');
 				$candidate->designation = Input::get('designation');
 				$candidate->key_skills = Input::get('key_skills');
-				$candidate->ssn = !empty($ssn) ? $ssn : Null;
 				$candidate->visa_id = Input::get('visa_id');
 				$candidate->work_state_id = Input::get('work_state_id');
-				$candidate->visa_expiry = date('Y-m-d', strtotime(Input::get('visa_expiry')));
-				//$candidate->vendor_id = Input::get('vendor_id');
 				$candidate->added_by = Auth::user()->id;
 
 				$city = Input::get('city');
@@ -295,7 +290,6 @@ class CandidateController extends HelperController {
 						'key_skills' => 'max:255',
 						'rate' => 'numeric',
 						'third_party_id' => 'max:247',
-						'ssn' => 'max:247',
 						'visa_id' => 'max:1'
 				)
 			);
@@ -332,16 +326,6 @@ class CandidateController extends HelperController {
 					$candidate->email = $email;
 				}
 
-				$ssn = Input::get('ssn');
-				if($ssn != $candidate->ssn){
-					if(!Candidate::where('ssn', '=', $ssn)->get()->isEmpty()) {
-						return Redirect::route('edit-candidate', array('id' => $id))
-						               ->withInput()
-									   ->withErrors(array('ssn' => "ssn is already in use"));
-					}
-				}
-				$candidate->ssn = !empty($ssn) ? $ssn : Null;
-
 				$candidate->first_name = Input::get('first_name');
 				$candidate->last_name = Input::get('last_name');
 				$candidate->phone = Input::get('phone');
@@ -351,8 +335,6 @@ class CandidateController extends HelperController {
 				$candidate->key_skills = Input::get('key_skills');
 				$candidate->visa_id = Input::get('visa_id');
 				$candidate->work_state_id = Input::get('work_state_id');
-				$candidate->visa_expiry = date('Y-m-d', strtotime(Input::get('visa_expiry')));
-				//$candidate->vendor_id = Input::get('vendor_id');
 				$candidate->added_by = Auth::user()->id;
 
 				$city = Input::get('city');

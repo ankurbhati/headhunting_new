@@ -81,6 +81,7 @@
 	          var employees = $('#employeeList');
 	            if(employees.attr('id')) {
 	        		var table = employees.DataTable();
+	        		//var table = employees.DataTable({"aLengthMenu": [ 100, 50, 25, 10]});
 			      	table.on( 'draw', function () {
 				        var body = $( table.table().body() );
 				 
