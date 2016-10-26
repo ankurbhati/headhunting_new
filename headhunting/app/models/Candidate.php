@@ -105,6 +105,17 @@ class Candidate extends Eloquent {
 
     /**
      *
+     * countries : Relation between candidate & its resume.
+     *
+     * @return Object belongs to Relation candidate & its resume..
+     */
+    public function candidaterate() {
+    
+        return $this->hasOne('CandidateRate','candidate_id','id');
+    }
+
+    /**
+     *
      * countries : Relation between candidate & User.
      *
      * @return Object belongs to Relation candidate & User..

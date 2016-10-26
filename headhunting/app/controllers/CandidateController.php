@@ -44,7 +44,6 @@ class CandidateController extends HelperController {
 						'country_id' => 'max:9',
 						'state_id' => 'max:9',
 						'designation' => 'max:255',
-						'key_skills' => 'max:255',
 						'rate' => 'numeric',
 						'third_party_id' => 'max:247',
 						'visa_id' => 'max:1'
@@ -74,14 +73,13 @@ class CandidateController extends HelperController {
 				}
 
 				$candidate = new Candidate();
-				$candidate->email = Input::get('email');
+				$candidate->email = trim(Input::get('email'));
 				$candidate->first_name = Input::get('first_name');
 				$candidate->last_name = Input::get('last_name');
 				$candidate->phone = Input::get('phone');
 				$candidate->country_id = Input::get('country_id');
 				$candidate->state_id = Input::get('state_id');
 				$candidate->designation = Input::get('designation');
-				$candidate->key_skills = Input::get('key_skills');
 				$candidate->visa_id = Input::get('visa_id');
 				$candidate->work_state_id = Input::get('work_state_id');
 				$candidate->added_by = Auth::user()->id;
@@ -104,12 +102,12 @@ class CandidateController extends HelperController {
 				}
 
 				if($candidate->work_state_id == 3) {
-					$thirdparty = Thirdparty::where('email', '=', Input::get('third_party_id'))->get();
+					$thirdparty = Thirdparty::where('email', '=', trim(Input::get('third_party_id')))->get();
 					if(!$thirdparty->isEmpty()) {
 						$candidate->source_id = $thirdparty->first()->id;
 					} else {
 						$thirdparty = new Thirdparty();
-						$thirdparty->email = Input::get('third_party_id');
+						$thirdparty->email = trim(Input::get('third_party_id'));
 						$thirdparty->save();
 						$mail_group = new MailGroupMember();
 						$mail_group->group_id = 3;
@@ -136,7 +134,6 @@ class CandidateController extends HelperController {
 						}
 						$candidate_resume = new CandidateResume();
 						$candidate_resume->candidate_id = $candidate->id;
-						$candidate_resume->key_skills = $candidate->key_skills;
 						$candidate_resume->designation = $candidate->designation;
 						$candidate_resume->visa = $candidate->visa_id?Visa::find($candidate->visa_id)->title:"";
 						$candidate_resume->region = $candidate->state_id?State::find($candidate->state_id)->state:"";
@@ -204,18 +201,18 @@ class CandidateController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
-	public function viewCandidate($id, $jobId = 0) {
+	public function viewCandidate($id, $jobId = 0, $searchingText="") {
 
 		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
 
-			$candidate = Candidate::with(array('visa', 'createdby', 'city', 'state', 'country', 'workstate'))->where('id', '=', $id)->get();
+			$candidate = Candidate::with(array('visa', 'createdby', 'city', 'state', 'country', 'workstate', 'candidaterate'))->where('id', '=', $id)->get();
 
 			if(!$candidate->isEmpty()) {
 				$candidate = $candidate->first();
 				$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
 				$rate = CandidateRate::where('candidate_id', $candidate->id)->first();
 				return View::make('Candidate.viewCandidate')
-						   ->with(array('title' => 'View Candidate', 'candidate' => $candidate, 'resume' => $resume, 'jobId' => $jobId, 'rate' => $rate));
+						   ->with(array('title' => 'View Candidate', 'candidate' => $candidate, 'resume' => $resume, 'jobId' => $jobId, 'rate' => $rate, 'searchingText' => $searchingText));
 			} else {
 
 				return Redirect::route('dashboard-view');
@@ -287,7 +284,6 @@ class CandidateController extends HelperController {
 						'country_id' => 'max:9',
 						'state_id' => 'max:9',
 						'designation' => 'max:255',
-						'key_skills' => 'max:255',
 						'rate' => 'numeric',
 						'third_party_id' => 'max:247',
 						'visa_id' => 'max:1'
@@ -316,7 +312,7 @@ class CandidateController extends HelperController {
 
 				$candidate = Candidate::find($id);
 
-				$email = Input::get('email');
+				$email = trim(Input::get('email'));
 				if($email && $email != $candidate->email){
 					if(!Candidate::where('email', '=', $email)->get()->isEmpty()) {
 						return Redirect::route('edit-candidate', array('id' => $id))
@@ -332,7 +328,6 @@ class CandidateController extends HelperController {
 				$candidate->country_id = Input::get('country_id');
 				$candidate->state_id = Input::get('state_id');
 				$candidate->designation = Input::get('designation');
-				$candidate->key_skills = Input::get('key_skills');
 				$candidate->visa_id = Input::get('visa_id');
 				$candidate->work_state_id = Input::get('work_state_id');
 				$candidate->added_by = Auth::user()->id;
@@ -355,12 +350,12 @@ class CandidateController extends HelperController {
 				}
 
 				if($candidate->work_state_id == 3) {
-					$thirdparty = Thirdparty::where('email', '=', Input::get('third_party_id'))->get();
+					$thirdparty = Thirdparty::where('email', '=', trim(Input::get('third_party_id')))->get();
 					if(!$thirdparty->isEmpty()) {
 						$candidate->source_id = $thirdparty->first()->id;
 					} else {
 						$thirdparty = new Thirdparty();
-						$thirdparty->email = Input::get('third_party_id');
+						$thirdparty->email = trim(Input::get('third_party_id'));
 						$thirdparty->save();
 						$mail_group = new MailGroupMember();
 						$mail_group->group_id = 3;
@@ -394,7 +389,6 @@ class CandidateController extends HelperController {
 							$candidate_resume = new CandidateResume();
 						}
 						$candidate_resume->candidate_id = $candidate->id;
-						$candidate_resume->key_skills = $candidate->key_skills;
 						$candidate_resume->designation = $candidate->designation;
 						$candidate_resume->visa = $candidate->visa_id?Visa::find($candidate->visa_id)->title:"";
 						$candidate_resume->region = $candidate->state_id?State::find($candidate->state_id)->state:"";

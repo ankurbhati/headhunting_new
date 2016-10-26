@@ -59,22 +59,21 @@
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
-	        Key Skills:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->key_skills}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
 	        Rate:
 	        </div><div class="col-sm-8">
-	        	@if($candidate->value){{$candidate->value}}@else{{"-"}}@endif
+	        	@if($candidate->candidaterate){{$candidate->candidaterate->value}}@else{{"-"}}@endif
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
 	        Work State:
 	        </div><div class="col-sm-8">
 	        	@if($candidate->workstate){{$candidate->workstate->title}}@else{{"-"}}@endif
-	        	@if($candidate->workstate->id == 3 && $candidate->thirdparty)({{$candidate->thirdparty->email}})@else{{"-"}}@endif
+	        </div>
+	    </div>
+	    <div class="row"><div class="col-sm-4">
+	        Third Party:
+	        </div><div class="col-sm-8">
+	        	@if($candidate->thirdparty){{$candidate->thirdparty->email}}@else{{"-"}}@endif
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">
@@ -118,3 +117,22 @@
 	</div>
 </div>
 @stop
+
+
+@if(trim($searchingText))
+<script>
+//var searchingText = {{"'".trim($searchingText)."'"}};
+//function replaceText() {
+/*    var jthis = $(this);
+    $("*").each(function() {
+    	//console.log(jthis); 
+        if(jthis.children().length==0 && jthis.text() != "") {
+        	console.log(searchingText);
+        	console.log(jthis.text());
+            jthis.text(jthis.text().replace("t", 'AAA:')); 
+        } 
+    });
+}
+*/
+</script>
+@endif

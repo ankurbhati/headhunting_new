@@ -405,7 +405,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Candidate
 	 */
-	Route::match(array('GET'), '/view-candidate/{id}/{jobId?}', array(
+	Route::match(array('GET'), '/view-candidate/{id}/{jobId?}/{searchingText?}', array(
 		'as'    =>    'view-candidate',
 		'uses'    =>    'CandidateController@viewCandidate'
 	));

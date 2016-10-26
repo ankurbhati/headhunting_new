@@ -262,7 +262,32 @@ ALTER TABLE `mass_mails` ADD FOREIGN KEY ( `send_by` ) REFERENCES `users` ( `id`
 
 
 
-
+---------------------------------
 ALTER TABLE `candidates`
   DROP `ssn`,
   DROP `visa_expiry`;
+
+
+INSERT INTO `headhunting`.`visas` (
+`id` ,
+`title`
+)
+VALUES (
+NULL , 'H4/EAD'
+), (
+NULL , 'CPT/EAD';
+
+ALTER TABLE `candidates`
+  DROP `key_skills`;
+
+ALTER TABLE `candidate_resumes`
+  DROP `key_skills`;
+
+
+UPDATE `headhunting`.`work_states` SET `title` = 'C2C (Employeer)',
+`created_at` = NULL WHERE `work_states`.`id` =3;
+
+UPDATE `headhunting`.`work_states` SET `title` = 'C2C (Independent)',
+`created_at` = NULL WHERE `work_states`.`id` =1;
+
+DELETE FROM `headhunting`.`work_states` WHERE `work_states`.`id` = 2";

@@ -2,12 +2,6 @@
 @section('content')
 <form class="form-horizontal" method="post">
   <div class="form-group">
-    <label for="inputQuery" class="col-sm-2 control-label">Key Skills</label>
-    <div class="col-sm-7">
-      <input type="text" class="form-control" name="key_skills" />
-    </div>
-  </div>
-  <div class="form-group">
     <label for="inputQuery" class="col-sm-2 control-label">Designation</label>
     <div class="col-sm-7">
       <input type="text" class="form-control" name="designation" />

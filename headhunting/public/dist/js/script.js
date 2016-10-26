@@ -45,6 +45,7 @@ $(function () {
 	    }
   }
 
+
   if($('select#work_state_id').val() !== undefined) {
 
 	  $('select#work_state_id').change(function() {
@@ -67,7 +68,8 @@ $(function () {
 	    	$('#third_party_view').hide();
 	    }
   }
-  
+
+
   if($('select#type_of_employment').val() !== undefined) {
 
 	  $('select#type_of_employment').change(function() {
@@ -223,3 +225,8 @@ $(function () {
 	},1000);
 
 }(jQuery));
+
+
+if(typeof(searchingText) !== undefined && typeof(replaceText) !== undefined) {
+	$(document).ready(replaceText());
+}

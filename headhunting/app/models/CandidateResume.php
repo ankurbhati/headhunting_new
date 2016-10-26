@@ -32,7 +32,8 @@ class CandidateResume extends Eloquent {
 
     protected $table = 'candidate_resumes';
 
-    public $fillable = ['id', 'candidate_id', 'resume', "resume_path", "key_skills", "designation", "visa", "region"];
+    //public $fillable = ['id', 'candidate_id', 'resume', "resume_path", "key_skills", "designation", "visa", "region"];
+    public $fillable = ['id', 'candidate_id', 'resume', "resume_path", "designation", "visa", "region"];
 
 	protected $mappingProperties = array(
 	'id' => [
@@ -51,10 +52,10 @@ class CandidateResume extends Eloquent {
 	  'type' => 'string',
 	  "analyzer" => "standard",
 	],
-	'key_skills' => [
+	/*'key_skills' => [
 	  'type' => 'string',
 	  "analyzer" => "standard",
-	],
+	],*/
 	'designation' => [
 	  'type' => 'string',
 	  "analyzer" => "standard",

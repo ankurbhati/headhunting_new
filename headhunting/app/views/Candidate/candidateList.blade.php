@@ -14,6 +14,7 @@
                         <th>Full Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Added At(time, city, state)</th>
                         <th>Visa Id</th>
                         <th>Action</th>
                       </tr>
@@ -24,13 +25,18 @@
                             <td>{{$candidate->first_name. " ".$candidate->last_name }}</td>
                             <td>{{$candidate->email}}</td>
 		                        <td>{{$candidate->phone}}</td>
+                            <td>
+                              {{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
+                              @if($candidate->city){{$candidate->city->name}}@else{{"-"}}@endif
+                              @if($candidate->state){{$candidate->state->state}}@else{{"-"}}@endif
+                            </td>
 		                        <td>{{$candidate->visa->title}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
                               @if(Auth::user()->getRole() <= 3)
 		                        	  <a href="{{ URL::route('edit-candidate', array($candidate->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
                               @endif
-		                        	@if(Auth::user()->getRole() <= 3)
+		                        	@if(Auth::user()->hasRole(1) || Auth::user()->hasRole(3) || Auth::user()->hasRole(5) || Auth::user()->hasRole(7))
 		                        		<a href="{{ URL::route('delete-candidate', array($candidate->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 		                        	@endif
                               @if(Auth::user()->getRole() <= 3 && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path)))
@@ -47,6 +53,7 @@
                         <th>Full Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Added At(time, city, state)</th>
                         <th>Visa Id</th>
                         <th>Action</th>
                       </tr>

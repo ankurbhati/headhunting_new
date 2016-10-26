@@ -16,6 +16,7 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
+                        <th><input type="checkbox" name="checkall" value="">Check All</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Resume</th>
@@ -25,6 +26,7 @@
                     <tbody>
 	                    @forelse($candidate_resumes as $candidate)
 		                      <tr>
+                            <td><input type="checkbox" name="checkcandidate" value="{{$candidate->candidate->email}}"></td>
                             <td>
                                 {{$candidate->candidate->first_name." ".$candidate->candidate->last_name}}
                             </td>
@@ -35,7 +37,7 @@
                                 <p>{{$candidate->resume?'"'.str_replace("<br />", "", substr($candidate->resume, 0, 80)).'..."':""}}</p>
                             </td>
 		                        <td>
-		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId )) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i>View </a>
+		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId, 'searchingText' => $searching_text)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i>View </a>
                               @if(Auth::user()->getRole() <= 3 && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path)))
                               | <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"><i class="glyphicon glyphicon-download"></i>Download</a>
                               @endif
@@ -49,7 +51,8 @@
 						@endforelse
                     </tbody>
                     <tfoot>
-                      <th>Name</th>
+                        <th><input type="checkbox" name="checkall" value="">Check All</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Resume</th>
                         <th>Action</th>
@@ -59,6 +62,12 @@
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
+          <div class="form-group row">
+              <div class="col-sm-12">
+                <input type="submit" value="Send Mass Mail" id="login-button" class="btn
+                  btn-info pull-right">
+              </div>
+         </div>
         </section><!-- /.content -->
 
 @stop
