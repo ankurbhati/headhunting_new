@@ -59,6 +59,7 @@ class CandidateResume extends Eloquent {
 	'designation' => [
 	  'type' => 'string',
 	  "analyzer" => "standard",
+	  //"index"=> "not_analyzed"
 	],
 	'visa' => [
 	  'type' => 'string',

@@ -16,7 +16,7 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th><input type="checkbox" name="checkall" value="">Check All</th>
+                        <!--<th><input type="checkbox" name="checkall" value="">Check All</th>-->
                         <th>Name</th>
                         <th>Email</th>
                         <th>Resume</th>
@@ -26,7 +26,9 @@
                     <tbody>
 	                    @forelse($candidate_resumes as $candidate)
 		                      <tr>
+                            <!--
                             <td><input type="checkbox" name="checkcandidate" value="{{$candidate->candidate->email}}"></td>
+                            -->
                             <td>
                                 {{$candidate->candidate->first_name." ".$candidate->candidate->last_name}}
                             </td>
@@ -51,7 +53,7 @@
 						@endforelse
                     </tbody>
                     <tfoot>
-                        <th><input type="checkbox" name="checkall" value="">Check All</th>
+                        <!-- <th><input type="checkbox" name="checkall" value="">Check All</th>-->
                         <th>Name</th>
                         <th>Email</th>
                         <th>Resume</th>
@@ -62,7 +64,7 @@
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-          <div class="form-group row">
+          <div class="form-group row" style="display:none;">
               <div class="col-sm-12">
                 <input type="submit" value="Send Mass Mail" id="login-button" class="btn
                   btn-info pull-right">

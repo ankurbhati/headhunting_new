@@ -10,7 +10,8 @@
   <div class="form-group">
     <label for="inputQuery" class="col-sm-2 control-label">Visa</label>
     <div class="col-sm-7">
-      <input type="text" class="form-control" name="visa" />
+      {{ Form::select('visa', $visa, null, array('class' => 'form-control')) }}
+      <!--<input type="text" class="form-control" name="visa" />-->
     </div>
   </div>
   <div class="form-group">
