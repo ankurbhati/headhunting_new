@@ -11,8 +11,10 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
+                        <th>Job ID</th>
                         <th>Job Title</th>
                         <th>Type Of Employment</th>
+                        <th>Added At</th>
                         <th>City, Country</th>
                         <th>Client</th>
                         <th>Added By</th>
@@ -23,17 +25,21 @@
                     <tbody>
                     	@forelse($jobPost as $jobPosts)
 		                      <tr>
-		                        <td>{{$jobPosts->title}}</td>
-								<td>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
-								<td>{{$jobPosts->city->name}}, {{$jobPosts->country->country}}</td>
-                <td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
-								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>
-								<td>{{($jobPosts->status == 1)?"Closed":"Open";}}</td>
-		                        <td>
+                              <td>{{$jobPosts->id}}</td>
+              		            <td>{{$jobPosts->title}}</td>
+              								<td>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
+              								<td>{{($jobPosts->created_at != "" && $jobPosts->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($jobPosts->created_at)):"-"}}</td> 
+                              <td>{{$jobPosts->city->name}}, {{$jobPosts->country->country}}</td>
+                              <td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
+              								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>
+              								<td>{{($jobPosts->status == 1)?"Closed":"Open";}}</td>
+              		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $jobPosts->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
-		                        	<a href="{{ URL::route('edit-requirement', array($jobPosts->id)) }}" title="Edit Job Post"><i class="fa fa-fw fa-edit"></i></a>
-		                        	@if($id == 0 && $jobPosts->jobsAssignedToMe()->count() == 0)
-		                        		<a href="{{ URL::route('assign-requirement', array($jobPosts->id)) }}" title="Assign To me"><i class="fa fa-plus"></i></a>
+                              @if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPosts) && Auth::user()->id == $jobPosts->created_by) 
+		                        	  <a href="{{ URL::route('edit-requirement', array($jobPosts->id)) }}" title="Edit Job Post"><i class="fa fa-fw fa-edit"></i></a>
+                              @endif
+                              @if($id == 0 && $jobPosts->jobsAssignedToMe()->count() == 0)
+		                        		<!--<a href="{{ URL::route('assign-requirement', array($jobPosts->id)) }}" title="Assign To me"><i class="fa fa-plus"></i></a>-->
                               @else
                                 <a href="{{ URL::route('advance-search', array($jobPosts->id)) }}" title="Search Candidate"><i class="fa fa-search"></i></a>
 		                        	@endif
@@ -51,8 +57,10 @@
                     </tbody>
                     <tfoot>
                       <tr>
+                        <th>Job ID</th>
                         <th>Job Title</th>
                         <th>Type Of Employment</th>
+                        <th>Added At</th>
                         <th>City, State, Country</th>
                         <th>Client</th>
                         <th>Added By</th>

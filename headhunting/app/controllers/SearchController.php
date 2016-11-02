@@ -64,6 +64,14 @@ class SearchController extends HelperController {
 		    		$query = $query?str_ireplace(" and ", " ", $query): "";
 		    		$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match' => ['resume' => $query]], ['match_phrase_prefix' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);	
 		    	}
+		    	/*$candidate_resumes = CandidateResume::searchByQuery(['multi_match' => [
+		    		//	'terms' => [$designation, $visa, $region, $query],
+		    			'query' => $designation." ".$visa." ".$region." ".$query,
+				    	'fields' => ["designation^2", "visa", "region", "resume"],
+				    	'type' => 'best_fields'
+		    		]
+		    	]);*/
+
 		    }catch(Exception $e){
 		    	print $e->getMessage();
 		    }

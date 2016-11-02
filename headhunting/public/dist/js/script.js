@@ -22,6 +22,7 @@ $(function () {
 	  }
   }
 
+
   if($('select#roles').val() !== undefined) {
 
 	  $('select#roles').change(function() {
@@ -227,6 +228,27 @@ $(function () {
 }(jQuery));
 
 
-if(typeof(searchingText) !== undefined && typeof(replaceText) !== undefined) {
-	$(document).ready(replaceText());
+//if(typeof(searchingText) !== undefined && typeof(replaceText) !== undefined) {
+//	$(document).ready(replaceText());
+//}
+if($('select#region').length>0){
+	getStateForSearch(840);	
 }
+
+
+function getStateForSearch(country){
+      $.ajax({
+          url: '/states/' + country
+      }).done(function(subcategories) {
+          // subcategories is json, loop over it and populate the subcategory select
+        
+          var subcategoryItems = "<option value=''>Select State</option>";
+          $.each(subcategories, function(i, item)
+          {
+                 subcategoryItems+= "<option value='"+ item.state+ "'>" + item.state + "</option>";
+          });
+
+          $('select#region').html(subcategoryItems);
+          //$('select#region').val(subcategories[0].id);
+      });
+  }

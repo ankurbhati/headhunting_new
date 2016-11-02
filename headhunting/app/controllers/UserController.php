@@ -815,8 +815,8 @@ class UserController extends HelperController {
 				    ->subject($mass_mail->subject)
 				    ->setBody($body_content, 'text/html');
 				});
-				// 1/8 i.e .125 second delay 
-				usleep(125000);
+				// 1/4 i.e .25 second delay 
+				usleep(250000);
 			}
 			$mass_mail->status = 3;
 			$mass_mail->save();

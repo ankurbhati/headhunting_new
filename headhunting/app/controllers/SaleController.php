@@ -141,7 +141,7 @@ class SaleController extends HelperController {
 							'type_of_employment' => 'required|numeric',
 							'country_id' => 'required',
 							'state_id' =>  'required',
-							'description' =>  'required|max:1000',
+							'description' =>  'required',
 							'client_id' => 'required',
 							'mode_of_interview' => 'max:247'
 					)
@@ -211,7 +211,7 @@ class SaleController extends HelperController {
 							'type_of_employment' => 'required|numeric',
 							'country_id' => 'required',
 							'state_id' =>  'required',
-							'description' =>  'required|max:1000',
+							'description' =>  'required',
 							'client_id' => 'required',
 							'mode_of_interview' => 'max:247'
 					)
@@ -270,7 +270,7 @@ class SaleController extends HelperController {
 		if($id != "") {
 			$jobPost = JobPost::find($id);
 		}
-		if((Auth::user()->hasRole(1)|| Auth::user()->hasRole(2)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
+		if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
 			$country = Country::all();
 			$count = array();
 			foreach( $country as $key => $value) {

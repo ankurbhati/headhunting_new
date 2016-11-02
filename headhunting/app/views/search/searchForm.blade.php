@@ -2,7 +2,7 @@
 @section('content')
 <form class="form-horizontal" method="post">
   <div class="form-group">
-    <label for="inputQuery" class="col-sm-2 control-label">Designation</label>
+    <label for="inputQuery" class="col-sm-2 control-label">Job Title</label>
     <div class="col-sm-7">
       <input type="text" class="form-control" name="designation" />
     </div>
@@ -15,9 +15,10 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="inputQuery" class="col-sm-2 control-label">Region</label>
+    <label for="inputQuery" class="col-sm-2 control-label">State</label>
     <div class="col-sm-7">
-      <input type="text" class="form-control" name="region" />
+      {{ Form::select('region', [], null, array('class' => 'form-control', 'id'=>'region')) }}
+      <!--<input type="text" class="form-control" name="region" />-->
     </div>
   </div>
   <div class="form-group">

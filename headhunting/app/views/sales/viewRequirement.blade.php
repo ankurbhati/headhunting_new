@@ -5,6 +5,12 @@
 	</div>
 	<div class="col-sm-10 right-view">
 	    <div class="row"><div class="col-sm-4">
+	        Job Id:
+	        </div><div class="col-sm-8">
+	        		{{$jobPost->id}}
+	        </div>
+	    </div>
+	    <div class="row"><div class="col-sm-4">
 	        Title:
 	        </div><div class="col-sm-8">
 	        		{{$jobPost->title}}
@@ -84,7 +90,9 @@
 						</a>
 					</div>
 					<div class="col-sm-3">
-						<a class="btn btn-info" href="{{ URL::route('edit-requirement', array($jobPost->id)) }}" title="Edit Job Post"><i class="fa fa-fw fa-edit"></i> Edit Requirement</a>
+						@if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) 
+	                   		<a class="btn btn-info" href="{{ URL::route('edit-requirement', array($jobPost->id)) }}" title="Edit Job Post"><i class="fa fa-fw fa-edit"></i> Edit Requirement</a>
+	                	@endif
 					</div>
 						@if($jobPost->jobsAssignedToMe()->count() == 0)
 							<div class="col-sm-3">
