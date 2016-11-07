@@ -27,7 +27,7 @@
 		                        <td>{{$mass_mail->subject}}</td>
 		                        <td>{{(strlen($mass_mail->description)>100)?substr($mass_mail->description, 0, 97)."...":$mass_mail->description}}</td>
                             <td>{{$mass_mail->created_at}}</td>
-                            <td>{{($mass_mail->mail_group_id == 1)?"Clients":"Third Party"}}</td>
+                            <td>@if($mass_mail->mail_group_id == 1){{"Clients"}}@elseif($mass_mail->mail_group_id == 3){{"Third Party"}}@else {{"Candidates"}}@endif</td>
 		                        <td>{{$mass_mail->limit_lower."/".$mass_mail->limit_upper}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-mass-mail', array('id' => $mass_mail->id)) }}" title="View Mass Mail"><i class="fa fa-fw fa-eye"></i></a>

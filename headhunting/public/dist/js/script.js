@@ -225,6 +225,29 @@ $(function () {
 		$("#hours_chicago").html(( hours_chicago < 10 ? "0" : "" ) + hours_chicago);
 	},1000);
 
+
+
+	$('input[name="checkall"]').on('click', function() {
+	    $('input.checkcandidate').prop('checked', this.checked);
+	    $('input[name="checkall"]').prop('checked', this.checked);
+	});
+
+	$('form[name="candidate_mass_mail"]').on('submit', function(event){
+		//event.preventDefault();
+		var $form = $(this);
+		$('#errormsg').hide();
+		var candidate_id = "";
+		if(!$('input.checkcandidate:checked').length){
+			$('#errormsg').show();
+			return false;
+		}
+		$('input.checkcandidate:checked').each(function(){
+			candidate_id = candidate_id+$(this).val()+",";
+		});
+		$('input[name="candidate_list"]').val(candidate_id);
+		//$form.submit();
+	});
+
 }(jQuery));
 
 

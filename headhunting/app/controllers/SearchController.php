@@ -53,26 +53,103 @@ class SearchController extends HelperController {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try {
 		    	$searching_text = $designation." ".$visa." ".$region." ".$query;
+
+
+		    	$q = CandidateResume::query();
+
+		    	if( isset($visa) && !empty($visa) ) {
+		    		 //print "IN visa".$visa;exit;
+		    		 //$q->where('visa','like', "'%".$visa."%'");
+		    		 $q->where('visa','like', $visa);
+		    	}
+
+		    	if( isset($region) && !empty($region) ) {
+		    		 $q->where('region','like', $region);
+		    	}
+
+		    	if( isset($designation) && !empty($designation) ) {
+					$q->where('designation','like', "%".$designation."%");
+		    	}
+
+		    	if( isset($query) && !empty($query) ) {	 
+					$ands = preg_split("/ AND /i", $query);
+					foreach($ands as $item) {
+						$ors = preg_split("/ OR /i", $item);
+						$count = 0;
+						foreach($ors as $term) {
+							if($count == 0){
+								$q->where('resume','like', "%".$term."%");
+							} else {
+								$q->orWhere('resume','like', "%".$term."%");	
+							}
+							$count++;
+						}	
+					}
+		    	}
+
+		    	$candidate_resumes = $q->get();	
+
+		    	/*
 		    	$designation = $designation?str_ireplace(" and ", " ", $designation):"";
-		    	$visa = $visa?str_ireplace(" and ", " ", $visa):"";
-		    	$region = $region?str_ireplace(" and ", " ", $region):"";
-		    	//$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match' => ['resume' => $query]], ['match' => ['key_skills' => $key_skills]], ['match' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);
 		    	//$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match' => ['resume' => $query]], ['match' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);
 		    	if(preg_match('/"/', $query)){
-		    		$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match_phrase_prefix' => ['resume' => $query]], ['match_phrase_prefix' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);
+		    		$candidate_resumes = CandidateResume::searchByQuery([
+		    			'bool' => [
+		    				'should' => [
+		    					[
+		    						'match_phrase_prefix' => [
+		    							'resume' => $query
+		    						]
+		    					], 
+		    					[
+		    						'match_phrase_prefix' => [
+		    							'designation' => $designation
+		    						]
+		    					],
+		    					[
+			    					'match' => [
+			    						'visa' => $visa
+			    					]
+		    					],
+		    					[
+		    						'match' => [
+		    							'region' => $region
+		    						]
+		    					]
+		    				]
+		    			]
+		    		]);
 		    	} else {
 		    		$query = $query?str_ireplace(" and ", " ", $query): "";
-		    		$candidate_resumes = CandidateResume::searchByQuery(['bool' => ['should' => [['match' => ['resume' => $query]], ['match_phrase_prefix' => ['designation' => $designation]], ['match' => ['visa' => $visa]], ['match' => ['region' => $region]]]]]);	
-		    	}
-		    	/*$candidate_resumes = CandidateResume::searchByQuery(['multi_match' => [
-		    		//	'terms' => [$designation, $visa, $region, $query],
-		    			'query' => $designation." ".$visa." ".$region." ".$query,
-				    	'fields' => ["designation^2", "visa", "region", "resume"],
-				    	'type' => 'best_fields'
-		    		]
-		    	]);*/
+		    		$candidate_resumes = CandidateResume::searchByQuery([
+		    			'bool' => [
+			    			'should' => [
+			    				[
+			    					'match' => [
+			    						'resume' => $query
+			    					]
+			    				],
+			    				[
+			    					'match_phrase_prefix' => [
+			    						'designation' => $designation
+			    					]
+			    				], 
+			    				[
+			    					'match' => [
+			    						'visa' => $visa
+			    					]
+			    				],
+			    				[
+			    					'match' => [
+			    						'region' => $region
+			    					]
+			    				]
+			    			]
+			    		]
+		    		]);	
+		    	}*/
 
-		    }catch(Exception $e){
+		    } catch(Exception $e){
 		    	print $e->getMessage();
 		    }
 	  	} else {
@@ -85,6 +162,17 @@ class SearchController extends HelperController {
 		die;*/
 
 	  	#return 'Done';
-		return View::make('search.searchResult')->with(array('title' => 'Search - Headhunting', 'searching_text' => $searching_text, 'candidate_resumes' => $candidate_resumes, 'jobId' => $jobId, 'query' => $query, 'designation' => $designation, 'visa' => $visa, 'region'=>$region));
+		return View::make('search.searchResult')->with(
+			array(
+				'title' => 'Search - Headhunting',
+				'searching_text' => $searching_text,
+				'candidate_resumes' => $candidate_resumes,
+				'jobId' => $jobId,
+				'query' => $query,
+				'designation' => $designation, 
+				'visa' => $visa,
+				'region'=>$region
+			)
+		);
 	}
 }

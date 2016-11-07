@@ -30,7 +30,13 @@
 	    <div class="row"><div class="col-sm-4">
 	        Mail Group:
 	        </div><div class="col-sm-8">
-	        	{{($mass_mail->mail_group_id == 1)?"Clients":"Third Party"}}
+	        	@if($mass_mail->mail_group_id == 1)
+	        		{{"Clients"}}
+	        	@elseif($mass_mail->mail_group_id == 3)
+	        		{{"Third Party"}}
+	        	@else
+	        		{{"Candidates"}}
+	        	@endif
 	        </div>
 	    </div>
 		<div class="row"><div class="col-sm-4">

@@ -4,6 +4,7 @@
 	{{ Form::open(array('class' =>
 	'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
 
+    @if(!isset($candidate_list))
     <div class="form-group">
         {{ Form::label('mail_group_id', 'Mail Group: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -11,6 +12,7 @@
             <span class='errorlogin'>{{$errors->first('mail_group_id');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+    @endif
 
     <div class="form-group">
         {{ Form::label('subject', 'Subject: ', array('class' => 'col-sm-3
@@ -22,7 +24,7 @@
     </div>
 
 
-
+    @if(!isset($candidate_list))
     <div class="form-group">
         {{ Form::label('limit_lower', 'Lower Limit: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -31,7 +33,9 @@
             <span class='errorlogin'>{{$errors->first('limit_lower');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+    @endif
 
+    @if(!isset($candidate_list))
     <div class="form-group">
         {{ Form::label('limit_lower', 'Upper Limit: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -40,8 +44,10 @@
             <span class='errorlogin'>{{$errors->first('limit_upper');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
-
+    @endif
+    @if(isset($candidate_list) && !empty($candidate_list))
+        <input type="hidden" name="candidate_ids" value="{{$candidate_list}}">
+    @endif
     <div class="form-group">
         {{ Form::label('description', 'Text: ', array('class' => 'col-sm-3
         control-label')); }}

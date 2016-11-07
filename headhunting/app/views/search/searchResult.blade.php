@@ -16,7 +16,7 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <!--<th><input type="checkbox" name="checkall" value="">Check All</th>-->
+                        <th><input type="checkbox" name="checkall" value="">Check All</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Resume</th>
@@ -26,9 +26,7 @@
                     <tbody>
 	                    @forelse($candidate_resumes as $candidate)
 		                      <tr>
-                            <!--
-                            <td><input type="checkbox" name="checkcandidate" value="{{$candidate->candidate->email}}"></td>
-                            -->
+                            <td><input type="checkbox" class="checkcandidate" value="{{$candidate->candidate->id}}"></td>
                             <td>
                                 {{$candidate->candidate->first_name." ".$candidate->candidate->last_name}}
                             </td>
@@ -53,7 +51,7 @@
 						@endforelse
                     </tbody>
                     <tfoot>
-                        <!-- <th><input type="checkbox" name="checkall" value="">Check All</th>-->
+                        <th><input type="checkbox" name="checkall" value="">Check All</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Resume</th>
@@ -64,10 +62,14 @@
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-          <div class="form-group row" style="display:none;">
+          <div style="color:red; display:none;" id="errormsg">Please select candidate</div>
+          <div class="form-group row" style="display:block;">
               <div class="col-sm-12">
-                <input type="submit" value="Send Mass Mail" id="login-button" class="btn
+                <form name="candidate_mass_mail" method="post" action="/mass-mail">
+                  <input type="hidden" name="candidate_list" value="" />
+                  <input type="submit" value="Send Mass Mail" id="login-button" class="btn
                   btn-info pull-right">
+                </form>
               </div>
          </div>
         </section><!-- /.content -->

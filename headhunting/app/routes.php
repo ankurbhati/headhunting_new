@@ -274,6 +274,22 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
+	Route::match(array('GET'), '/close-requirement/{id}', array(
+			'as'    =>    'close-requirement',
+			'uses'    =>    'SaleController@closeRequirement'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
+	Route::match(array('GET'), '/reopen-requirement/{id}', array(
+			'as'    =>    'reopen-requirement',
+			'uses'    =>    'SaleController@reopenRequirement'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
 	Route::match(array('GET'), '/assign-requirement/{id}/{assignedTo?}', array(
 			'as'    =>    'assign-requirement',
 			'uses'    =>    'SaleController@assignRequirement'
@@ -446,6 +462,14 @@ Route::group(array('before' => 'auth'), function() {
 	 * Routes For GET API for mass mail
 	 */
 	Route::match(array('GET'), '/mass-mail/', array(
+			'as'    =>    'mass-mail',
+			'uses'    =>    'UserController@massMail'
+	));
+
+	/**
+	 * Routes For GET API for mass mail
+	 */
+	Route::match(array('POST'), '/mass-mail/', array(
 			'as'    =>    'mass-mail',
 			'uses'    =>    'UserController@massMail'
 	));
