@@ -93,6 +93,38 @@ class SaleController extends HelperController {
 
 	/**
 	 *
+	 * closeRequirement() : closeRequirement
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function closeRequirement($id) {
+		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+			$jobPost = JobPost::find($id);
+			$jobPost->status = 2;
+			$jobPost->save();
+		}
+		return Redirect::route('list-requirement');
+	}
+
+	/**
+	 *
+	 * reopenRequirement() : reopenRequirement
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function reopenRequirement($id) {
+		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+			$jobPost = JobPost::find($id);
+			$jobPost->status = 1;
+			$jobPost->save();
+		}
+		return Redirect::route('list-requirement');
+	}
+
+	/**
+	 *
 	 * viewRequirement() : viewRequirement
 	 *
 	 * @return Object : View
@@ -112,12 +144,12 @@ class SaleController extends HelperController {
 	 */
 	public function listRequirement($id=0) {
 		if($id == 0) {
-			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->get();
+			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc')->get();
 		} else {
 			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->get();
+			})->orderBy('updated_at', 'desc')->get();
 		}
 		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
 	}
