@@ -32,7 +32,7 @@
                               <td>{{$jobPosts->city->name}}, {{$jobPosts->country->country}}</td>
                               <td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
               								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>
-              								<td>{{($jobPosts->status == 1)?"Closed":"Open";}}</td>
+              								<td>{{($jobPosts->status == 2)?"Closed":"Open";}}</td>
               		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $jobPosts->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
                               @if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPosts) && Auth::user()->id == $jobPosts->created_by) 
@@ -48,6 +48,14 @@
 		                        	@endif
                               <a href="{{ URL::route('add-comment-job-post-view', array($jobPosts->id)) }}" title="Add Comments"><i class="fa fa-fw fa-edit"></i></a>
                               <a href="{{ URL::route('peers', array($jobPosts->id)) }}" title="Assign To Peers"><i class="fa fa-plus"></i> Assign To Peers</a>
+
+                              @if($jobPosts->status == 1 && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3)))
+                                <a href="{{ URL::route('close-requirement', array($jobPosts->id)) }}" title="Close Job Post"><i class="fa fa-fw fa-minus"></i></a>
+                              @endif
+                              @if($jobPosts->status == 2 && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3)))
+                                <a href="{{ URL::route('reopen-requirement', array($jobPosts->id)) }}" title="Reopen Job Post"><i class="fa fa-fw fa-plus"></i></a>
+                              @endif
+
 		                        </td>
 		                      </tr>
 	                   	@empty

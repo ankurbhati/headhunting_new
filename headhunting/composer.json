@@ -6,7 +6,7 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"davispeixoto/laravel-4-solr": "dev-master",
-		"fairholm/elasticquent": "1.0.*",
+	    "fairholm/elasticquent": "1.0.*",
 		"smalot/pdfparser": "*"
 	},
 	"autoload": {

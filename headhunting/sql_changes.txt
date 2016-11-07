@@ -291,3 +291,34 @@ UPDATE `headhunting`.`work_states` SET `title` = 'C2C (Independent)',
 `created_at` = NULL WHERE `work_states`.`id` =1;
 
 DELETE FROM `headhunting`.`work_states` WHERE `work_states`.`id` = 2";
+
+
+
+
+
+
+UPDATE `headhunting`.`work_states` SET `title` = 'C2C (Employer)',
+`created_at` = NULL WHERE `work_states`.`id` =3;
+
+INSERT INTO `headhunting`.`work_states` (
+`id` ,
+`title` ,
+`created_at` ,
+`updated_at`
+)
+VALUES (
+NULL , 'W2 (Seperate)', NULL ,
+CURRENT_TIMESTAMP
+), (
+NULL , '1099 (Separate)', NULL ,
+CURRENT_TIMESTAMP
+);
+
+ALTER TABLE `mass_mails` CHANGE `mail_group_id` `mail_group_id` INT( 11 ) NULL ;
+ALTER TABLE `mass_mails` ADD `candidates` TEXT NULL AFTER `limit_upper` ;
+
+
+ALTER TABLE `job_posts` CHANGE `status` `status` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT '1=>open, 2=>close';
+UPDATE `job_posts` SET `status`=1;
+
+
