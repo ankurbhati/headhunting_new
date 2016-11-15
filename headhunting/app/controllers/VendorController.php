@@ -107,7 +107,7 @@ class VendorController extends \BaseController {
 	 *
 	 */
 	public function vendorList() {
-		$vendors = Vendor::all();
+		$vendors = Vendor::paginate(100);
 		return View::make('Vendor.vendorList')->with(array('title' => 'Vendors List', 'vendors' => $vendors));
 	}
 

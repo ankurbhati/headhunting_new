@@ -59,6 +59,12 @@
                       </tr>
                     </tfoot>
                   </table>
+                  @if (count($candidates) > 100)
+                    <div>
+                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                      {{ $candidates->links() }}
+                    </div>
+                  @endif
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
             </div><!-- /.col -->

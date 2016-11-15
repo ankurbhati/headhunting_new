@@ -144,12 +144,12 @@ class SaleController extends HelperController {
 	 */
 	public function listRequirement($id=0) {
 		if($id == 0) {
-			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc')->get();
+			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc')->paginate(100);
 		} else {
 			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->orderBy('updated_at', 'desc')->get();
+			})->orderBy('updated_at', 'desc')->paginate(100);
 		}
 		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
 	}
@@ -330,11 +330,11 @@ class SaleController extends HelperController {
 	 */
 	public function listSubmittel($id=0) {
 		if($id == 0) {
-			$candidateApplications = CandidateApplication::all();
+			$candidateApplications = CandidateApplication::paginate(100);
 		} else {
 			$candidateApplications = CandidateApplication::with(array('candidate', 'requirement'))
 																									 ->where('job_post_id', '=', $id)
-																									 ->get();
+																									 ->paginate(100);
 		}
 		return View::make('sales.listSubmittels')->with(array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications));
 	}

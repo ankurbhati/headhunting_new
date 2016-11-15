@@ -189,7 +189,7 @@ class CandidateController extends HelperController {
 		$candidates = Candidate::leftJoin('candidate_resumes', function($join) {
 	      $join->on('candidates.id', '=', 'candidate_resumes.candidate_id');
 	    })
-	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path')->get();
+	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path')->paginate(100);
 		return View::make('Candidate.candidateList')->with(array('title' => 'Candidates List', 'candidates' => $candidates));
 	}
 

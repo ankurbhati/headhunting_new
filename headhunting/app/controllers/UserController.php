@@ -110,9 +110,9 @@ class UserController extends HelperController {
 			$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<', 6)
 				      ->where('user_id', '!=', Auth::user()->id);
-			})->get();
+			})->paginate(100);
 		} else {
-			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->get();
+			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
 		}
 
 		if($id > 0) {
@@ -121,7 +121,7 @@ class UserController extends HelperController {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 5)
 				      ->where('role_id', '>=', 4);
-				})->get();
+				})->paginate(100);
 			}
 		}
 
@@ -657,9 +657,9 @@ class UserController extends HelperController {
 	 */
 	public function massMailList() {
 		if(Auth::user()->hasRole(1)){
-			$mass_mails = MassMail::with('sendby')->get();
+			$mass_mails = MassMail::with('sendby')->paginate(100);
 		} else {
-			$mass_mails = MassMail::with('sendby')->where('send_by', '=', Auth::user()->id)->get();
+			$mass_mails = MassMail::with('sendby')->where('send_by', '=', Auth::user()->id)->paginate(100);
 		}
 		return View::make('User.massMailList')->with(array('title' => 'Mass Mail List', 'mass_mails' => $mass_mails));
 	}

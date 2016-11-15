@@ -47,6 +47,12 @@
                       <th>Action</th>
                     </tfoot>
                   </table>
+                  @if (count($mass_mails) > 100)
+                    <div>
+                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                      {{ $mass_mails->links() }}
+                    </div>
+                  @endif
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
             </div><!-- /.col -->

@@ -137,9 +137,9 @@ class ClientController extends \BaseController {
 	 */
 	public function clientList() {
 		if(Auth::user()->hasRole(1)) {
-			$clients = Client::all();
+			$clients = Client::paginate(100);
 		} else {
-			$clients = Client::where('created_by', '=', Auth::user()->id)->get();
+			$clients = Client::where('created_by', '=', Auth::user()->id)->paginate(100);
 		}
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}
