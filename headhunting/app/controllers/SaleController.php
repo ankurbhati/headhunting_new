@@ -131,7 +131,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function viewRequirement($id) {
-		$jobPost = JobPost::with(array('country', 'state', 'client', 'city'))->find($id);
+		$jobPost = JobPost::with(array('country', 'state', 'client', 'city', 'comments'))->find($id);
 		return View::make('sales.viewRequirement')->with(array('title' => 'View Requirement - Headhunting', 'jobPost' => $jobPost,));
 	}
 
