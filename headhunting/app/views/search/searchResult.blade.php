@@ -58,7 +58,7 @@
                         <th>Action</th>
                     </tfoot>
                   </table>
-                  @if (count($candidate_resumes) > 100)
+                  @if (count($candidate_resumes) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
                       {{ $candidate_resumes->links() }}

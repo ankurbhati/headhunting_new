@@ -69,6 +69,7 @@ class ClientController extends \BaseController {
 		fclose($file);
 		$message = $already_exist.$message.'<b><br />';
 		Session::flash('upload_result', $message);
+		Session::flash('flashmessagetxt', 'Uploaded Successfully!!');
 		return Redirect::route('client-upload');
 	}
 	
@@ -119,6 +120,7 @@ class ClientController extends \BaseController {
 					$mail_group->group_id = 1;
 					$mail_group->user_id = $client->id;
 					$mail_group->save();
+					Session::flash('flashmessagetxt', 'Added Successfully!!'); 
 					return Redirect::to('clients');
 				} else {
 					return Redirect::to('add-client')->withInput();
@@ -269,7 +271,7 @@ class ClientController extends \BaseController {
 
 				// Checking Authorised or not
 				if($client->save()) {
-
+					Session::flash('flashmessagetxt', 'Updated Successfully!!'); 
 					return Redirect::route('client-list');
 				} else {
 
@@ -292,6 +294,7 @@ class ClientController extends \BaseController {
 			if(Auth::user()->hasRole(1)) {
 				$client = Client::where('id', '=', $id)->get()->first();
 				if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
+					Session::flash('flashmessagetxt', 'Deleted Successfully!!'); 
 					return Redirect::route('client-list');
 				}
 			}

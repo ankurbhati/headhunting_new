@@ -125,6 +125,7 @@ class CandidateController extends HelperController {
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+						Session::flash('flashmessagetxt', 'Candidate Added Successfully!!');
                         $rate = Input::get('rate');
 						if(isset($rate) && !empty($rate)){
 							$candidate_rate = new CandidateRate();
@@ -372,6 +373,7 @@ class CandidateController extends HelperController {
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+						Session::flash('flashmessagetxt', 'Updated Successfully!!');
 						$rate = Input::get('rate');
 						if(isset($rate) && !empty($rate)) {
 							$candidate_rate = CandidateRate::where('candidate_id', $candidate->id)->first();
@@ -446,6 +448,7 @@ class CandidateController extends HelperController {
 
 			}  
 			if($candidate->delete()) {
+				Session::flash('flashmessagetxt', 'Deleted Successfully!!');
 				return Redirect::route('candidate-list');
 			}
 		}
@@ -568,6 +571,7 @@ class CandidateController extends HelperController {
 			$candidateApplication->status = 1;
 			$candidateApplication->created_at = date('Y-m-d H:i:s');
 			if($candidateApplication->save()) {
+				Session::flash('flashmessagetxt', 'Submitted Successfully!!');
 				return Redirect::route('list-submittel', array('id' => $jobId));
 			} else {
 				return Redirect::route('dashboard-view');

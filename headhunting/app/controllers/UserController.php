@@ -52,7 +52,6 @@ class UserController extends HelperController {
 		foreach( $country as $key => $value) {
 			$count[$value->id] = $value->country;
 		}
-
 		return View::make('User.newUser')->with(array('title' => 'Add Employee', 'roles' => $rols, 'country' => $count));
 	}
 
@@ -152,6 +151,7 @@ class UserController extends HelperController {
 	public function deleteEmp($id) {
 		if(Auth::user()->getRole() == 1) {
 			if(User::find($id)->delete()) {
+				Session::flash('flashmessagetxt', 'Employee Deleted Successfully!!');
 				return Redirect::route('employee-list');
 			}
 		}
@@ -267,6 +267,7 @@ class UserController extends HelperController {
 					$user->password = Hash::make($password);
 				}
 				if($user->save()) {
+					Session::flash('flashmessagetxt', 'Password Updated Successfully!!');
 					if(Auth::user()->id == $id) {
 						Auth::logout();
 						return Redirect::to('/')
@@ -447,6 +448,7 @@ class UserController extends HelperController {
 								$userPeer->save();
 							}
 						}
+						Session::flash('flashmessagetxt', 'Details Updated Successfully!!');
 						return Redirect::route('dashboard-view');
 					}
 				} else {
@@ -639,6 +641,7 @@ class UserController extends HelperController {
 							$userPeer->user_id =$user->id;
 							$userPeer->save();
 						}
+						Session::flash('flashmessagetxt', 'Employee Added Successfully!!');
 						return Redirect::to('dashboard');
 					}
 				} else {
@@ -756,6 +759,7 @@ class UserController extends HelperController {
 					$mass_mail->limit_upper = Input::get('limit_upper');
 					$mass_mail->send_by = Auth::user()->id;
 					if($mass_mail->save()) {
+						Session::flash('flashmessagetxt', 'Job Submitted Successfully!!');
 						return Redirect::route('mass-mail-list');
 					} else {
 						return Redirect::route('mass-mail')->withInput();

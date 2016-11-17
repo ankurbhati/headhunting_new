@@ -47,7 +47,9 @@
 		                        		<a href="{{ URL::route('delete-requirement', array($jobPosts->id)) }}" title="Delete Job Post"><i class="fa fa-fw fa-ban text-danger"></i></a>
 		                        	@endif
                               <a href="{{ URL::route('add-comment-job-post-view', array($jobPosts->id)) }}" title="Add Comments"><i class="fa fa-fw fa-edit"></i></a>
+                              @if(Auth::user()->hasRole(3))
                               <a href="{{ URL::route('peers', array($jobPosts->id)) }}" title="Assign To Peers"><i class="fa fa-plus"></i> Assign To Peers</a>
+                              @endif
 
                               @if($jobPosts->status == 1 && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3)))
                                 <a href="{{ URL::route('close-requirement', array($jobPosts->id)) }}" title="Close Job Post"><i class="fa fa-fw fa-minus"></i></a>
@@ -77,7 +79,7 @@
                       </tr>
                     </tfoot>
                   </table>
-                  @if (count($jobPost) > 100)
+                  @if (count($jobPost) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
                       {{ $jobPost->links() }}

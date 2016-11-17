@@ -42,6 +42,9 @@
 		            <li class="active">Dashboard</li>
 		          </ol>
 		        </section>
+		        <div id="status-area" style="text-align: center; margin-top: 10px;">
+	        		<!--<span class="flash_message " style="display: inline;">This is a message!</span>-->
+	        	</div>
         		@yield('content')
         	</div>
         	@include('shared.footer')
@@ -75,8 +78,47 @@
     	{{ HTML::script("plugins/input-mask/jquery.inputmask.js")}}
 	    {{ HTML::script("plugins/input-mask/jquery.inputmask.date.extensions.js")}}
 	    {{ HTML::script("dist/js/script.js")}}
-	    
 	    <script>
+	    @if(Session::has('flashmessagetxt'))
+			var message_text = {{ "'".Session::get('flashmessagetxt') ."'"}};
+			//alert(message_text);
+
+			(function($) {
+			    $.fn.flash_message = function(options) {
+			      
+			      options = $.extend({
+			        text: 'Done',
+			        time: 1000,
+			        how: 'before',
+			        class_name: ''
+			      }, options);
+			      
+			      return $(this).each(function() {
+			        if( $(this).parent().find('.flash_message').get(0) )
+			          return;
+			        
+			        var message = $('<span />', {
+			          'class': 'flash_message ' + options.class_name,
+			          text: options.text
+			        }).hide().fadeIn('fast');
+			        
+			        $(this)[options.how](message);
+			        
+			        message.delay(options.time).fadeOut('normal', function() {
+			          $(this).remove();
+			        });
+			        
+			      });
+			    };
+			})(jQuery);
+
+		    $('#status-area').flash_message({
+		        text: message_text,
+		        how: 'append'
+		    });
+		@endif
+
+
 	      (function () {
 	          var employees = $('#employeeList');
 	            if(employees.attr('id')) {

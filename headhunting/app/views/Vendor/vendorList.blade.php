@@ -53,7 +53,7 @@
                       </tr>
                     </tfoot>
                   </table>
-                  @if (count($vendors) > 100)
+                  @if (count($vendors) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
                       {{ $vendors->links() }}

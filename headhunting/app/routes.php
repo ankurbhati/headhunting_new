@@ -282,6 +282,14 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
+	Route::match(array('POST'), '/close-requirement/{id}', array(
+			'as'    =>    'close-requirement',
+			'uses'    =>    'SaleController@closeRequirement'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
 	Route::match(array('GET'), '/reopen-requirement/{id}', array(
 			'as'    =>    'reopen-requirement',
 			'uses'    =>    'SaleController@reopenRequirement'

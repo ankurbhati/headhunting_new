@@ -67,6 +67,13 @@
 						{{$jobPost->country->country}}
 					</div>
 			</div>
+
+			<div class="row"><div class="col-sm-4">
+					Status:
+					</div><div class="col-sm-8">
+						{{($jobPost->status == 2)?"Closed"."-".$feedbacks[$jobPost->feedback]:"Open";}}
+					</div>
+			</div>
 			<div class="row">
 				<div class="col-sm-4">
 	        		Description:
