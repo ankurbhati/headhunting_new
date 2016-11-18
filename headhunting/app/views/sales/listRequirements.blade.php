@@ -24,7 +24,7 @@
                   <div class="form-group">
                       {{ Form::label('type_of_employment', 'Type Of Employment: ', array('class' => 'col-sm-3
                       control-label')); }}
-                      <div class="col-sm-8">{{ Form::select('type_of_employment', array(1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"),"", array('class' => 'form-control')) }}
+                      <div class="col-sm-8">{{ Form::select('type_of_employment', array(0=>"Select type of employment", 1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"),"", array('class' => 'form-control')) }}
                           <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
                       </div>
                   </div>

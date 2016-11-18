@@ -48,14 +48,6 @@
                       </div>
                   </div>
                   
-                  <div class="form-group">
-                      {{ Form::label('roles', 'Roles: ', array('class' => 'col-sm-3
-                      control-label')); }}
-                      <div class="col-sm-8">{{ Form::select('roles', $roles, null, array('class' => 'form-control')) }} 
-                          <span class='errorlogin email-login'>{{$errors->first('roles');}}@if(!empty($message)){{$message}}@endIf</span>
-                      </div>
-                  </div>
-
                   <div class="form-group row ">
                       <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
                           btn-info', 'id' => 'login-button') ); }}</div>
