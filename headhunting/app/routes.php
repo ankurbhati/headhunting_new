@@ -192,7 +192,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Employee
 	 */
-	Route::match(array('GET'), '/employees', array(
+	Route::match(array('GET', 'POST'), '/employees', array(
 			'as'    =>    'employee-list',
 			'uses'    =>    'UserController@employeeList'
 	));
@@ -217,7 +217,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
-	Route::match(array('GET'), '/list-requirement', array(
+	Route::match(array('GET', 'POST'), '/list-requirement', array(
 			'as'    =>    'list-requirement',
 			'uses'    =>    'SaleController@listRequirement'
 	));
@@ -258,7 +258,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
-	Route::match(array('GET'), '/assigned-requirement/{id?}', array(
+	Route::match(array('GET', 'POST'), '/assigned-requirement/{id?}', array(
 			'as'    =>    'assigned-requirement',
 			'uses'    =>    'SaleController@listRequirement'
 	));

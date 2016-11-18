@@ -70,7 +70,27 @@ class UserController extends HelperController {
 			$rols[$value->id] = $value->role;
 		}
 
-		$users = User::with(array('userRoles'))->where('id', '!=', Auth::user()->id)->get();
+
+		$q = User::query();
+		$q = User::with(array('userRoles'))->where('id', '!=', Auth::user()->id);
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('first_name'))){
+				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
+			}
+			if(!empty(Input::get('last_name'))) {
+				$q->where('last_name', 'like', "%".Input::get('last_name')."%");	
+			}
+			if(!empty(Input::get('designation'))) {
+				$q->where('designation', 'like', "%".Input::get('designation')."%");	
+			}
+		}
+		
+		$users = $q->paginate(100);
+
 		return View::make('User.employeeList')->with(array('title' => 'Employee List', 'users' => $users, 'roles' => $rols));
 	}
 

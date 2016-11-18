@@ -166,14 +166,29 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function listRequirement($id=0) {
+
+		$q = JobPost::query();
+		
 		if($id == 0) {
-			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc')->paginate(100);
+			$q->with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc');
 		} else {
-			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
+			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->orderBy('updated_at', 'desc')->paginate(100);
+			})->orderBy('updated_at', 'desc');
 		}
+
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('title'))) {
+				$q->where('title', 'like', "%".Input::get('title')."%");
+			} 
+			if(!empty(Input::get('type_of_employment'))){
+				$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
+			}
+		}
+
+		$jobPost = $q->paginate(100);
 		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
 	}
 
