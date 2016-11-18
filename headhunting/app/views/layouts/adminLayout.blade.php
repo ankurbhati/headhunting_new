@@ -69,8 +69,8 @@
 	
 	    {{ HTML::script("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}
 	    <!-- Slimscroll -->
-		{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
-	    {{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}
+		<!--{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
+	    {{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}-->
 	    {{ HTML::script("plugins/slimScroll/jquery.slimscroll.min.js")}}
 	    {{ HTML::script("plugins/fastclick/fastclick.min.js")}}
 	    {{ HTML::script("dist/js/app.min.js")}}

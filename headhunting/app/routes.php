@@ -349,7 +349,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Client
 	 */
-	Route::match(array('GET'), '/clients', array(
+	Route::match(array('GET', 'POST'), '/clients', array(
 			'as'    =>    'client-list',
 			'uses'    =>    'ClientController@clientList'
 	));

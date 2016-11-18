@@ -7,6 +7,40 @@
                 <div class="box-header">
                   <h3 class="box-title">Data Table With Full Features</h3>
                 </div><!-- /.box-header -->
+
+
+                {{ Form::open(array('class' =>
+  'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+
+                <div class="form-group">
+                    {{ Form::label('subject', 'Subject: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-8">{{ Form::text('subject', '', array('class' =>
+                        'form-control', 'placeholder' => 'subject', 'required')); }}
+                        <span class='errorlogin'>{{$errors->first('subject');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('description', 'Description: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-8">{{ Form::text('description_search', '', array('class' =>
+                        'form-control', 'placeholder' => 'ex. Hello User,', 'required')); }}
+                        <span class='errorlogin'>{{$errors->first('description');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group row ">
+                    <div class="col-sm-11" style="text-align: center;">{{ Form::submit('Search', array('class' => 'btn
+                        btn-info', 'id' => 'requirement-button') ); }}</div>
+
+                </div>
+
+            {{ Form::close() }}
+
+
+
+
                 <div class="box-body">
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -47,7 +81,7 @@
                       <th>Action</th>
                     </tfoot>
                   </table>
-                  @if (count($mass_mails) > 100)
+                  @if (count($mass_mails) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
                       {{ $mass_mails->links() }}

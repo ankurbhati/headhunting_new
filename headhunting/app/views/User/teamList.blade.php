@@ -67,7 +67,7 @@
                       </tr>
                     </tfoot>
                   </table>
-                  @if (count($users) > 100)
+                  @if (count($users) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
                       {{ $users->links() }}

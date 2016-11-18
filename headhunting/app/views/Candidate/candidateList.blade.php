@@ -7,6 +7,54 @@
                 <div class="box-header">
                   <h3 class="box-title">Data Table With Full Features</h3>
                 </div><!-- /.box-header -->
+
+
+
+                {{ Form::open(array('class' =>
+                'form-horizontal','id' => 'login-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
+
+                    <div class="form-group">
+                        {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
+                        control-label')); }}
+                        <div class="col-sm-8">{{ Form::email('email', "", array('class' =>
+                            'form-control', 'placeholder' => 'Enter Candidate Email', 'required'=>"true")); }} 
+                            <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {{ Form::label('first_name', 'First Name: ', array('class' => 'col-sm-3
+                        control-label')); }}
+                        <div class="col-sm-8">{{ Form::text('first_name', "", array('class' =>
+                            'form-control', 'placeholder' => 'Enter Candidates First Name', 'required'=>"true")); }} 
+                            <span class='errorlogin email-login'>{{$errors->first('first_name');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('last_name', 'Last Name: ', array('class' => 'col-sm-3
+                        control-label')); }}
+                        <div class="col-sm-8">{{ Form::text('last_name', "", array('class' =>
+                            'form-control', 'placeholder' => 'Enter Candidates Last Name', 'required'=>"true")); }} 
+                            <span class='errorlogin email-login'>{{$errors->first('last_name');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('visa_id', 'Visa: ', array('class' => 'col-sm-3
+                        control-label')); }}
+                        <div class="col-sm-8">{{ Form::select('visa_id', $visa, null, array('class' => 'form-control', 'required'=>"true")) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('visa_id');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    </div>
+                    <div class="form-group row ">
+                        <div class="col-sm-11" style="text-align: center;">{{ Form::submit('Search', array('class' => 'btn
+                            btn-info', 'id' => 'login-button') ); }}</div>
+
+                   </div>
+                {{ Form::close() }}
+
+
+
+
                 <div class="box-body">
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>

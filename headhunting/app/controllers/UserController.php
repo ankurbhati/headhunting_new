@@ -63,8 +63,15 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function employeeList() {
+
+		$roles = Role::all();
+		$rols = array();
+		foreach( $roles as $key => $value) {
+			$rols[$value->id] = $value->role;
+		}
+
 		$users = User::with(array('userRoles'))->where('id', '!=', Auth::user()->id)->get();
-		return View::make('User.employeeList')->with(array('title' => 'Employee List', 'users' => $users));
+		return View::make('User.employeeList')->with(array('title' => 'Employee List', 'users' => $users, 'roles' => $rols));
 	}
 
 	/**

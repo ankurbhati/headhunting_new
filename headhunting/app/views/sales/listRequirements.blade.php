@@ -7,6 +7,39 @@
                 <div class="box-header">
                   <h3 class="box-title">Job Postings</h3>
                 </div><!-- /.box-header -->
+
+
+
+
+                  {{ Form::open(array('class' =>
+  'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+                  <div class="form-group">
+                      {{ Form::label('title', 'Job Title: ', array('class' => 'col-sm-3
+                      control-label')); }}
+                      <div class="col-sm-8">{{ Form::text('title', "", array('class' =>
+                          'form-control', 'placeholder' => 'Enter Job Title')); }}
+                          <span class='errorlogin email-login'>{{$errors->first('title');}}@if(!empty($message)){{$message}}@endIf</span>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      {{ Form::label('type_of_employment', 'Type Of Employment: ', array('class' => 'col-sm-3
+                      control-label')); }}
+                      <div class="col-sm-8">{{ Form::select('type_of_employment', array(1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"),"", array('class' => 'form-control')) }}
+                          <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
+                      </div>
+                  </div>
+
+                  <div class="form-group row ">
+                      <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
+                          btn-info', 'id' => 'requirement-button') ); }}</div>
+
+                 </div>
+
+              {{ Form::close() }}
+
+
+
+
                 <div class="box-body">
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
