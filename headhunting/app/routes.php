@@ -421,7 +421,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Candidate
 	 */
-	Route::match(array('GET'), '/candidates', array(
+	Route::match(array('GET', 'POST'), '/candidates', array(
 			'as'    =>    'candidate-list',
 			'uses'    =>    'CandidateController@candidateList'
 	));
@@ -485,7 +485,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For GET API for mass mail
 	 */
-	Route::match(array('GET'), '/mass-mail-list/', array(
+	Route::match(array('GET', 'POST'), '/mass-mail-list/', array(
 			'as'    =>    'mass-mail-list',
 			'uses'    =>    'UserController@massMailList'
 	));
@@ -526,7 +526,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET'), '/third-parties', array(
+	Route::match(array('GET', 'POST'), '/third-parties', array(
 			'as'    =>    'third-party-list',
 			'uses'    =>    'ThirdpartyController@thirdpartyList'
 	));

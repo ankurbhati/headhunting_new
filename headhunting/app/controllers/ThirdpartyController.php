@@ -212,13 +212,33 @@ class ThirdpartyController extends \BaseController {
 	 *
 	 */
 	public function thirdpartyList() {
+
+		$q = Thirdparty::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('poc'))){
+				$q->where('poc', 'like', "%".Input::get('poc')."%");	
+			}
+			if(!empty(Input::get('phone'))) {
+				$q->where('phone', 'like', "%".Input::get('phone')."%");	
+			}
+			if(!empty(Input::get('phone_ext'))) {
+				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
+			}
+		}
+
+
+
 		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {
-			$thirdparties = Thirdparty::whereHas('thirdPartyUsers', function($q)
+			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
 				{
 				    $q->where('user_id','=', Auth::user()->id);
 				})->paginate(100);
 		} else {
-			$thirdparties = Thirdparty::paginate(100);
+			$thirdparties = $q->paginate(100);
 		}
 
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));

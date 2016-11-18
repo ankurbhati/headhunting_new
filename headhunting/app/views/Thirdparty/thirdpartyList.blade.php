@@ -8,7 +8,7 @@
                   <h3 class="box-title">Data Table With Full Features</h3>
                 </div><!-- /.box-header -->
 
-                {{ Form::open(array('route' => 'add-third-party','class' =>
+                {{ Form::open(array('class' =>
 'form-horizontal','id' => 'login-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
 
     <div class="form-group">

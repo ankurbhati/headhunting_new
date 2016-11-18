@@ -17,7 +17,7 @@
                         {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
                         control-label')); }}
                         <div class="col-sm-8">{{ Form::email('email', "", array('class' =>
-                            'form-control', 'placeholder' => 'Enter Candidate Email', 'required'=>"true")); }} 
+                            'form-control', 'placeholder' => 'Enter Candidate Email')); }} 
                             <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                         {{ Form::label('first_name', 'First Name: ', array('class' => 'col-sm-3
                         control-label')); }}
                         <div class="col-sm-8">{{ Form::text('first_name', "", array('class' =>
-                            'form-control', 'placeholder' => 'Enter Candidates First Name', 'required'=>"true")); }} 
+                            'form-control', 'placeholder' => 'Enter Candidates First Name')); }} 
                             <span class='errorlogin email-login'>{{$errors->first('first_name');}}@if(!empty($message)){{$message}}@endIf</span>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         {{ Form::label('last_name', 'Last Name: ', array('class' => 'col-sm-3
                         control-label')); }}
                         <div class="col-sm-8">{{ Form::text('last_name', "", array('class' =>
-                            'form-control', 'placeholder' => 'Enter Candidates Last Name', 'required'=>"true")); }} 
+                            'form-control', 'placeholder' => 'Enter Candidates Last Name')); }} 
                             <span class='errorlogin email-login'>{{$errors->first('last_name');}}@if(!empty($message)){{$message}}@endIf</span>
                         </div>
                     </div>

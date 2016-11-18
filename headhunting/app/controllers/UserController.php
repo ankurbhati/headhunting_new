@@ -72,7 +72,7 @@ class UserController extends HelperController {
 
 
 		$q = User::query();
-		$q = User::with(array('userRoles'))->where('id', '!=', Auth::user()->id);
+		$q->with(array('userRoles'))->where('id', '!=', Auth::user()->id);
 
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
@@ -686,10 +686,22 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function massMailList() {
+
+		$q = MassMail::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('subject'))) {
+				$q->where('subject', 'like', "%".Input::get('subject')."%");
+			} 
+			if(!empty(Input::get('description'))){
+				$q->where('description', 'like', "%".Input::get('description')."%");	
+			}
+		}
+
 		if(Auth::user()->hasRole(1)){
-			$mass_mails = MassMail::with('sendby')->paginate(100);
+			$mass_mails = $q->with('sendby')->paginate(100);
 		} else {
-			$mass_mails = MassMail::with('sendby')->where('send_by', '=', Auth::user()->id)->paginate(100);
+			$mass_mails = $q->with('sendby')->where('send_by', '=', Auth::user()->id)->paginate(100);
 		}
 		return View::make('User.massMailList')->with(array('title' => 'Mass Mail List', 'mass_mails' => $mass_mails));
 	}

@@ -186,9 +186,27 @@ class CandidateController extends HelperController {
 	 *
 	 */
 	public function candidateList() {
-		#$candidates = Candidate::all();
+		
 		$visa = Visa::all()->lists('title', 'id');
-		$candidates = Candidate::leftJoin('candidate_resumes', function($join) {
+		$visa[0] = "Select Visa";
+		$q = Candidate::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('first_name'))){
+				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
+			}
+			if(!empty(Input::get('last_name'))) {
+				$q->where('last_name', 'like', "%".Input::get('last_name')."%");	
+			}
+			if(!empty(Input::get('visa_id'))) {
+				$q->where('visa_id', '=', Input::get('visa_id'));	
+			}
+		}
+
+		$candidates = $q->leftJoin('candidate_resumes', function($join) {
 	      $join->on('candidates.id', '=', 'candidate_resumes.candidate_id');
 	    })
 	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path')->paginate(100);
