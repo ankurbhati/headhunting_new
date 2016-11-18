@@ -69,6 +69,7 @@ class ClientController extends \BaseController {
 		fclose($file);
 		$message = $already_exist.$message.'<b><br />';
 		Session::flash('upload_result', $message);
+		Session::flash('flashmessagetxt', 'Uploaded Successfully!!');
 		return Redirect::route('client-upload');
 	}
 	
@@ -119,6 +120,7 @@ class ClientController extends \BaseController {
 					$mail_group->group_id = 1;
 					$mail_group->user_id = $client->id;
 					$mail_group->save();
+					Session::flash('flashmessagetxt', 'Added Successfully!!'); 
 					return Redirect::to('clients');
 				} else {
 					return Redirect::to('add-client')->withInput();
@@ -136,11 +138,37 @@ class ClientController extends \BaseController {
 	 *
 	 */
 	public function clientList() {
-		if(Auth::user()->hasRole(1)) {
-			$clients = Client::all();
-		} else {
-			$clients = Client::where('created_by', '=', Auth::user()->id)->get();
+		$q = Client::query();
+		if(!Auth::user()->hasRole(1)) {
+			//$q = Client::all();
+		//} else {
+			//$clients = Client::where('created_by', '=', Auth::user()->id)->paginate(100);
+			$q->where('created_by', '=', Auth::user()->id);
 		}
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('company_name'))) {
+				$q->where('company_name', 'like', "%".Input::get('company_name')."%");
+			}
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('first_name'))){
+				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
+			}
+			if(!empty(Input::get('last_name'))) {
+				$q->where('last_name', 'like', "%".Input::get('last_name')."%");	
+			}
+			if(!empty(Input::get('phone'))) {
+				$q->where('phone', 'like', "%".Input::get('phone')."%");	
+			}
+			if(!empty(Input::get('phone_ext'))) {
+				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
+			} 
+		}
+		
+		$clients = $q->paginate(100);
+
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}
 
@@ -269,7 +297,7 @@ class ClientController extends \BaseController {
 
 				// Checking Authorised or not
 				if($client->save()) {
-
+					Session::flash('flashmessagetxt', 'Updated Successfully!!'); 
 					return Redirect::route('client-list');
 				} else {
 
@@ -292,6 +320,7 @@ class ClientController extends \BaseController {
 			if(Auth::user()->hasRole(1)) {
 				$client = Client::where('id', '=', $id)->get()->first();
 				if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
+					Session::flash('flashmessagetxt', 'Deleted Successfully!!'); 
 					return Redirect::route('client-list');
 				}
 			}

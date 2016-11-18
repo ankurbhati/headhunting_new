@@ -322,3 +322,11 @@ ALTER TABLE `job_posts` CHANGE `status` `status` TINYINT( 4 ) NOT NULL DEFAULT '
 UPDATE `job_posts` SET `status`=1;
 
 
+
+
+
+
+
+ALTER TABLE `job_posts` ADD `feedback` TINYINT NULL DEFAULT NULL COMMENT '0 => Rejected By Sales Manager/1 => Submitted To Prime Vendor/ 2=> Submitted To End Client/3 => Interview Requested/ 4=> Selected| => Rejected For All States' AFTER `status` ;
+
+ALTER TABLE `job_posts` CHANGE `feedback` `feedback` TINYINT( 4 ) NULL DEFAULT NULL COMMENT '0 => Rejected By Sales Manager/1 => Submitted To Prime Vendor/ 2=> Submitted To End Client/3 => Interview Requested/ 4=> Selected/5 => Rejected For All States';

@@ -89,7 +89,7 @@ class SearchController extends HelperController {
 					}
 		    	}
 
-		    	$candidate_resumes = $q->get();	
+		    	$candidate_resumes = $q->paginate(100);	
 
 		    	/*
 		    	$designation = $designation?str_ireplace(" and ", " ", $designation):"";
@@ -156,7 +156,7 @@ class SearchController extends HelperController {
 		    }
 	  	} else {
 	    	// Show all posts if no query is set
-	    	$candidate_resumes = CandidateResume::all();
+	    	$candidate_resumes = CandidateResume::paginate(100);
 	    }
 	    //echo $query;exit;
 		/*echo "<pre>". count($candidate_resumes);

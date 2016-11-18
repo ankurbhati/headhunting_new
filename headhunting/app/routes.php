@@ -192,7 +192,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Employee
 	 */
-	Route::match(array('GET'), '/employees', array(
+	Route::match(array('GET', 'POST'), '/employees', array(
 			'as'    =>    'employee-list',
 			'uses'    =>    'UserController@employeeList'
 	));
@@ -217,7 +217,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
-	Route::match(array('GET'), '/list-requirement', array(
+	Route::match(array('GET', 'POST'), '/list-requirement', array(
 			'as'    =>    'list-requirement',
 			'uses'    =>    'SaleController@listRequirement'
 	));
@@ -258,7 +258,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
-	Route::match(array('GET'), '/assigned-requirement/{id?}', array(
+	Route::match(array('GET', 'POST'), '/assigned-requirement/{id?}', array(
 			'as'    =>    'assigned-requirement',
 			'uses'    =>    'SaleController@listRequirement'
 	));
@@ -275,6 +275,14 @@ Route::group(array('before' => 'auth'), function() {
 	 * Routes for list-requirement
 	 */
 	Route::match(array('GET'), '/close-requirement/{id}', array(
+			'as'    =>    'close-requirement',
+			'uses'    =>    'SaleController@closeRequirement'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
+	Route::match(array('POST'), '/close-requirement/{id}', array(
 			'as'    =>    'close-requirement',
 			'uses'    =>    'SaleController@closeRequirement'
 	));
@@ -341,7 +349,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Client
 	 */
-	Route::match(array('GET'), '/clients', array(
+	Route::match(array('GET', 'POST'), '/clients', array(
 			'as'    =>    'client-list',
 			'uses'    =>    'ClientController@clientList'
 	));
@@ -413,7 +421,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Candidate
 	 */
-	Route::match(array('GET'), '/candidates', array(
+	Route::match(array('GET', 'POST'), '/candidates', array(
 			'as'    =>    'candidate-list',
 			'uses'    =>    'CandidateController@candidateList'
 	));
@@ -477,7 +485,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For GET API for mass mail
 	 */
-	Route::match(array('GET'), '/mass-mail-list/', array(
+	Route::match(array('GET', 'POST'), '/mass-mail-list/', array(
 			'as'    =>    'mass-mail-list',
 			'uses'    =>    'UserController@massMailList'
 	));
@@ -518,7 +526,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET'), '/third-parties', array(
+	Route::match(array('GET', 'POST'), '/third-parties', array(
 			'as'    =>    'third-party-list',
 			'uses'    =>    'ThirdpartyController@thirdpartyList'
 	));

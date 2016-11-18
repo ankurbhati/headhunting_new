@@ -133,3 +133,11 @@
 span.highlight {
     background-color: #FFFF88;
 }
+
+#status-area .flash_message {
+    background-color: #5edf17;
+    color:#fff;
+    padding: 5px;
+    font-size: 18px;
+    font-weight: 800;
+}

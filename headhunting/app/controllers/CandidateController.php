@@ -125,6 +125,7 @@ class CandidateController extends HelperController {
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+						Session::flash('flashmessagetxt', 'Candidate Added Successfully!!');
                         $rate = Input::get('rate');
 						if(isset($rate) && !empty($rate)){
 							$candidate_rate = new CandidateRate();
@@ -185,12 +186,31 @@ class CandidateController extends HelperController {
 	 *
 	 */
 	public function candidateList() {
-		#$candidates = Candidate::all();
-		$candidates = Candidate::leftJoin('candidate_resumes', function($join) {
+		
+		$visa = Visa::all()->lists('title', 'id');
+		$visa[0] = "Select Visa";
+		$q = Candidate::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('first_name'))){
+				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
+			}
+			if(!empty(Input::get('last_name'))) {
+				$q->where('last_name', 'like', "%".Input::get('last_name')."%");	
+			}
+			if(!empty(Input::get('visa_id'))) {
+				$q->where('visa_id', '=', Input::get('visa_id'));	
+			}
+		}
+
+		$candidates = $q->leftJoin('candidate_resumes', function($join) {
 	      $join->on('candidates.id', '=', 'candidate_resumes.candidate_id');
 	    })
-	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path')->get();
-		return View::make('Candidate.candidateList')->with(array('title' => 'Candidates List', 'candidates' => $candidates));
+	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path')->paginate(100);
+		return View::make('Candidate.candidateList')->with(array('title' => 'Candidates List', 'candidates' => $candidates, 'visa'=>$visa));
 	}
 
 
@@ -372,6 +392,7 @@ class CandidateController extends HelperController {
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+						Session::flash('flashmessagetxt', 'Updated Successfully!!');
 						$rate = Input::get('rate');
 						if(isset($rate) && !empty($rate)) {
 							$candidate_rate = CandidateRate::where('candidate_id', $candidate->id)->first();
@@ -446,6 +467,7 @@ class CandidateController extends HelperController {
 
 			}  
 			if($candidate->delete()) {
+				Session::flash('flashmessagetxt', 'Deleted Successfully!!');
 				return Redirect::route('candidate-list');
 			}
 		}
@@ -568,6 +590,7 @@ class CandidateController extends HelperController {
 			$candidateApplication->status = 1;
 			$candidateApplication->created_at = date('Y-m-d H:i:s');
 			if($candidateApplication->save()) {
+				Session::flash('flashmessagetxt', 'Submitted Successfully!!');
 				return Redirect::route('list-submittel', array('id' => $jobId));
 			} else {
 				return Redirect::route('dashboard-view');

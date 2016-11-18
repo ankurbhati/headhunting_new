@@ -66,8 +66,8 @@ class SaleController extends HelperController {
 		$jobPostAssignment->assigned_to_id = ($assignedTo == "")?$jobPostAssignment->assigned_by_id:$assignedTo;
 		$jobPostAssignment->status = 2;
 		if($jobPostAssignment->save()) {
+			Session::flash('flashmessagetxt', 'Assigned Successfully!!'); 
 			if(Auth::user()->id == $jobPostAssignment->assigned_to_id) {
-
 				return Redirect::route('assigned-requirement', array($jobPostAssignment->assigned_to_id));
 			} else {
 				return Redirect::route('list-requirement');
@@ -87,6 +87,7 @@ class SaleController extends HelperController {
 	public function deleteRequirement($id) {
 		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			$jobPost = JobPost::find($id)->delete();
+			Session::flash('flashmessagetxt', 'Deleted Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
 	}
@@ -99,10 +100,23 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function closeRequirement($id) {
-		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+
+		if( $_SERVER['REQUEST_METHOD'] == 'GET' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3))) {
+			$feedbacks = array(
+				'Rejected By Sales Manager',
+				'Submitted To Prime Vendor',
+				'Submitted To End Client',
+				'Interview Requested',
+				'Selected',
+				'Rejected For All States'
+			);
+			return View::make('sales.closeRequirement')->with(array('title' => 'Close Requirement - Headhunting', 'feedbacks'=>$feedbacks));
+		} else if($_SERVER['REQUEST_METHOD'] == 'POST' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3))) {
 			$jobPost = JobPost::find($id);
 			$jobPost->status = 2;
+			$jobPost->feedback = Input::get('feedback');
 			$jobPost->save();
+			Session::flash('flashmessagetxt', 'Job Closed Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
 	}
@@ -119,6 +133,7 @@ class SaleController extends HelperController {
 			$jobPost = JobPost::find($id);
 			$jobPost->status = 1;
 			$jobPost->save();
+			Session::flash('flashmessagetxt', 'Job Reopened Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
 	}
@@ -131,8 +146,16 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function viewRequirement($id) {
-		$jobPost = JobPost::with(array('country', 'state', 'client', 'city'))->find($id);
-		return View::make('sales.viewRequirement')->with(array('title' => 'View Requirement - Headhunting', 'jobPost' => $jobPost,));
+		$feedbacks = array(
+			'Rejected By Sales Manager',
+			'Submitted To Prime Vendor',
+			'Submitted To End Client',
+			'Interview Requested',
+			'Selected',
+			'Rejected For All States'
+		);
+		$jobPost = JobPost::with(array('country', 'state', 'client', 'city', 'comments'))->find($id);
+		return View::make('sales.viewRequirement')->with(array('title' => 'View Requirement - Headhunting', 'feedbacks'=>$feedbacks,'jobPost' => $jobPost,));
 	}
 
 	/**
@@ -143,14 +166,29 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function listRequirement($id=0) {
+
+		$q = JobPost::query();
+		
 		if($id == 0) {
-			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc')->get();
+			$q->with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc');
 		} else {
-			$jobPost = JobPost::with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
+			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->orderBy('updated_at', 'desc')->get();
+			})->orderBy('updated_at', 'desc');
 		}
+
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('title'))) {
+				$q->where('title', 'like', "%".Input::get('title')."%");
+			} 
+			if(!empty(Input::get('type_of_employment'))){
+				$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
+			}
+		}
+
+		$jobPost = $q->paginate(100);
 		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
 	}
 
@@ -214,6 +252,7 @@ class SaleController extends HelperController {
 				$jobPost->status = 2;
 
 				if($jobPost->save()) {
+					Session::flash('flashmessagetxt', 'Job Posted Successfully!!'); 
 					return Redirect::route('list-requirement');
 				} else {
 					return Redirect::route('post-requirement')->withInput();
@@ -282,6 +321,7 @@ class SaleController extends HelperController {
 				$jobPost->status = $jobPost->status;
 
 				if($jobPost->save()) {
+					Session::flash('flashmessagetxt', 'Job Updated Successfully!!'); 
 					return Redirect::route('list-requirement');
 				} else {
 					return Redirect::route('post-requirement', array($id))->withInput();
@@ -330,11 +370,11 @@ class SaleController extends HelperController {
 	 */
 	public function listSubmittel($id=0) {
 		if($id == 0) {
-			$candidateApplications = CandidateApplication::all();
+			$candidateApplications = CandidateApplication::paginate(100);
 		} else {
 			$candidateApplications = CandidateApplication::with(array('candidate', 'requirement'))
 																									 ->where('job_post_id', '=', $id)
-																									 ->get();
+																									 ->paginate(100);
 		}
 		return View::make('sales.listSubmittels')->with(array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications));
 	}
@@ -386,6 +426,7 @@ class SaleController extends HelperController {
 				$jobPostComment->created_at = date('Y-m-d H:i:s');
 				if($jobPostComment->save()) {
 					$jobPost = JobPost::with(array('comments', 'comments.user'))->select(array('id', 'title'))->where('id', '=', $jobId)->get()->first();
+					Session::flash('flashmessagetxt', 'Comment Added Successfully!!'); 
 					return View::make('sales.postCommentRequirement')->with(array('title' => 'Job Post Comments - Headhunting', 'jobPost' => $jobPost));
 				}
 			}

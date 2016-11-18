@@ -52,7 +52,6 @@ class UserController extends HelperController {
 		foreach( $country as $key => $value) {
 			$count[$value->id] = $value->country;
 		}
-
 		return View::make('User.newUser')->with(array('title' => 'Add Employee', 'roles' => $rols, 'country' => $count));
 	}
 
@@ -64,8 +63,35 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function employeeList() {
-		$users = User::with(array('userRoles'))->where('id', '!=', Auth::user()->id)->get();
-		return View::make('User.employeeList')->with(array('title' => 'Employee List', 'users' => $users));
+
+		$roles = Role::all();
+		$rols = array();
+		foreach( $roles as $key => $value) {
+			$rols[$value->id] = $value->role;
+		}
+
+
+		$q = User::query();
+		$q->with(array('userRoles'))->where('id', '!=', Auth::user()->id);
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('first_name'))){
+				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
+			}
+			if(!empty(Input::get('last_name'))) {
+				$q->where('last_name', 'like', "%".Input::get('last_name')."%");	
+			}
+			if(!empty(Input::get('designation'))) {
+				$q->where('designation', 'like', "%".Input::get('designation')."%");	
+			}
+		}
+		
+		$users = $q->paginate(100);
+
+		return View::make('User.employeeList')->with(array('title' => 'Employee List', 'users' => $users, 'roles' => $rols));
 	}
 
 	/**
@@ -110,9 +136,9 @@ class UserController extends HelperController {
 			$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<', 6)
 				      ->where('user_id', '!=', Auth::user()->id);
-			})->get();
+			})->paginate(100);
 		} else {
-			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->get();
+			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
 		}
 
 		if($id > 0) {
@@ -121,7 +147,7 @@ class UserController extends HelperController {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 5)
 				      ->where('role_id', '>=', 4);
-				})->get();
+				})->paginate(100);
 			}
 		}
 
@@ -152,6 +178,7 @@ class UserController extends HelperController {
 	public function deleteEmp($id) {
 		if(Auth::user()->getRole() == 1) {
 			if(User::find($id)->delete()) {
+				Session::flash('flashmessagetxt', 'Employee Deleted Successfully!!');
 				return Redirect::route('employee-list');
 			}
 		}
@@ -267,6 +294,7 @@ class UserController extends HelperController {
 					$user->password = Hash::make($password);
 				}
 				if($user->save()) {
+					Session::flash('flashmessagetxt', 'Password Updated Successfully!!');
 					if(Auth::user()->id == $id) {
 						Auth::logout();
 						return Redirect::to('/')
@@ -447,6 +475,7 @@ class UserController extends HelperController {
 								$userPeer->save();
 							}
 						}
+						Session::flash('flashmessagetxt', 'Details Updated Successfully!!');
 						return Redirect::route('dashboard-view');
 					}
 				} else {
@@ -639,6 +668,7 @@ class UserController extends HelperController {
 							$userPeer->user_id =$user->id;
 							$userPeer->save();
 						}
+						Session::flash('flashmessagetxt', 'Employee Added Successfully!!');
 						return Redirect::to('dashboard');
 					}
 				} else {
@@ -656,10 +686,22 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function massMailList() {
+
+		$q = MassMail::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('subject'))) {
+				$q->where('subject', 'like', "%".Input::get('subject')."%");
+			} 
+			if(!empty(Input::get('description'))){
+				$q->where('description', 'like', "%".Input::get('description')."%");	
+			}
+		}
+
 		if(Auth::user()->hasRole(1)){
-			$mass_mails = MassMail::with('sendby')->get();
+			$mass_mails = $q->with('sendby')->paginate(100);
 		} else {
-			$mass_mails = MassMail::with('sendby')->where('send_by', '=', Auth::user()->id)->get();
+			$mass_mails = $q->with('sendby')->where('send_by', '=', Auth::user()->id)->paginate(100);
 		}
 		return View::make('User.massMailList')->with(array('title' => 'Mass Mail List', 'mass_mails' => $mass_mails));
 	}
@@ -756,6 +798,7 @@ class UserController extends HelperController {
 					$mass_mail->limit_upper = Input::get('limit_upper');
 					$mass_mail->send_by = Auth::user()->id;
 					if($mass_mail->save()) {
+						Session::flash('flashmessagetxt', 'Job Submitted Successfully!!');
 						return Redirect::route('mass-mail-list');
 					} else {
 						return Redirect::route('mass-mail')->withInput();

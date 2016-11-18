@@ -89,6 +89,7 @@ class ThirdpartyController extends \BaseController {
 		}
 		fclose($file);
 		$message = $already_exist.$message.'<b><br />Report : '.$failed.' already exists out of '.($count-1)."</b>";
+		Session::flash('flashmessagetxt', 'Uploaded Successfully!!');
 		Session::flash('upload_result', $message);
 		return Redirect::route('vendor-third-party');
 	}
@@ -192,6 +193,7 @@ class ThirdpartyController extends \BaseController {
 						$thirdpartyuser->user_id = Auth::user()->id;
 						$thirdpartyuser->source_id = $thirdparty->id;
 						$thirdpartyuser->save();
+						Session::flash('flashmessagetxt', 'Added Successfully!!');
 						return Redirect::to('third-parties');
 					} else {
 						return Redirect::to('add-third-party')->withInput();
@@ -210,13 +212,33 @@ class ThirdpartyController extends \BaseController {
 	 *
 	 */
 	public function thirdpartyList() {
+
+		$q = Thirdparty::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('poc'))){
+				$q->where('poc', 'like', "%".Input::get('poc')."%");	
+			}
+			if(!empty(Input::get('phone'))) {
+				$q->where('phone', 'like', "%".Input::get('phone')."%");	
+			}
+			if(!empty(Input::get('phone_ext'))) {
+				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
+			}
+		}
+
+
+
 		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {
-			$thirdparties = Thirdparty::whereHas('thirdPartyUsers', function($q)
+			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
 				{
 				    $q->where('user_id','=', Auth::user()->id);
-				})->get();
+				})->paginate(100);
 		} else {
-			$thirdparties = Thirdparty::all();
+			$thirdparties = $q->paginate(100);
 		}
 
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));
@@ -360,7 +382,8 @@ class ThirdpartyController extends \BaseController {
 				}
 
 				// Checking Authorised or not
-				if($thirdparty->save()) {					
+				if($thirdparty->save()) {
+					Session::flash('flashmessagetxt', 'Updated Successfully!!');					
 					return Redirect::route('third-party-list');
 				} else {
 					return Redirect::route('edit-client')->withInput();
@@ -381,6 +404,7 @@ class ThirdpartyController extends \BaseController {
 		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
 			$thirdparty = Thirdparty::find($id);
 			if(MailGroupMember::where('user_id', '=', $thirdparty->id)->where('group_id', '=', 3)->delete() && $thirdparty->delete()) {
+				Session::flash('flashmessagetxt', 'Deleted Successfully!!');
 				return Redirect::route('third-party-list');
 			}
 		}
