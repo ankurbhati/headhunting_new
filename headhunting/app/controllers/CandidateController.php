@@ -212,7 +212,7 @@ class CandidateController extends HelperController {
 				$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
 				$rate = CandidateRate::where('candidate_id', $candidate->id)->first();
 				return View::make('Candidate.viewCandidate')
-						   ->with(array('title' => 'View Candidate', 'candidate' => $candidate, 'resume' => $resume, 'jobId' => $jobId, 'rate' => $rate, 'searchingText' => $searchingText));
+						   ->with(array('title' => 'View Candidate', 'candidate' => $candidate, 'resume' => $resume, 'jobId' => $jobId, 'rate' => $rate, 'searchingText' => urldecode($searchingText)));
 			} else {
 
 				return Redirect::route('dashboard-view');

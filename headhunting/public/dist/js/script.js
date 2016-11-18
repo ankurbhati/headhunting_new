@@ -21,7 +21,11 @@ $(function () {
 		  getState(countryVal);
 	  }
   }
-
+	if($('#searchedValue').length > 0 && $("#searchedValue").val() != "") {
+		var searchKey = $("#searchedValue").val().split("---").join('').replace(' or ', ' and ').split(' and ');
+		console.log(searchKey);
+		$(".search-view-user").unhighlight().highlight(searchKey);
+	}
 
   if($('select#roles').val() !== undefined) {
 

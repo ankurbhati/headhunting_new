@@ -52,6 +52,7 @@ class SearchController extends HelperController {
 		if($query || $designation || $visa || $region) {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try {
+		    	$searching_text_to_send = $designation."---".$visa."---".$region."---".$query;
 		    	$searching_text = $designation." ".$visa." ".$region." ".$query;
 
 
@@ -68,10 +69,10 @@ class SearchController extends HelperController {
 		    	}
 
 		    	if( isset($designation) && !empty($designation) ) {
-					$q->where('designation','like', "%".$designation."%");
+					$q->where('designation','like', $designation."%");
 		    	}
 
-		    	if( isset($query) && !empty($query) ) {	 
+		    	if( isset($query) && !empty($query) ) {
 					$ands = preg_split("/ AND /i", $query);
 					foreach($ands as $item) {
 						$ors = preg_split("/ OR /i", $item);
@@ -80,10 +81,11 @@ class SearchController extends HelperController {
 							if($count == 0){
 								$q->where('resume','like', "%".$term."%");
 							} else {
-								$q->orWhere('resume','like', "%".$term."%");	
+								//$q->orWhere('resume','like', "%".$term."%");	
+								$q->Where('resume','like', "%".$term."%");	
 							}
 							$count++;
-						}	
+						}
 					}
 		    	}
 
@@ -165,6 +167,7 @@ class SearchController extends HelperController {
 		return View::make('search.searchResult')->with(
 			array(
 				'title' => 'Search - Headhunting',
+				'searching_text_to_send' => urlencode($searching_text_to_send),
 				'searching_text' => $searching_text,
 				'candidate_resumes' => $candidate_resumes,
 				'jobId' => $jobId,

@@ -789,7 +789,7 @@ class UserController extends HelperController {
 			$mass_mail->setConnection('master');
 			$mass_mail->save();
 			$authUser = User::find($mass_mail->send_by);
-			if (isset($mass_mail->mailgroup_id) && !empty($mass_mail->mailgroup_id)) {
+			if (isset($mass_mail->mail_group_id) && !empty($mass_mail->mail_group_id)) {
 
 				$model = $mass_mail->mailgroup->model;
 				$user_list = array();
