@@ -45,6 +45,14 @@ Route::match(array('POST'), 'login', array(
 
 Route::group(array('before' => 'auth'), function() {
 
+
+    /**
+	 * Routes for post-requirement
+	 */
+	Route::match(array('POST'), '/validate-candidate', array(
+			'as'    =>    'validateCandidate',
+			'uses'    =>    'CandidateController@validateCandidate'
+	));
 	/**
 	 * Routes for post-requirement
 	 */

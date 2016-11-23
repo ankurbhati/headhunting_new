@@ -8,7 +8,19 @@
 $(function () {
   "use strict";
 
+  if($("#candidate-form").length > 0) {
+  	$("#candidate-form").on('change', '#email', validateCandidate);
+  }
+
   $("[data-mask]").inputmask();
+  $("#submitSearch").click(function(e){
+  	e.preventDefault();
+  	if($('#inputQuery').val() != "") {
+  		var flag = setQuery();
+  		console.log(flag);
+  	}
+  	$("#searchForm").submit();
+  });
   if($('select#state_id').val() !== undefined) {
 
 	  $('select#country_id').change(function() {
@@ -22,7 +34,7 @@ $(function () {
 	  }
   }
 	if($('#searchedValue').length > 0 && $("#searchedValue").val() != "") {
-		var searchKey = $("#searchedValue").val().split("---").join('').replace(' or ', ' and ').split(' and ');
+		var searchKey = $("#searchedValue").val().split("---").join(' and ').replace('(', '').replace(')', '').replace(' or ', ' and ').split(' and ');
 		console.log(searchKey);
 		$(".search-view-user").unhighlight().highlight(searchKey);
 	}
@@ -127,6 +139,7 @@ $(function () {
 	        $('select#mentor_id').val(subcategories[0].user_id);
 	    });
   }
+
 
   $("#description").wysihtml5();
   $("#disclaimer").wysihtml5();
@@ -278,4 +291,75 @@ function getStateForSearch(country){
           $('select#region').html(subcategoryItems);
           //$('select#region').val(subcategories[0].id);
       });
+  }
+
+
+
+  function setQuery() {
+
+  	var query = $('#inputQuery').val(),
+	    finalQuery = [],
+	    queryType = 1;
+	if(query.indexOf(' or ') > 0) {
+	  var firstPrec = query.split("(");
+	  var parent = [],
+	      childs = [];
+	  for (i in firstPrec) {
+	    if(firstPrec[i].indexOf(')') <0 ) {
+	      parent.push(firstPrec[i]);
+	    } else {
+	      var childArr = firstPrec[i].split(')');
+	      for(var j in childArr) {
+	        if(childArr[j] != ''){
+	          childs.push(childArr[j]);
+	        }
+	      }
+	    }
+	  }
+	  for(var m in childs) {
+	    if(childs[m] != ' and ') {
+	      var orArr = childs[m].split(' or ');
+	      for(var k in orArr) {
+	        if(parent.length > 0) {
+	          for(var l  in parent) {
+	            var andArr = parent[l].split(' and ');
+	            if(andArr.length >= 2) {
+	              finalQuery.push(parent[l] + orArr[k]);
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }
+	  queryType = 2;
+	} else {
+	  var fin = query.replace('(', '').replace(')', '');
+	  var finalQuery = fin.split(' and ');
+	  queryType = 3;
+	}
+	$("#searchQuery").val(finalQuery);
+	$("#searchType").val(queryType);
+
+	return true;
+}
+
+
+
+function validateCandidate(e) {
+	if($('#email').val() != "") {
+  		$.ajax({
+	        url: '/validate-candidate',
+	        data: {'email':$('#email').val()},
+	        method:'post'
+	    }).done(function(response) {
+	        var $email = $('#email');
+	        if(response.error) {
+	        	$email.addClass('error');
+	        	$email.next().text('Email Id either invalid or exists in database');
+	        } else {
+	        	$email.removeClass('error');
+	        	$email.next().text('');
+	        }
+	    });
+	}
   }

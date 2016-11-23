@@ -2,13 +2,14 @@
 @section('content')
 <div class="content">
 {{ Form::open(array('route' => 'add-candidate','class' =>
-'form-horizontal','id' => 'login-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
+'form-horizontal','id' => 'candidate-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
 
     <div class="form-group">
         {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::email('email', "", array('class' =>
             'form-control', 'placeholder' => 'Enter Candidate Email', 'required'=>"true")); }} 
+            <span class='errorlogin email-login-ajax'></span>
             <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

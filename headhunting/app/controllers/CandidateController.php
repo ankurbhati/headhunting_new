@@ -45,7 +45,7 @@ class CandidateController extends HelperController {
 						'state_id' => 'max:9',
 						'designation' => 'max:255',
 						'rate' => 'numeric',
-						'third_party_id' => 'max:247',
+						'third_party_id' => 'email|max:247',
 						'visa_id' => 'max:1'
 				)
 			);
@@ -188,7 +188,7 @@ class CandidateController extends HelperController {
 	public function candidateList() {
 		
 		$visa = Visa::all()->lists('title', 'id');
-		$visa[0] = "Select Visa";
+		
 		$q = Candidate::query();
 		
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -305,7 +305,7 @@ class CandidateController extends HelperController {
 						'state_id' => 'max:9',
 						'designation' => 'max:255',
 						'rate' => 'numeric',
-						'third_party_id' => 'max:247',
+						'third_party_id' => 'email|max:247',
 						'visa_id' => 'max:1'
 				)
 			);
@@ -612,5 +612,29 @@ class CandidateController extends HelperController {
 		return $this->sendJsonResponseOnly($thirdparty);
 	}
 
+	/**
+	 * validating candidate while creating.
+	 *
+	 * @return Response
+	 */
+	public function validateCandidate()
+	{
 
+		$response = array();
+    	$response['error'] = false;
+		// Server Side Validation.
+		$validate=Validator::make (
+			Input::all(), array(
+					'email' => 'required|email|max:50|email|unique:candidates,email',
+			)
+		);
+
+		if($validate->fails()) {
+			$response['error'] = true;
+    		$response['message'] = 'Candidate Already Exists';
+		} else {
+			$response['message'] = 'success';
+		}
+		return $this->sendJsonResponseOnly($response);
+	}
 }

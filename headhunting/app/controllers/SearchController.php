@@ -45,6 +45,9 @@ class SearchController extends HelperController {
 	public function searchResult($jobId = 0) {
 
 		$query = Input::get('query', '');
+		$searchQuery = Input::get('searchQuery');
+		$searchQuery = explode(',', $searchQuery);
+		$searcType = Input::get('searchType');
     	$designation = Input::get('designation', '');
     	$visa = Input::get('visa', '');
     	$region = Input::get('region', '');
@@ -72,22 +75,59 @@ class SearchController extends HelperController {
 					$q->where('designation','like', $designation."%");
 		    	}
 
-		    	if( isset($query) && !empty($query) ) {
-					$ands = preg_split("/ AND /i", $query);
-					foreach($ands as $item) {
-						$ors = preg_split("/ OR /i", $item);
-						$count = 0;
-						foreach($ors as $term) {
-							if($count == 0){
-								$q->where('resume','like', "%".$term."%");
-							} else {
-								//$q->orWhere('resume','like', "%".$term."%");	
-								$q->Where('resume','like', "%".$term."%");	
-							}
-							$count++;
+		   //  	if( isset($query) && !empty($query) ) {
+					// $ands = preg_split("/ AND /i", $query);
+					// foreach($ands as $item) {
+					// 	$ors = preg_split("/ OR /i", $item);
+					// 	$count = 0;
+					// 	foreach($ors as $term) {
+					// 		if($count == 0){
+					// 			$q->where('resume','like', "%".$term."%");
+					// 		} else {
+					// 			$q->orWhere('resume','like', "%".$term."%");
+					// 			//$q->Where('resume','like', "%".$term."%");
+					// 		}
+					// 		$count++;
+					// 	}
+					// }
+		   //  	}
+
+		    	if(isset($searchQuery) && !empty($searchQuery) && isset($searcType) && !empty($searcType)) {
+		    		Log::info(json_encode($searchQuery));
+		    		if($searcType == 3 && count($searchQuery) > 0) {
+						foreach($searchQuery as $item) {
+							$q->where('resume','like', "%".$item."%");
 						}
+					} elseif($searcType == 2 && count($searchQuery) > 0) {
+						foreach($searchQuery as $index => $item) {
+							// $ands = preg_split("/ AND /i", $query);
+							// foreach($ands as $item) {
+
+							// }
+							if($index == 0) {
+
+								$q->where(function ($query) use ($item) {
+									$ands = preg_split("/ and /i", $item);
+									foreach($ands as $childItem) {
+										$query->where('resume','like', "%".$childItem."%");
+									}
+								}); 
+							} else {
+								$q->orWhere(function ($query) use ($item) {
+								    $ands = preg_split("/ and /i", $item);
+									foreach($ands as $childItem) {
+										$query->where('resume','like', "%".$childItem."%");
+									}
+								});
+							}
+							//$q->where('resume','like', "%".$item."%");
+						}
+					} else {
+						$q->where('resume','like', "%".$searchQuery."%");
 					}
 		    	}
+
+
 
 		    	$candidate_resumes = $q->paginate(100);	
 
@@ -158,6 +198,9 @@ class SearchController extends HelperController {
 	    	// Show all posts if no query is set
 	    	$candidate_resumes = CandidateResume::paginate(100);
 	    }
+	    $queries = DB::getQueryLog();
+		$last_query = end($queries);
+		Log::info(json_encode($last_query));
 	    //echo $query;exit;
 		/*echo "<pre>". count($candidate_resumes);
 		print_r($candidate_resumes[0]);

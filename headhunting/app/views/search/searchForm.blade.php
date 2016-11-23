@@ -1,6 +1,6 @@
 @extends('layouts.adminLayout')
 @section('content')
-<form class="form-horizontal" method="post">
+<form class="form-horizontal" id="searchForm" method="post">
   <div class="form-group">
     <label for="inputQuery" class="col-sm-2 control-label">Job Title</label>
     <div class="col-sm-7">
@@ -24,12 +24,14 @@
   <div class="form-group">
     <label for="inputQuery" class="col-sm-2 control-label">Query</label>
     <div class="col-sm-7">
-      <textarea class="form-control" style="resize: none;" rows="2" name="query"></textarea>
+      <textarea class="form-control" style="resize: none;" rows="2" id="inputQuery" name="query"></textarea>
     </div>
   </div>
+  {{ Form::hidden('searchQuery', '', array('id'=>'searchQuery')) }}
+  {{ Form::hidden('searchType', '', array('id'=>'searchType')) }}
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary">Search</button>
+      <button id="submitSearch" type="submit" class="btn btn-primary">Search</button>
     </div>
   </div>
 </form>

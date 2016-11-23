@@ -41,7 +41,7 @@
                     <div class="form-group">
                         {{ Form::label('visa_id', 'Visa: ', array('class' => 'col-sm-3
                         control-label')); }}
-                        <div class="col-sm-8">{{ Form::select('visa_id', $visa, null, array('class' => 'form-control', 'required'=>"true")) }} 
+                        <div class="col-sm-8">{{ Form::select('visa_id', $visa, 0, array('class' => 'form-control', 'required'=>"true")) }} 
                             <span class='errorlogin email-login'>{{$errors->first('visa_id');}}@if(!empty($message)){{$message}}@endIf</span>
                         </div>
                     </div>

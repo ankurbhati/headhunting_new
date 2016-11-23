@@ -69,8 +69,8 @@
 	
 	    {{ HTML::script("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}
 	    <!-- Slimscroll -->
-		<!--{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
-	    {{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}-->
+		{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
+	    {{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}
 	    {{ HTML::script("plugins/slimScroll/jquery.slimscroll.min.js")}}
 	    {{ HTML::script("plugins/fastclick/fastclick.min.js")}}
 	    {{ HTML::script("dist/js/app.min.js")}}
@@ -123,7 +123,7 @@
 	          var employees = $('#employeeList');
 	            if(employees.attr('id')) {
 	        		//var table = employees.DataTable();
-	        		var table = employees.DataTable({"aLengthMenu": [ 100, 50, 25, 10]});
+	        		var table = employees.DataTable({"aLengthMenu": [ 100], paging: false, bInfo : false, searching: false});
 			      	table.on( 'draw', function () {
 				        var body = $( table.table().body() );
 				 

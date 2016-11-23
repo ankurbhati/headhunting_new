@@ -825,67 +825,78 @@ class UserController extends HelperController {
 	 */
 	public function sendMailFromCron() {
 
-		$mass_mail = MassMail::with(array('mailgroup'))->where('status', '=', '1');
-		if($mass_mail->exists()) {
-			$mass_mail = $mass_mail->first();
-			$mass_mail->status = 2;
-			$mass_mail->setConnection('master');
-			$mass_mail->save();
-			$authUser = User::find($mass_mail->send_by);
-			if (isset($mass_mail->mail_group_id) && !empty($mass_mail->mail_group_id)) {
+		if(!MassMail::where('status', '=', '2')->exists()) {
 
-				$model = $mass_mail->mailgroup->model;
-				$user_list = array();
-				$users = MailGroupMember::where('group_id', '=', $mass_mail->mail_group_id)->lists('user_id');
-				if($model == 'Client') {
-					$user_list = $model::whereIn('id', $users)
-										->where('created_by', '=', $authUser->id)
+			$mass_mail = MassMail::with(array('mailgroup'))->where('status', '=', '1');
+
+			if($mass_mail->exists()) {
+				$mass_mail = $mass_mail->first();
+				$mass_mail->status = 2;
+				$mass_mail->setConnection('master');
+				$mass_mail->save();
+				$authUser = User::find($mass_mail->send_by);
+				if (isset($mass_mail->mail_group_id) && !empty($mass_mail->mail_group_id)) {
+
+					$model = $mass_mail->mailgroup->model;
+					$user_list = array();
+					$users = MailGroupMember::where('group_id', '=', $mass_mail->mail_group_id)->lists('user_id');
+					if($model == 'Client') {
+						$user_list = $model::whereIn('id', $users)
+											->where('created_by', '=', $authUser->id)
+											->offset($mass_mail->limit_lower)
+						                	->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
+											->get();
+					} else if($model == 'Thirdparty') {
+						$user_list = Thirdparty::whereHas('thirdPartyUsers', function($q) use (&$authUser)
+										{
+										    $q->where('user_id','=', $authUser->id);
+										})
 										->offset($mass_mail->limit_lower)
-					                	->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
+						                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
 										->get();
-				} else if($model == 'Thirdparty') {
-					$user_list = Thirdparty::whereHas('thirdPartyUsers', function($q) use (&$authUser)
-									{
-									    $q->where('user_id','=', $authUser->id);
-									})
-									->offset($mass_mail->limit_lower)
-					                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
-									->get();
-					$queries = DB::getQueryLog();
-					$last_query = end($queries);
-					Log::info(json_encode($last_query));
+						$queries = DB::getQueryLog();
+						$last_query = end($queries);
+						Log::info(json_encode($last_query));
+					} else {
+						$user_list = $model::whereIn('id', $users)->offset($mass_mail->limit_lower)
+						                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)->get();
+					}
 				} else {
-					$user_list = $model::whereIn('id', $users)->offset($mass_mail->limit_lower)
-					                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)->get();
+					$user_list = array();
+					$user_list = Candidate::whereIn('id', explode(",",$mass_mail->candidates))->get();
 				}
-			} else {
-				$user_list = array();
-				$user_list = Candidate::whereIn('id', explode(",",$mass_mail->candidates))->get();
+				$setting = Setting::where('type', '=', 'disclaimer');
+				$disclaimer = ($setting->exists())?$setting->first()->value:'';
+				$signature = ($authUser->signature)?$authUser->signature:"";
+				Log::info("Limit Count : ".count($user_list));
+				try{
+					foreach($user_list as $user) {
+						Config::set('mail.username', $authUser->email);
+						Config::set('mail.from.address', $authUser->email);
+						Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
+		       			Config::set('mail.password', $authUser->email_password);
+
+		       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
+
+						Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+						{
+
+						    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+						    ->subject($mass_mail->subject)
+						    ->setBody($body_content, 'text/html');
+						});
+						// 1/4 i.e .25 second delay 
+						usleep(100000);
+					}
+					$mass_mail->status = 3;
+					$mass_mail->save();
+				}
+				catch (Exception $e) {
+    				Log::info('Caught exception: '.  $e->getMessage());
+    				$mass_mail->status = 4;
+					$mass_mail->save();
+				}
 			}
-			$setting = Setting::where('type', '=', 'disclaimer');
-			$disclaimer = ($setting->exists())?$setting->first()->value:'';
-			$signature = ($authUser->signature)?$authUser->signature:"";
-			Log::info("Limit Count : ".count($user_list));
-			foreach($user_list as $user) {
-				Config::set('mail.username', $authUser->email);
-				Config::set('mail.from.address', $authUser->email);
-				Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
-       			Config::set('mail.password', $authUser->email_password);
-
-       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
-
-				Mail::queue([], [], function($message) use(&$mass_mail, &$user, &$body_content)
-				{
-
-				    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
-				    ->subject($mass_mail->subject)
-				    ->setBody($body_content, 'text/html');
-				});
-				// 1/4 i.e .25 second delay 
-				usleep(250000);
-			}
-			$mass_mail->status = 3;
-			$mass_mail->save();
 		}
 	}
 
