@@ -11,6 +11,11 @@ $(function () {
   if($("#candidate-form").length > 0) {
   	$("#candidate-form").on('change', '#email', validateCandidate);
   }
+  if($("#client-email").length > 0) {
+  	$("#client-email").change(validateClient);
+  }
+
+
 
   $("[data-mask]").inputmask();
   $("#submitSearch").click(function(e){
@@ -357,7 +362,28 @@ function validateCandidate(e) {
 	        	$email.addClass('error');
 	        	$email.next().text('Email Id either invalid or exists in database');
 	        } else {
-	        	$email.removeClass('error');
+	        	$email.removeClass('error').addClass('success');
+	        	$email.next().text('');
+	        }
+	    });
+	}
+  }
+
+
+
+function validateClient(e) {
+	if($('#client-email').val() != "") {
+  		$.ajax({
+	        url: '/validate-client',
+	        data: {'email':$('#client-email').val()},
+	        method:'post'
+	    }).done(function(response) {
+	        var $email = $('#client-email');
+	        if(response.error) {
+	        	$email.addClass('error');
+	        	$email.next().text('Email Id either invalid or exists in database');
+	        } else {
+	        	$email.removeClass('error').addClass('success');
 	        	$email.next().text('');
 	        }
 	    });

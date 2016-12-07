@@ -53,6 +53,14 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'validateCandidate',
 			'uses'    =>    'CandidateController@validateCandidate'
 	));
+
+	/**
+	 * Routes for post-requirement
+	 */
+	Route::match(array('POST'), '/validate-client', array(
+			'as'    =>    'validateClient',
+			'uses'    =>    'ClientController@validateClient'
+	));
 	/**
 	 * Routes for post-requirement
 	 */
@@ -505,6 +513,14 @@ Route::group(array('before' => 'auth'), function() {
 		'as'    =>    'view-mass-mail',
 		'uses'    =>    'UserController@viewMassMail'
 	));
+	/**
+	 * Routes For REST API for new Employee
+	 */
+	Route::match(array('GET'), '/cancel-mass-mail/{id}', array(
+		'as'    =>    'cancel-mass-mail',
+		'uses'    =>    'UserController@cancelMassMail'
+	));
+
 
 	/**
 	 * Routes For POST API for mass mail

@@ -696,14 +696,49 @@ class UserController extends HelperController {
 			if(!empty(Input::get('description'))){
 				$q->where('description', 'like', "%".Input::get('description')."%");	
 			}
+			if(!empty(Input::get('status'))){
+				$status = Input::get('status');
+				if($status <=2 || $status == 5 ) {
+					$q->where('status', '=', $status);
+				} else {
+					$q->whereIn('status', array(3, 4));
+				}
+			}
 		}
 
 		if(Auth::user()->hasRole(1)){
-			$mass_mails = $q->with('sendby')->paginate(100);
+			$mass_mails = $q->with('sendby')->orderBy('id', 'DESC')->paginate(100);
 		} else {
-			$mass_mails = $q->with('sendby')->where('send_by', '=', Auth::user()->id)->paginate(100);
+			$mass_mails = $q->with('sendby')->where('send_by', '=', Auth::user()->id)->orderBy('id', 'DESC')->paginate(100);
 		}
 		return View::make('User.massMailList')->with(array('title' => 'Mass Mail List', 'mass_mails' => $mass_mails));
+	}
+
+
+/**
+	 *
+	 * cancelMailList() : mass Mail List
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function cancelMassMail($id) {
+
+		if(Auth::user()->hasRole(1)) {
+			$massMail = MassMail::find($id);
+			if($massMail->status == 1) {
+				$massMail->setConnection('master');
+				$massMail->status = 5;
+
+				if($massMail->save()) {
+					Session::flash('flashmessagetxt', 'Mail Canceled Successfully!!');
+				}
+			} else {
+				Session::flash('flashmessagetxt', 'Mail under Progress!!');
+			}
+
+		}
+		return Redirect::route('mass-mail-list');
 	}
 
 
@@ -824,8 +859,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function sendMailFromCron() {
-
-		if(!MassMail::where('status', '=', '2')->exists()) {
+		if(MassMail::where('status', '=', '2')->count() <= 5) {
 
 			$mass_mail = MassMail::with(array('mailgroup'))->where('status', '=', '1');
 
@@ -886,7 +920,7 @@ class UserController extends HelperController {
 						    ->setBody($body_content, 'text/html');
 						});
 						// 1/4 i.e .25 second delay 
-						usleep(100000);
+						//usleep(10000);
 					}
 					$mass_mail->status = 3;
 					$mass_mail->save();

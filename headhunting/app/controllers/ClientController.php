@@ -334,4 +334,30 @@ class ClientController extends \BaseController {
 		//}
 	}
 
+
+	/**
+	 * validating candidate while creating.
+	 *
+	 * @return Response
+	 */
+	public function validateClient()
+	{
+
+		$response = array();
+    	$response['error'] = false;
+		// Server Side Validation.
+		$validate=Validator::make (
+			Input::all(), array(
+					'email' => 'required|email|max:50|email|unique:clients,email',
+			)
+		);
+
+		if($validate->fails()) {
+			$response['error'] = true;
+    		$response['message'] = 'Client Already Exists';
+		} else {
+			$response['message'] = 'success';
+		}
+		return $this->sendJsonResponseOnly($response);
+	}
 }

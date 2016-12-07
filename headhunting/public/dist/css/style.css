@@ -141,3 +141,7 @@ span.highlight {
     font-size: 18px;
     font-weight: 800;
 }
+
+.form-control.success {
+    border-color: green;
+}

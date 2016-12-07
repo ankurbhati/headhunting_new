@@ -16,16 +16,24 @@
                     {{ Form::label('subject', 'Subject: ', array('class' => 'col-sm-3
                     control-label')); }}
                     <div class="col-sm-8">{{ Form::text('subject', '', array('class' =>
-                        'form-control', 'placeholder' => 'subject', 'required')); }}
+                        'form-control', 'placeholder' => 'subject')); }}
                         <span class='errorlogin'>{{$errors->first('subject');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
 
                 <div class="form-group">
+                    {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-8">{{ Form::select('status', array(1 => "pending", 2 => 'In progress', 3=>'Completed', 5 => 'Canceled'), 1, array('class' =>
+                        'form-control')); }}
+                        <span class='errorlogin'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+                <div class="form-group">
                     {{ Form::label('description', 'Description: ', array('class' => 'col-sm-3
                     control-label')); }}
                     <div class="col-sm-8">{{ Form::text('description_search', '', array('class' =>
-                        'form-control', 'placeholder' => 'ex. Hello User,', 'required')); }}
+                        'form-control', 'placeholder' => 'ex. Hello User,')); }}
                         <span class='errorlogin'>{{$errors->first('description');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
@@ -51,6 +59,7 @@
                         <th>Created At</th>
                         <th>Mail Group</th>
                         <th>limit-lower/limit-upper</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -63,8 +72,13 @@
                             <td>{{$mass_mail->created_at}}</td>
                             <td>@if($mass_mail->mail_group_id == 1){{"Clients"}}@elseif($mass_mail->mail_group_id == 3){{"Third Party"}}@else {{"Candidates"}}@endif</td>
 		                        <td>{{$mass_mail->limit_lower."/".$mass_mail->limit_upper}}</td>
+                            <td>{{($mass_mail->status == 1)?"Pending":($mass_mail->status == 2?"In Progress":($mass_mail->status == 5?"Canceled":"Completed"))}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-mass-mail', array('id' => $mass_mail->id)) }}" title="View Mass Mail"><i class="fa fa-fw fa-eye"></i></a>
+
+                              @if($mass_mail->status == 1 && Auth::user()->hasRole(1))
+                                <a href="{{ URL::route('cancel-mass-mail', array('id' => $mass_mail->id)) }}" title="Cancel Mass Mail"><i class="fa fa-close"></i></a>
+                              @endif
 		                        </td>
 		                      </tr>
 	                   	@empty
@@ -78,6 +92,7 @@
                       <th>Created At</th>
                       <th>Mail Group</th>
                       <th>limit-lower/limit-upper</th>
+                      <th>Status</th>
                       <th>Action</th>
                     </tfoot>
                   </table>
