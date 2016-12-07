@@ -145,10 +145,23 @@ $(function () {
 	    });
   }
 
+  var optionsText = {
+	  toolbar: {
+	    "font-styles": true, // Font styling, e.g. h1, h2, etc.
+	    "emphasis": true, // Italics, bold, etc.
+	    "lists": true, // (Un)ordered lists, e.g. Bullets, Numbers.
+	    "html": false, // Button which allows you to edit the generated HTML.
+	    "link": true, // Button to insert a link.
+	    "image": false, // Button to insert an image.
+	    "color": true, // Button to change color of font
+	    "blockquote": true, // Blockquote
+	    "size": 'xs' // options are xs, sm, lg
+	  }
+	};
 
-  $("#description").wysihtml5();
-  $("#disclaimer").wysihtml5();
-  $("#signature").wysihtml5();
+  $("#description").wysihtml5(optionsText);
+  $("#disclaimer").wysihtml5(optionsText);
+  $("#signature").wysihtml5(optionsText);
 
   function getState(country){
 	    $.ajax({
@@ -368,8 +381,6 @@ function validateCandidate(e) {
 	    });
 	}
   }
-
-
 
 function validateClient(e) {
 	if($('#client-email').val() != "") {
