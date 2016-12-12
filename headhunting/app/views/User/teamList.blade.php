@@ -13,6 +13,9 @@
                   @endif
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$managerUsers->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -67,10 +70,13 @@
                       </tr>
                     </tfoot>
                   </table>
-                  @if (count($users) > 0)
+                  <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$managerUsers->getTotal()}}</span></p>
+                  </div>
+                  @if (count($managerUsers) > 0)
                     <div>
-                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
-                      {{ $users->links() }}
+                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Pages</span>
+                      {{ $managerUsers->links() }}
                     </div>
                   @endif
                 </div><!-- /.box-body -->

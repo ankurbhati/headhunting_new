@@ -15,6 +15,28 @@ $(function () {
   	$("#client-email").change(validateClient);
   }
 
+	if($('#nca-group').length > 0) {
+
+	  $('#nca_signed').change(function() {
+		    var nca = $(this).val();
+		    if(nca == 1) {
+		    	$('#nca-group').show();
+		    } else {
+		    	$('#nca-group').hide();
+		    }
+		});
+	}
+if($('#msa-group').length > 0) {
+
+	  $('#msa_signed').change(function() {
+		    var msa = $(this).val();
+		    if(msa == 1) {
+		    	$('#msa-group').show();
+		    } else {
+		    	$('#msa-group').hide();
+		    }
+		});
+	}
 
 
   $("[data-mask]").inputmask();

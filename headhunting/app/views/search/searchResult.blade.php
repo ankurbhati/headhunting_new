@@ -13,6 +13,9 @@
                 	</div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total results found :  <span class="text-bold">{{$candidate_resumes->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -58,6 +61,9 @@
                         <th>Action</th>
                     </tfoot>
                   </table>
+                  <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total results found :  <span class="text-bold">{{$candidate_resumes->getTotal()}}</span></p>
+                  </div>
                   @if (count($candidate_resumes) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>

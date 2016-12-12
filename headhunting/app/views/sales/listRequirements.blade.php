@@ -41,6 +41,9 @@
 
 
                 <div class="box-body">
+                 <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Jobs Posted :  <span class="text-bold">{{$jobPost->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -112,6 +115,9 @@
                       </tr>
                     </tfoot>
                   </table>
+                  <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Jobs Posted :  <span class="text-bold">{{$jobPost->getTotal()}}</span></p>
+                  </div>
                   @if (count($jobPost) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>

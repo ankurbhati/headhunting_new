@@ -8,6 +8,9 @@
                   <h3 class="box-title">Data Table With Full Features</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                  <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of vendors :  <span class="text-bold">{{$vendors->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -53,6 +56,9 @@
                       </tr>
                     </tfoot>
                   </table>
+                  <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of vendors :  <span class="text-bold">{{$vendors->getTotal()}}</span></p>
+                  </div>
                   @if (count($vendors) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>

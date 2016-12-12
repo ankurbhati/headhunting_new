@@ -52,10 +52,10 @@
                    </div>
                 {{ Form::close() }}
 
-
-
-
                 <div class="box-body">
+                <div>
+                    <p style="padding:1.9em 1.2em 0px 0px;">Total no of candidates :  <span class="text-bold">{{$candidates->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -107,9 +107,12 @@
                       </tr>
                     </tfoot>
                   </table>
+                  <div>
+                    <p style="padding:1.9em 1.2em 0px 0px;">Total no of candidates :  <span class="text-bold">{{$candidates->getTotal()}}</span></p>
+                  </div>
                   @if (count($candidates) > 0)
                     <div>
-                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Pages</span>
                       {{ $candidates->links() }}
                     </div>
                   @endif

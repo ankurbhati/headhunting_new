@@ -36,27 +36,76 @@
             <span class='errorlogin email-login'>{{$errors->first('phone_ext');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-    
     <div class="form-group">
-        {{ Form::label('nca_document', 'Upload Nca Document: ', array('class' => 'col-sm-3
+        {{ Form::label('nca_signed', 'NCA Signed: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8"><input type="file" name="nca_document" />
-        @if(Session::has('nca_document_error'))
-            <span class="errorlogin email-login">
-                {{ Session::get('nca_document_error') }}
-            </span>
-        @endif
+        <div class="col-sm-8">{{ Form::select('nca_signed', array('No', 'Yes'), 0, array('class' => 'form-control', 'id' => 'nca_signed')) }} 
+            <span class='errorlogin email-login'>{{$errors->first('nca_signed');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-	<div class="form-group">
-        {{ Form::label('msa_document', 'Upload Msa Document: ', array('class' => 'col-sm-3
+    <div id="nca-group" style="display:none;">
+        <div class="form-group">
+            {{ Form::label('nca_document', 'Upload Nca Document: ', array('class' => 'col-sm-3
+            control-label')); }}
+            <div class="col-sm-8"><input type="file" name="nca_document" />
+            @if(Session::has('nca_document_error'))
+                <span class="errorlogin email-login">
+                    {{ Session::get('nca_document_error') }}
+                </span>
+            @endif
+            </div>
+        </div>
+        <div class="form-group">
+            {{ Form::label('nca_company_name', 'NCA Company Name: ', array('class' => 'col-sm-3
+            control-label')); }}
+            <div class="col-sm-8">{{ Form::text('nca_company_name', "", array('class' =>
+                'form-control', 'placeholder' => 'Enter Company Name For NCA')); }} 
+                <span class='errorlogin email-login'>{{$errors->first('nca_company_name');}}@if(!empty($message)){{$message}}@endIf</span>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ Form::label('nca_activation_date', 'NCA Activation Date: ', array('class' => 'col-sm-3
+            control-label')); }}
+            <div class="col-sm-8">{{ Form::text('nca_activation_date', "", array('class' =>
+                'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }} 
+                <span class='errorlogin'>{{$errors->first('nca_activation_date');}}@if(!empty($message)){{$message}}@endIf</span>
+            </div>
+        </div>
+    </div>
+     <div class="form-group">
+        {{ Form::label('msa_signed', 'MSA Signed: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8"><input type="file" name="msa_document" />
-        @if(Session::has('msa_document_error'))
-            <span class="errorlogin email-login">
-                {{ Session::get('msa_document_error') }}
-            </span>
-        @endif
+        <div class="col-sm-8">{{ Form::select('msa_signed', array('No', 'Yes'), 0, array('class' => 'form-control', 'id' => 'msa_signed')) }}
+            <span class='errorlogin email-login'>{{$errors->first('msa_signed');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+    <div id="msa-group" style="display:none;">
+    	<div class="form-group">
+            {{ Form::label('msa_document', 'Upload Msa Document: ', array('class' => 'col-sm-3
+            control-label')); }}
+            <div class="col-sm-8"><input type="file" name="msa_document" />
+            @if(Session::has('msa_document_error'))
+                <span class="errorlogin email-login">
+                    {{ Session::get('msa_document_error') }}
+                </span>
+            @endif
+            </div>
+        </div>
+        <div class="form-group">
+            {{ Form::label('msa_company_name', 'NCA Company Name: ', array('class' => 'col-sm-3
+            control-label')); }}
+            <div class="col-sm-8">{{ Form::text('msa_company_name', "", array('class' =>
+                'form-control', 'placeholder' => 'Enter Company Name For MSA')); }} 
+                <span class='errorlogin email-login'>{{$errors->first('msa_company_name');}}@if(!empty($message)){{$message}}@endIf</span>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ Form::label('msa_activation_date', 'MSA Activation Date: ', array('class' => 'col-sm-3
+            control-label')); }}
+            <div class="col-sm-8">{{ Form::text('msa_activation_date', "", array('class' =>
+                'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }} 
+                <span class='errorlogin'>{{$errors->first('msa_activation_date');}}@if(!empty($message)){{$message}}@endIf</span>
+            </div>
         </div>
     </div>
     <div class="form-group row ">

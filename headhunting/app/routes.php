@@ -550,9 +550,17 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET', 'POST'), '/third-parties', array(
+	Route::match(array('GET' , 'POST'), '/third-parties', array(
 			'as'    =>    'third-party-list',
 			'uses'    =>    'ThirdpartyController@thirdpartyList'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET', 'POST'), '/source-list/{id}', array(
+			'as'    =>    'third-party-list-with-document',
+			'uses'    =>    'ThirdpartyController@thirdpartyListHasDocument'
 	));
 
 	/**

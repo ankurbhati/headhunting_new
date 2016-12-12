@@ -50,6 +50,9 @@
 
 
                 <div class="box-body">
+                <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Mass Mails :  <span class="text-bold">{{$mass_mails->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -96,6 +99,9 @@
                       <th>Action</th>
                     </tfoot>
                   </table>
+                   <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Mass Mails :  <span class="text-bold">{{$mass_mails->getTotal()}}</span></p>
+                  </div>
                   @if (count($mass_mails) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>

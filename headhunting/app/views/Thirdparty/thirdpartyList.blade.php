@@ -52,6 +52,9 @@
 
 
                 <div class="box-body">
+                <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Third Parties Sources :  <span class="text-bold">{{$thirdparties->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -108,6 +111,9 @@
                       </tr>
                     </tfoot>
                   </table>
+                  <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Third Parties Sources :  <span class="text-bold">{{$thirdparties->getTotal()}}</span></p>
+                  </div>
                   @if (count($thirdparties) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>

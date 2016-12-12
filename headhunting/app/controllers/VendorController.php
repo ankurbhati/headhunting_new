@@ -114,7 +114,7 @@ class VendorController extends \BaseController {
 
 	/**
 	 *
-	 * viewVendor() : View Vendor
+	 * thirdpartyListHasDocument() : View Vendor
 	 *
 	 * @return Object : View
 	 *

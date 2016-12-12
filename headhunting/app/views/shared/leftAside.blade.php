@@ -70,6 +70,8 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('third-party-list') }}"><i class="fa fa-user"></i>Third Party List</a></li>
+                <li><a href="{{ URL::route('third-party-list-with-document', array('id'=>1))}}"><i class="fa fa-user"></i>Third Party List MSA</a></li>
+                <li><a href="{{ URL::route('third-party-list-with-document', array('id'=>2))}}"><i class="fa fa-user"></i>Third Party List NCA</a></li>
                 <li><a href="{{ URL::route('add-third-party') }}"><i class="fa fa-user-plus"></i>Add Third Party</a></li>
                 <li><a href="{{ URL::route('vendor-third-party') }}"><i class="fa fa-user"></i>Upload Third Party</a></li>
               </ul>

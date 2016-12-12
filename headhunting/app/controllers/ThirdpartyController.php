@@ -143,6 +143,10 @@ class ThirdpartyController extends \BaseController {
 					$thirdparty->phone = Input::get('phone');
 					$thirdparty->phone_ext = Input::get('phone_ext');
 					$thirdparty->created_by = $user_id;
+					$thirdparty->nca_company_name = Input::get('nca_company_name');
+					$thirdparty->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+					$thirdparty->msa_company_name = Input::get('msa_company_name');
+					$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
 					
 					// Checking Authorised or not
 					if($thirdparty->save()) {
@@ -247,6 +251,56 @@ class ThirdpartyController extends \BaseController {
 
 	/**
 	 *
+	 * vendorList() : Vendor List
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function thirdpartyListHasDocument($id) {
+
+		$q = Thirdparty::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('poc'))){
+				$q->where('poc', 'like', "%".Input::get('poc')."%");	
+			}
+			if(!empty(Input::get('phone'))) {
+				$q->where('phone', 'like', "%".Input::get('phone')."%");	
+			}
+			if($id != 1) {
+				if(!empty(Input::get('company_name'))) {
+					$q->where('nca_company_name', 'like', "%".Input::get('company_name')."%");	
+				}
+			} else {
+				if(!empty(Input::get('company_name'))) {
+					$q->where('msa_company_name', 'like', "%".Input::get('company_name')."%");	
+				}
+			}
+		}
+		if($id == 1) {
+			$q->where('msa_document', '!=', "");
+		} else {
+			$q->where('nca_document', '!=', "");
+		}
+
+		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {
+			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
+				{
+				    $q->where('user_id','=', Auth::user()->id);
+				})->paginate(100);
+		} else {
+			$thirdparties = $q->paginate(100);
+		}
+
+		return View::make('Thirdparty.thirdpartyListSource')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties, 'id' => $id));
+	}
+
+
+	/**
+	 *
 	 * viewVendor() : View Vendor
 	 *
 	 * @return Object : View
@@ -344,6 +398,11 @@ class ThirdpartyController extends \BaseController {
 				$thirdparty->poc = Input::get('poc');
 				$thirdparty->phone = Input::get('phone');
 				$thirdparty->phone_ext = Input::get('phone_ext');
+
+				$thirdparty->nca_company_name = Input::get('nca_company_name');
+					$thirdparty->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+					$thirdparty->msa_company_name = Input::get('msa_company_name');
+					$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
 
 				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
 					list($msg, $fileType) = $this->check_resume_validity("nca_document");

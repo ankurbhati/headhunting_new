@@ -61,6 +61,9 @@
 
                 <!-- /.box-header -->
                 <div class="box-body">
+                <div>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$users->getTotal()}}</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -108,5 +111,4 @@
             </div><!-- /.col -->
           </div><!-- /.row -->
         </section><!-- /.content -->
-
 @stop
