@@ -330,3 +330,8 @@ UPDATE `job_posts` SET `status`=1;
 ALTER TABLE `job_posts` ADD `feedback` TINYINT NULL DEFAULT NULL COMMENT '0 => Rejected By Sales Manager/1 => Submitted To Prime Vendor/ 2=> Submitted To End Client/3 => Interview Requested/ 4=> Selected| => Rejected For All States' AFTER `status` ;
 
 ALTER TABLE `job_posts` CHANGE `feedback` `feedback` TINYINT( 4 ) NULL DEFAULT NULL COMMENT '0 => Rejected By Sales Manager/1 => Submitted To Prime Vendor/ 2=> Submitted To End Client/3 => Interview Requested/ 4=> Selected/5 => Rejected For All States';
+
+
+ALTER TABLE `sources` ADD `nca_company_name` VARCHAR(255) NULL AFTER `nca_document`, ADD `nca_activation_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP AFTER `nca_company_name`;
+
+ALTER TABLE `sources` ADD `msa_company_name` VARCHAR(255) NULL AFTER `msa_document`, ADD `msa_activation_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP AFTER `msa_company_name`;
