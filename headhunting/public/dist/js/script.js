@@ -394,7 +394,7 @@ function validateCandidate(e) {
 	    }).done(function(response) {
 	        var $email = $('#email');
 	        if(response.error) {
-	        	$email.addClass('error');
+	        	$email.removeClass('success').addClass('error');
 	        	$email.next().text('Email Id either invalid or exists in database');
 	        } else {
 	        	$email.removeClass('error').addClass('success');
@@ -413,7 +413,7 @@ function validateClient(e) {
 	    }).done(function(response) {
 	        var $email = $('#client-email');
 	        if(response.error) {
-	        	$email.addClass('error');
+	        	$email.removeClass('success').addClass('error');
 	        	$email.next().text('Email Id either invalid or exists in database');
 	        } else {
 	        	$email.removeClass('error').addClass('success');

@@ -41,10 +41,18 @@
                     <div class="form-group">
                         {{ Form::label('visa_id', 'Visa: ', array('class' => 'col-sm-3
                         control-label')); }}
-                        <div class="col-sm-8">{{ Form::select('visa_id', $visa, 0, array('class' => 'form-control', 'required'=>"true")) }} 
+                        <div class="col-sm-8">{{ Form::select('visa_id', array('' => 'Please select one Valid Visa Type') + $visa, '', array('class' => 'form-control')) }} 
                             <span class='errorlogin email-login'>{{$errors->first('visa_id');}}@if(!empty($message)){{$message}}@endIf</span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        {{ Form::label('added_by', 'Added By:', array('class' => 'col-sm-3
+                        control-label')); }}
+                        <div class="col-sm-8">{{ Form::select('added_by', array('' => 'Please select one Creator') + $addedBy, "", array('class' => 'form-control')) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('added_by');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    </div>
+                    
                     <div class="form-group row ">
                         <div class="col-sm-11" style="text-align: center;">{{ Form::submit('Search', array('class' => 'btn
                             btn-info', 'id' => 'login-button') ); }}</div>
