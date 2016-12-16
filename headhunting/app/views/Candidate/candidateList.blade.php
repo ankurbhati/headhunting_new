@@ -69,6 +69,7 @@
                       <tr>
                         <th>Full Name</th>
                         <th>Email</th>
+                        <th>Added By</th>
                         <th>Phone</th>
                         <th>Added At(time, city, state)</th>
                         <th>Visa Id</th>
@@ -80,6 +81,7 @@
 		                      <tr>
                             <td>{{$candidate->first_name. " ".$candidate->last_name }}</td>
                             <td>{{$candidate->email}}</td>
+                            <td>{{$candidate->added_by_name}}</td>
 		                        <td>{{$candidate->phone}}</td>
                             <td>
                               {{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
@@ -108,6 +110,7 @@
                       <tr>
                         <th>Full Name</th>
                         <th>Email</th>
+                        <th>Added By</th>
                         <th>Phone</th>
                         <th>Added At(time, city, state)</th>
                         <th>Visa Id</th>

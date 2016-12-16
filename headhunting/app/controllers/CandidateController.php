@@ -217,8 +217,10 @@ class CandidateController extends HelperController {
 
 		$candidates = $q->leftJoin('candidate_resumes', function($join) {
 	      $join->on('candidates.id', '=', 'candidate_resumes.candidate_id');
-	    })
-	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path')->paginate(100);
+	    })->leftJoin('users', function($join){
+			$join->on('added_by', '=', 'users.id');
+		})
+	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path', DB::raw('CONCAT(users.first_name, " ", users.last_name) as added_by_name'))->paginate(100);
 		return View::make('Candidate.candidateList')->with(array('title' => 'Candidates List', 'candidates' => $candidates, 'visa'=>$visa, 'addedBy' => $addedByList));
 	}
 
