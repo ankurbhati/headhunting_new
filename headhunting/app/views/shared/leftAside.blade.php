@@ -8,12 +8,13 @@
             </div>
             <div class="pull-left info">
               <p>{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
+              <p>{{Auth::user()->designation}}</p>
             </div>
           </div>
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
-            @if(Auth::user()->getRole() == 1)
+            @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
               <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> <span>Employees</span> <i class="fa fa-angle-left pull-right"></i>
@@ -24,14 +25,14 @@
               </ul>
             </li>
             @endif
-            @if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
+            @if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8))
               <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> <span>Clients</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('client-list') }}"><i class="fa fa-user"></i>Client List</a></li>
-                @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
+                @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))
                 <li><a href="{{ URL::route('add-client') }}"><i class="fa fa-user-plus"></i>Add Client</a></li>
                 <li><a href="{{ URL::route('client-upload') }}"><i class="fa fa-user"></i>Upload Clients</a></li>
                 @endif
@@ -47,7 +48,7 @@
                 @if(Auth::user()->getRole() != 4)
                 <li><a href="{{ URL::route('list-requirement') }}"><i class="fa fa-level-down"></i>Posted Requirements</a></li>
                 @endif
-                @if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
+                @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
                   <li><a href="{{ URL::route('post-requirement') }}"><i class="fa fa-plus"></i>Post Requirement</a></li>
                 @endif
                 <li><a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}"><i class="fa fa-upload"></i>Assigned Requirement</a></li>
@@ -63,7 +64,7 @@
                 <li><a href="{{ URL::route('add-candidate') }}"><i class="fa fa-user-plus"></i>Add Candidate</a></li>
               </ul>
             </li>
-	          @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5))
+	          @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8))
               <li class="treeview">
               <a href="#">
                 <i class="fa fa-users"></i> <span>Third Party</span> <i class="fa fa-angle-left pull-right"></i>
@@ -87,14 +88,14 @@
                 <i class="fa fa-users"></i> <span>My Team</span>
               </a>
             </li>
-            @if(Auth::user()->getRole() <= 6)
+            @if(Auth::user()->getRole() <= 6 || Auth::user()->hasRole(8))
             <li>
               <a href="{{ URL::route('mass-mail') }}">
                 <i class="fa fa-users"></i> <span>Mass Mail</span>
               </a>
             </li>
             @endif
-            @if(Auth::user()->getRole() <= 6)
+            @if(Auth::user()->getRole() <= 6 || Auth::user()->hasRole(8))
             <li>
               <a href="{{ URL::route('mass-mail-list') }}">
                 <i class="fa fa-users"></i> <span>Mail List</span>
@@ -106,7 +107,7 @@
                 <i class="fa fa-eye"></i> <span>Job Submittals</span>
               </a>
             </li>
-            @if(Auth::user()->hasRole(1))
+            @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
             <li>
               <a href="{{ URL::route('settings') }}">
                 <i class="fa fa-eye"></i> <span>Settings</span>
