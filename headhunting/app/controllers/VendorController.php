@@ -23,7 +23,7 @@ class VendorController extends \BaseController {
 	public function createVendor()
 	{
 
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -121,7 +121,7 @@ class VendorController extends \BaseController {
 	 */
 	public function viewVendor($id) {
 
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
 
 			$vendor = Vendor::with(array('createdby'))->where('id', '=', $id)->get();
 
@@ -149,7 +149,7 @@ class VendorController extends \BaseController {
 	 */
 	public function editVendor($id) {
 
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
 
 			$vendor = Vendor::with(array('createdby'))->where('id', '=', $id)->get();
 
@@ -177,7 +177,7 @@ class VendorController extends \BaseController {
 	 */
 	public function updateVendor($id)
 	{
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -267,7 +267,7 @@ class VendorController extends \BaseController {
 	 *
 	 */
 	public function deleteVendor($id) {
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
 			$vendor = Vendor::find($id);
 			if(MailGroupMember::where('user_id', '=', $vendor->id)->where('group_id', '=', 2)->delete() && $vendor->delete()) {
 				return Redirect::route('vendor-list');

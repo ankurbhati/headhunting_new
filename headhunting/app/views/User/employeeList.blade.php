@@ -84,10 +84,10 @@
 		                        <td>
 		                        	<a href="{{ URL::route('view-member', array('id' => $user->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
 		                        	<a href="{{ URL::route('edit-member', array($user->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
-		                        	@if(Auth::user()->getRole() == 1)
+		                        	@if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
 		                        		<a href="{{ URL::route('delete-member', array($user->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 		                        	@endif
-		                        	@if(Auth::user()->getRole() == 1)
+		                        	@if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
 		                        		<a href="{{ URL::route('change-password', array('id' => $user->id)) }}" title="Change Password"><i class="fa fa-fw fa-unlock-alt"></i></a>
 		                        	@endif
 		                        </td>

@@ -132,7 +132,7 @@ class UserController extends HelperController {
 		$managerUsers = array();
 		$users = array();
 		$currentUserRole = Auth::user()->getRole();
-		if($currentUserRole === 1) {
+		if($currentUserRole === 1 || $currentUserRole === 8) {
 			$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<', 6)
 				      ->where('user_id', '!=', Auth::user()->id);
@@ -193,7 +193,7 @@ class UserController extends HelperController {
 	 */
 	public function editEmp($id) {
 
-		if(Auth::user()->getRole() == 1 || Auth::user()->id == $id ) {
+		if(Auth::user()->getRole() == 1 || Auth::user()->getRole() == 8 || Auth::user()->id == $id ) {
 			$roles = Role::all();
 			$rols = array();
 
@@ -233,7 +233,7 @@ class UserController extends HelperController {
 	 */
 	public function updatePass($id) {
 
-		if(Auth::user()->getRole() == 1 || Auth::user()->id == $id ) {
+		if(Auth::user()->getRole() == 1 || Auth::user()->getRole() == 8 || Auth::user()->id == $id ) {
 
 			Validator::extend('has', function($attr, $value, $params) {
 
@@ -320,7 +320,7 @@ class UserController extends HelperController {
 	 */
 	public function updatePassView($id) {
 
-		if(Auth::user()->getRole() == 1 || Auth::user()->id == $id ) {
+		if(Auth::user()->getRole() == 1 || Auth::user()->getRole() == 8 || Auth::user()->id == $id ) {
 
 			$user = User::where("id", "=", $id)->get();
 
@@ -346,7 +346,7 @@ class UserController extends HelperController {
 	 */
 	public function viewEmp($id) {
 
-		if(Auth::user()->hasRole(1) || Auth::user()->id == $id ) {
+		if(Auth::user()->hasRole(1) || Auth::user()->getRole() == 8 || Auth::user()->id == $id ) {
 
 			$user = User::with(array('userRoles', 'country', 'state'))->where('id', '=', $id)->get();
 
@@ -373,7 +373,7 @@ class UserController extends HelperController {
 	 */
 	public function updateEmp($id) {
 
-		if(Auth::user()->getRole() == 1 || Auth::user()->id == $id) {
+		if(Auth::user()->getRole() == 1 || Auth::user()->getRole() == 8 || Auth::user()->id == $id) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -579,7 +579,7 @@ class UserController extends HelperController {
 	 */
 	public function addEmp() {
 
-		if(Auth::user()->getRole() == 1) {
+		if(Auth::user()->getRole() == 1 || Auth::user()->getRole() == 8 ) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {
@@ -706,7 +706,7 @@ class UserController extends HelperController {
 			}
 		}
 
-		if(Auth::user()->hasRole(1)){
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8) ){
 			$mass_mails = $q->with('sendby')->orderBy('id', 'DESC')->paginate(100);
 		} else {
 			$mass_mails = $q->with('sendby')->where('send_by', '=', Auth::user()->id)->orderBy('id', 'DESC')->paginate(100);
@@ -751,7 +751,7 @@ class UserController extends HelperController {
 	 */
 	public function viewMassMail($id) {
 
-		if(Auth::user()->hasRole(1)) {
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
 			$mass_mail = MassMail::with(array('sendby'))->where('id', '=', $id)->get();
 		} else {
 			$mass_mail = MassMail::with(array('sendby'))->where('id', '=', $id)->where('send_by', '=', Auth::user()->id)->get();
@@ -962,7 +962,7 @@ class UserController extends HelperController {
 	public function saveSettings() {
 
 
-		if(Auth::user()->hasRole(1)) {
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {

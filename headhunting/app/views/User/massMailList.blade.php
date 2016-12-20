@@ -79,7 +79,7 @@
 		                        <td>
 		                        	<a href="{{ URL::route('view-mass-mail', array('id' => $mass_mail->id)) }}" title="View Mass Mail"><i class="fa fa-fw fa-eye"></i></a>
 
-                              @if($mass_mail->status == 1 && Auth::user()->hasRole(1))
+                              @if($mass_mail->status == 1 && (Auth::user()->hasRole(1) || Auth::user()->hasRole(8)))
                                 <a href="{{ URL::route('cancel-mass-mail', array('id' => $mass_mail->id)) }}" title="Cancel Mass Mail"><i class="fa fa-close"></i></a>
                               @endif
 		                        </td>
