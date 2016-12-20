@@ -21,6 +21,7 @@
     {{ HTML::style('plugins/daterangepicker/daterangepicker-bs3.css'); }}
     {{ HTML::style('plugins/datatables/dataTables.bootstrap.css'); }}
 	{{ HTML::style('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); }} 
+	{{ HTML::style('plugins/ckeditor/skins/moono/editor.css'); }} 
 	{{ HTML::style('dist/css/style.css'); }}
 
   </head>
@@ -68,6 +69,7 @@
 	    <!-- Bootstrap WYSIHTML5 -->
 	
 	    {{ HTML::script("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}
+	    {{ HTML::script("plugins/ckeditor/ckeditor.js")}}
 	    <!-- Slimscroll -->
 		{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
 	    {{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}
