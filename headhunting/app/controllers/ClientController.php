@@ -81,7 +81,7 @@ class ClientController extends \BaseController {
 	 */
 	public function createClient()
 	{
-		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)) {
 
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -139,10 +139,7 @@ class ClientController extends \BaseController {
 	 */
 	public function clientList() {
 		$q = Client::query();
-		if(!Auth::user()->hasRole(1)) {
-			//$q = Client::all();
-		//} else {
-			//$clients = Client::where('created_by', '=', Auth::user()->id)->paginate(100);
+		if(!(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))) {
 			$q->where('created_by', '=', Auth::user()->id);
 		}
 
@@ -182,9 +179,9 @@ class ClientController extends \BaseController {
 	 */
 	public function viewClient($id) {
 
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) {
 
-			if(Auth::user()->hasRole(1)) {
+			if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
 				$client = Client::with(array('createdby'))->where('id', '=', $id)->get();
 			} else {
 				$client = Client::with(array('createdby'))->where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
@@ -214,9 +211,9 @@ class ClientController extends \BaseController {
 	public function editClient($id) {
 
 		//if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
-		if(Auth::user()->hasRole(1)) {
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
 			
-			if(Auth::user()->hasRole(1)) {
+			if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
 				$client = Client::where('id', '=', $id)->get();
 			} else {
 				$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get();
@@ -246,7 +243,7 @@ class ClientController extends \BaseController {
 	 */
 	public function updateClient($id)
 	{
-		if(Auth::user()->getRole() <= 3) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
 
 		// Server Side Validation.
 			$validate=Validator::make (
@@ -317,21 +314,13 @@ class ClientController extends \BaseController {
 	 */
 	public function deleteClient($id) {
 		//if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
-			if(Auth::user()->hasRole(1)) {
+			if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
 				$client = Client::where('id', '=', $id)->get()->first();
 				if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
 					Session::flash('flashmessagetxt', 'Deleted Successfully!!'); 
 					return Redirect::route('client-list');
 				}
 			}
-			//else {
-			//	$client = Client::where('id', '=', $id)->where('created_by', '=', Auth::user()->id)->get()->first();
-			//}
-			
-			//if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {
-			//	return Redirect::route('client-list');
-			//}
-		//}
 	}
 
 

@@ -101,7 +101,7 @@
 						</a>
 					</div>
 					<div class="col-sm-3">
-						@if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) 
+						@if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) 
 	                   		<a class="btn btn-info" href="{{ URL::route('edit-requirement', array($jobPost->id)) }}" title="Edit Job Post"><i class="fa fa-fw fa-edit"></i> Edit Requirement</a>
 	                	@endif
 					</div>
@@ -110,7 +110,7 @@
 								<a class="btn btn-primary" href="{{ URL::route('assign-requirement', array($jobPost->id)) }}" title="Assign To me"><i class="fa fa-plus"></i> Assign To Me</a>
 							</div>
 						@endif
-						@if(Auth::user()->getRole() <= 2)
+						@if(Auth::user()->getRole() <= 2 || Auth::user()->hasRole(8))
 							<div class="col-sm-3">
 								<a class="btn btn-warning" href="{{ URL::route('delete-requirement', array($jobPost->id)) }}" title="Delete Job Post"><i class="fa fa-fw fa-ban text-danger"></i>Remove Requirement</a>
 							</div>

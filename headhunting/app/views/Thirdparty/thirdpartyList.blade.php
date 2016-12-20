@@ -88,10 +88,10 @@
                 @endif
 									<td>
 										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
-								  @if(Auth::user()->getRole() <= 3)
+								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 										  <a href="{{ URL::route('edit-third-party', array($thirdparty->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
 								  @endif
-										@if(Auth::user()->getRole() <= 3)
+										@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 											<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 										@endif
 								</td>

@@ -16,7 +16,7 @@
 	                        	@if($jobPost->jobsAssignedToMe()->count() == 0)
 	                        		<a href="{{ URL::route('assign-requirement', array($jobPost->id)) }}" class="text-success" title="Assign To me"><i class="fa fa-plus"></i>&nbsp; Assign To Me</a>&nbsp;&nbsp; &nbsp; &nbsp;
 	                        	@endif
-	                        	@if(Auth::user()->getRole() <= 2)
+	                        	@if(Auth::user()->getRole() <= 2 || Auth::user()->hasRole(8))
 	                        		<a href="{{ URL::route('delete-requirement', array($jobPost->id)) }}" class="text-danger" title="Delete Job Post"><i class="fa fa-trash-o text-danger"></i>&nbsp; Delete Requirement</a>
 	                        	@endif
 	                      </div>

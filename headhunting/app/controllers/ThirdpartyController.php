@@ -102,7 +102,7 @@ class ThirdpartyController extends \BaseController {
 	public function createThirdparty()
 	{
 
-		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) ) {
 
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -308,7 +308,7 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function viewThirdparty($id) {
 
-		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5)  || Auth::user()->hasRole(8) ) {
 
 			$thirdparty = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', Auth::user()->id)->where('source_id', '=', $id)->get();
 			
@@ -336,7 +336,7 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function editThirdparty($id) {
 
-		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) ) {
 
 			//$thirdparty = Thirdparty::with(array('createdby'))->where('id', '=', $id)->get();
 			$thirdparty = Thirdpartyuser::with(array('vendors'))->where('user_id', '=', Auth::user()->id)->where('source_id', '=', $id)->get();
@@ -365,7 +365,7 @@ class ThirdpartyController extends \BaseController {
 	 */
 	public function updateThirdparty($id)
 	{
-		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) ) {
 			// Server Side Validation.
 			$validate=Validator::make (
 				Input::all(), array(
@@ -460,7 +460,7 @@ class ThirdpartyController extends \BaseController {
 	 *
 	 */
 	public function deleteThirdparty($id) {
-		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) ) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) ) {
 			$thirdparty = Thirdparty::find($id);
 			if(MailGroupMember::where('user_id', '=', $thirdparty->id)->where('group_id', '=', 3)->delete() && $thirdparty->delete()) {
 				Session::flash('flashmessagetxt', 'Deleted Successfully!!');

@@ -34,10 +34,10 @@
                             @endif
 		                        <td>
 		                        	<a href="{{ URL::route('view-vendor', array('id' => $vendor->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
-                              @if(Auth::user()->getRole() <= 3)
+                              @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8))
 		                        	  <a href="{{ URL::route('edit-vendor', array($vendor->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
                               @endif
-		                        	@if(Auth::user()->getRole() <= 3)
+		                        	@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8))
 		                        		<a href="{{ URL::route('delete-vendor', array($vendor->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 		                        	@endif
 		                        </td>

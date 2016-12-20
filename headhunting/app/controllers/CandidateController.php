@@ -31,7 +31,7 @@ class CandidateController extends HelperController {
 	public function createCandidate()
 	{
 
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5) || Auth::user()->hasRole(8)) {
 			
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -234,7 +234,7 @@ class CandidateController extends HelperController {
 	 */
 	public function viewCandidate($id, $jobId = 0, $searchingText="") {
 
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5) || Auth::user()->hasRole(8)) {
 
 			$candidate = Candidate::with(array('visa', 'createdby', 'city', 'state', 'country', 'workstate', 'candidaterate'))->where('id', '=', $id)->get();
 
@@ -264,7 +264,7 @@ class CandidateController extends HelperController {
 	 */
 	public function editCandidate($id) {
 
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5) || Auth::user()->hasRole(8)) {
 
 			$country = Country::all()->lists('country', 'id');
 
@@ -302,7 +302,7 @@ class CandidateController extends HelperController {
 	 */
 	public function updateCandidate($id)
 	{
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5) || Auth::user()->hasRole(8)) {
 
 			// Server Side Validation.
 			$validate=Validator::make (
@@ -471,7 +471,7 @@ class CandidateController extends HelperController {
 	 *
 	 */
 	public function deleteCandidate($id) {
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5) || Auth::user()->hasRole(8)) {
 			$candidate = Candidate::find($id);
 			$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
 			if($resume && $resume->removeFromIndex() && $resume->delete() ){

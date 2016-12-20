@@ -28,7 +28,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function postRequirementView() {
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) {
 			$jobPost = new JobPost();
 			$country = Country::all();
 
@@ -85,7 +85,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function deleteRequirement($id) {
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) {
 			$jobPost = JobPost::find($id)->delete();
 			Session::flash('flashmessagetxt', 'Deleted Successfully!!'); 
 		}
@@ -101,7 +101,7 @@ class SaleController extends HelperController {
 	 */
 	public function closeRequirement($id) {
 
-		if( $_SERVER['REQUEST_METHOD'] == 'GET' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3))) {
+		if( $_SERVER['REQUEST_METHOD'] == 'GET' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))) {
 			$feedbacks = array(
 				'Rejected By Sales Manager',
 				'Submitted To Prime Vendor',
@@ -111,7 +111,7 @@ class SaleController extends HelperController {
 				'Rejected For All States'
 			);
 			return View::make('sales.closeRequirement')->with(array('title' => 'Close Requirement - Headhunting', 'feedbacks'=>$feedbacks));
-		} else if($_SERVER['REQUEST_METHOD'] == 'POST' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3))) {
+		} else if($_SERVER['REQUEST_METHOD'] == 'POST' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))) {
 			$jobPost = JobPost::find($id);
 			$jobPost->status = 2;
 			$jobPost->feedback = Input::get('feedback');
@@ -129,7 +129,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function reopenRequirement($id) {
-		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)) {
 			$jobPost = JobPost::find($id);
 			$jobPost->status = 1;
 			$jobPost->save();
@@ -203,7 +203,7 @@ class SaleController extends HelperController {
 	 */
 	public function postRequirement() {
 
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) {
 			// Server Side Validation.
 			$validate=Validator::make (
 					Input::all(), array(
@@ -274,7 +274,7 @@ class SaleController extends HelperController {
 		if($id != "") {
 			$jobPost = JobPost::find($id);
 		}
-		if((Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
+		if((Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
 			// Server Side Validation.
 			$validate=Validator::make (
 					Input::all(), array(
@@ -342,7 +342,7 @@ class SaleController extends HelperController {
 		if($id != "") {
 			$jobPost = JobPost::find($id);
 		}
-		if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
+		if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) {
 			$country = Country::all();
 			$count = array();
 			foreach( $country as $key => $value) {

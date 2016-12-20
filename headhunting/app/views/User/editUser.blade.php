@@ -8,7 +8,7 @@
         {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">
-        @if(Auth::user()->getRole() == 1)
+        @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
         {{ Form::text('email', $user->email, array('class' =>
             'form-control', 'placeholder' => 'Enter Your Email', 'required')); }}
         @else
@@ -44,7 +44,7 @@
             <span class='errorlogin'>{{$errors->first('designation');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-    @if(Auth::user()->getRole() == 1)
+    @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
     <div class="form-group">
         {{ Form::label('doj', 'Date Of Joining: ', array('class' => 'col-sm-3
         control-label')); }}
