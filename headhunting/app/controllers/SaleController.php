@@ -186,6 +186,11 @@ class SaleController extends HelperController {
 			if(!empty(Input::get('type_of_employment'))){
 				$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
 			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
 		}
 
 		$jobPost = $q->paginate(100);
@@ -384,6 +389,11 @@ class SaleController extends HelperController {
 			}
 			if(!empty(Input::get('status'))) {
 				$q->where('status', '=', Input::get('status'));	
+			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
 		}
 

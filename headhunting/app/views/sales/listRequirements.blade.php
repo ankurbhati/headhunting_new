@@ -24,8 +24,19 @@
                   <div class="form-group">
                       {{ Form::label('type_of_employment', 'Type Of Employment: ', array('class' => 'col-sm-3
                       control-label')); }}
-                      <div class="col-sm-8">{{ Form::select('type_of_employment', array(0=>"Select type of employment", 1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"),"", array('class' => 'form-control')) }}
+                      <div class="col-sm-8">{{ Form::select('type_of_employment', array(0=>"Select type of employment", 1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"),0, array('class' => 'form-control')) }}
                           <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                      control-label')); }}
+                      <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                          <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                      </div>
+                      <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                          <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
                       </div>
                   </div>
 

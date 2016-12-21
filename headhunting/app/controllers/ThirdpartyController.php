@@ -232,6 +232,11 @@ class ThirdpartyController extends \BaseController {
 			if(!empty(Input::get('phone_ext'))) {
 				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
 			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
 		}
 
 
@@ -279,6 +284,13 @@ class ThirdpartyController extends \BaseController {
 					$q->where('msa_company_name', 'like', "%".Input::get('company_name')."%");	
 				}
 			}
+
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
+			
 		}
 		if($id == 1) {
 			$q->where('msa_document', '!=', "");

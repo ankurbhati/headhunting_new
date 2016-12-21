@@ -29,6 +29,17 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
                 <div class="form-group row ">
                     <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
                         btn-info', 'id' => 'login-button') ); }}</div>
@@ -48,6 +59,7 @@
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
                         <th>Status</th>
+                        <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -59,6 +71,7 @@
             								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
             								<td>{{$candidateApplication->candidate->email}}</td>
             								<td>{{($candidateApplication->status == 1)?"Not Interviewed":"PO";}}</td>
+                            <td>{{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
@@ -77,6 +90,7 @@
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
                         <th>Status</th>
+                        <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

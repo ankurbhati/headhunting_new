@@ -57,6 +57,17 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
                 <div class="form-group row ">
                     <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
                         btn-info', 'id' => 'login-button') ); }}</div>
@@ -77,6 +88,7 @@
                         <th>Company</th>
                         <th>Phone</th>
                         <th>Created By</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -88,6 +100,7 @@
 		                        <td>{{$client->company_name}}</td>
 		                        <td>{{$client->phone}}</td>
                             <td>{{$client->createdby->first_name. " ".$client->createdby->last_name }}</td>
+                            <td>{{($client->created_at != "" && $client->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($client->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-client', array('id' => $client->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
                               @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
@@ -107,6 +120,7 @@
                         <th>Company</th>
                         <th>Phone</th>
                         <th>Created By</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

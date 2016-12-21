@@ -43,6 +43,18 @@
             <span class='errorlogin email-login'>{{$errors->first('phone_ext');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+
+    <div class="form-group">
+        {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+            <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+        <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+            <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
     <div class="form-group row ">
             <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
                 btn-info', 'id' => 'login-button') ); }}</div>
@@ -63,6 +75,7 @@
                         <th>Phone</th>
                         <th>NCA Document</th>
                         <th>MSA Document</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -86,6 +99,7 @@
                 @else
                   <td>-</td>
                 @endif
+                <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
 									<td>
 										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
 								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
@@ -107,6 +121,7 @@
                         <th>Phone</th>
                         <th>NCA Document</th>
                         <th>MSA Document</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

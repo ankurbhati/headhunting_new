@@ -24,7 +24,7 @@
                 <div class="form-group">
                     {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
                     control-label')); }}
-                    <div class="col-sm-8">{{ Form::select('status', array(1 => "pending", 2 => 'In progress', 3=>'Completed', 5 => 'Canceled'), 1, array('class' =>
+                    <div class="col-sm-8">{{ Form::select('status', array(0=>'Select Status',1 => "pending", 2 => 'In progress', 3=>'Completed', 5 => 'Canceled'), 0, array('class' =>
                         'form-control')); }}
                         <span class='errorlogin'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
@@ -37,7 +37,16 @@
                         <span class='errorlogin'>{{$errors->first('description');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                  </div>
                 <div class="form-group row ">
                     <div class="col-sm-11" style="text-align: center;">{{ Form::submit('Search', array('class' => 'btn
                         btn-info', 'id' => 'requirement-button') ); }}</div>
@@ -63,6 +72,7 @@
                         <th>Mail Group</th>
                         <th>limit-lower/limit-upper</th>
                         <th>Status</th>
+                        <th>Sent At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -76,6 +86,7 @@
                             <td>@if($mass_mail->mail_group_id == 1){{"Clients"}}@elseif($mass_mail->mail_group_id == 3){{"Third Party"}}@else {{"Candidates"}}@endif</td>
 		                        <td>{{$mass_mail->limit_lower."/".$mass_mail->limit_upper}}</td>
                             <td>{{($mass_mail->status == 1)?"Pending":($mass_mail->status == 2?"In Progress":($mass_mail->status == 5?"Canceled":"Completed"))}}</td>
+                            <td>{{($mass_mail->created_at != "" && $mass_mail->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($mass_mail->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-mass-mail', array('id' => $mass_mail->id)) }}" title="View Mass Mail"><i class="fa fa-fw fa-eye"></i></a>
 
@@ -96,6 +107,7 @@
                       <th>Mail Group</th>
                       <th>limit-lower/limit-upper</th>
                       <th>Status</th>
+                      <th>Sent At</th>
                       <th>Action</th>
                     </tfoot>
                   </table>
