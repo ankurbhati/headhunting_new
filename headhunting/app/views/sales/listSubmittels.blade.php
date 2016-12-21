@@ -7,6 +7,38 @@
                 <div class="box-header">
                   <h3 class="box-title">Job Submittels</h3>
                 </div><!-- /.box-header -->
+
+
+
+                {{ Form::open(array('class' =>
+'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+
+                <div class="form-group">
+                    {{ Form::label('submitted_by', 'Submitted By: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::select('submitted_by', array('' => 'Please select one Submitter') + $addedByList, "", array('class' => 'form-control')) }}
+                        <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::select('status', array(0=>"Select Type Of Status", 1=>"Not Interviewed", 2=> "PO"), "", array('class' => 'form-control')) }}
+                        <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group row ">
+                    <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
+                        btn-info', 'id' => 'login-button') ); }}</div>
+
+               </div>
+            {{ Form::close() }}
+
+
+
+
                 <div class="box-body">
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>

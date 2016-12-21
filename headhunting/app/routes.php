@@ -246,6 +246,11 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'SaleController@listSubmittel'
 	));
 
+	Route::match(array('POST'), '/list-submittel/{id?}', array(
+			'as'    =>    'list-submittel',
+			'uses'    =>    'SaleController@listSubmittel'
+	));
+
 	/**
 	 * Routes for list-requirement
 	 */
