@@ -52,6 +52,17 @@
                             <span class='errorlogin email-login'>{{$errors->first('added_by');}}@if(!empty($message)){{$message}}@endIf</span>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                        control-label')); }}
+                        <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                        <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    </div>
                     
                     <div class="form-group row ">
                         <div class="col-sm-11" style="text-align: center;">{{ Form::submit('Search', array('class' => 'btn

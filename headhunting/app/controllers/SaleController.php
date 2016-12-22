@@ -186,6 +186,11 @@ class SaleController extends HelperController {
 			if(!empty(Input::get('type_of_employment'))){
 				$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
 			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
 		}
 
 		$jobPost = $q->paginate(100);
@@ -369,14 +374,35 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function listSubmittel($id=0) {
-		if($id == 0) {
-			$candidateApplications = CandidateApplication::paginate(100);
-		} else {
-			$candidateApplications = CandidateApplication::with(array('candidate', 'requirement'))
-																									 ->where('job_post_id', '=', $id)
-																									 ->paginate(100);
+
+		$q = CandidateApplication::query();
+
+		$y = CandidateApplication::query();
+
+		$addedByList = $y->leftJoin('users', function($join){
+			$join->on('submitted_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('submitted_by'))) {
+				$q->where('submitted_by', '=', Input::get('submitted_by'));	
+			}
+			if(!empty(Input::get('status'))) {
+				$q->where('status', '=', Input::get('status'));	
+			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
 		}
-		return View::make('sales.listSubmittels')->with(array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications));
+
+		if($id == 0) {
+			$candidateApplications = $q->paginate(100);
+		} else {
+			$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
+		}
+		return View::make('sales.listSubmittels')->with(array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'addedByList'=>$addedByList));
 	}
 
 	/**

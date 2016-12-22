@@ -87,6 +87,13 @@ class UserController extends HelperController {
 			if(!empty(Input::get('designation'))) {
 				$q->where('designation', 'like', "%".Input::get('designation')."%");	
 			}
+
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
+
 		}
 		
 		$users = $q->paginate(100);
@@ -703,6 +710,11 @@ class UserController extends HelperController {
 				} else {
 					$q->whereIn('status', array(3, 4));
 				}
+			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
 		}
 

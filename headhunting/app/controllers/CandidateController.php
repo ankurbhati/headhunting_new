@@ -213,6 +213,13 @@ class CandidateController extends HelperController {
 			if(!empty(Input::get('added_by'))) {
 				$q->where('added_by', '=', Input::get('added_by'));	
 			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				//DB::enableQueryLog();
+				$q->whereBetween('candidates.created_at', [$fromDateTime, $toDateTime]);
+				//var_dump($result, DB::getQueryLog());exit;
+			}
 		}
 
 		$candidates = $q->leftJoin('candidate_resumes', function($join) {

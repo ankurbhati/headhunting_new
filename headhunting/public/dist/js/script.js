@@ -210,6 +210,8 @@ if($('#msa-group').length > 0) {
   }
 
  	$('#datepicker').datepicker();
+ 	$('.from_date').datepicker();
+ 	$('.to_date').datepicker();
   
 	// Create two variable with the names of the months and days in an array
 	var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 

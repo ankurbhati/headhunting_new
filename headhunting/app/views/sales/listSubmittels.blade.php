@@ -7,6 +7,49 @@
                 <div class="box-header">
                   <h3 class="box-title">Job Submittels</h3>
                 </div><!-- /.box-header -->
+
+
+
+                {{ Form::open(array('class' =>
+'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+
+                <div class="form-group">
+                    {{ Form::label('submitted_by', 'Submitted By: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::select('submitted_by', array('' => 'Please select one Submitter') + $addedByList, "", array('class' => 'form-control')) }}
+                        <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::select('status', array(0=>"Select Type Of Status", 1=>"Not Interviewed", 2=> "PO"), "", array('class' => 'form-control')) }}
+                        <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group row ">
+                    <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
+                        btn-info', 'id' => 'login-button') ); }}</div>
+
+               </div>
+            {{ Form::close() }}
+
+
+
+
                 <div class="box-body">
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -16,6 +59,7 @@
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
                         <th>Status</th>
+                        <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -27,6 +71,7 @@
             								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
             								<td>{{$candidateApplication->candidate->email}}</td>
             								<td>{{($candidateApplication->status == 1)?"Not Interviewed":"PO";}}</td>
+                            <td>{{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
@@ -45,6 +90,7 @@
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
                         <th>Status</th>
+                        <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

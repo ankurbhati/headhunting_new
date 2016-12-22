@@ -22,6 +22,7 @@
                         <th><input type="checkbox" name="checkall" value="">Check All</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Added At</th>
                         <th>Resume</th>
                         <th>Action</th>
                       </tr>
@@ -36,6 +37,7 @@
                             <td>
                                 {{$candidate->candidate->email}}
                             </td>
+                            <td>{{($candidate->candidate->created_at != "" && $candidate->candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->candidate->created_at)):"-"}}</td>
                             <td>
                                 <p>{{$candidate->resume?'"'.str_replace("<br />", "", substr($candidate->resume, 0, 80)).'..."':""}}</p>
                             </td>
@@ -57,6 +59,7 @@
                         <th><input type="checkbox" name="checkall" value="">Check All</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Added At</th>
                         <th>Resume</th>
                         <th>Action</th>
                     </tfoot>

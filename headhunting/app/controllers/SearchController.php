@@ -52,7 +52,7 @@ class SearchController extends HelperController {
     	$visa = Input::get('visa', '');
     	$region = Input::get('region', '');
     	$searching_text = '';
-		if($query || $designation || $visa || $region) {
+		if($query || $designation || $visa || $region || (!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) ) {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try {
 		    	$searching_text_to_send = $designation."---".$visa."---".$region."---".$query;
@@ -74,6 +74,14 @@ class SearchController extends HelperController {
 		    	if( isset($designation) && !empty($designation) ) {
 					$q->where('designation','like', $designation."%");
 		    	}
+
+		    	if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+					$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+					$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+					$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+					$searching_text_to_send .= $fromDateTime."---".$toDateTime;
+		    		$searching_text .= $fromDateTime." ".$toDateTime;
+				}
 
 		   //  	if( isset($query) && !empty($query) ) {
 					// $ands = preg_split("/ AND /i", $query);
@@ -210,7 +218,7 @@ class SearchController extends HelperController {
 		return View::make('search.searchResult')->with(
 			array(
 				'title' => 'Search - Headhunting',
-				'searching_text_to_send' => urlencode($searching_text_to_send),
+				'searching_text_to_send' => isset($searching_text_to_send)?urlencode($searching_text_to_send): "",
 				'searching_text' => $searching_text,
 				'candidate_resumes' => $candidate_resumes,
 				'jobId' => $jobId,

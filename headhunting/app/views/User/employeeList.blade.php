@@ -48,6 +48,17 @@
                       </div>
                   </div>
                   
+                  <div class="form-group">
+                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                  </div>
+
                   <div class="form-group row ">
                       <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
                           btn-info', 'id' => 'login-button') ); }}</div>
@@ -71,6 +82,7 @@
                         <th>Email</th>
                         <th>Designation</th>
                         <th>Roles</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -81,6 +93,7 @@
 		                        <td>{{$user->email}}</td>
 		                        <td>{{$user->designation}}</td>
 		                        <td>{{$user->userRoles[0]->roles->role}}</td>
+                            <td>{{($user->created_at != "" && $user->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($user->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-member', array('id' => $user->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
 		                        	<a href="{{ URL::route('edit-member', array($user->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
@@ -102,6 +115,7 @@
                         <th>Email</th>
                         <th>Designation</th>
                         <th>Roles</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

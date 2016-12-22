@@ -10,7 +10,7 @@
   <div class="form-group">
     <label for="visa" class="col-sm-2 control-label">Visa</label>
     <div class="col-sm-7">
-      {{ Form::select('visa', $visa, null, array('class' => 'form-control', 'id' => 'visa')) }}
+      {{ Form::select('visa', $visa, "", array('class' => 'form-control', 'id' => 'visa')) }}
       <!--<input type="text" class="form-control" name="visa" />-->
     </div>
   </div>
@@ -28,6 +28,18 @@
       <textarea class="form-control" style="resize: none;" rows="2" id="inputQuery" name="query"></textarea>
     </div>
   </div>
+
+  <div class="form-group">
+      <label for="inputQuery" class="col-sm-2 control-label">Added At</label>
+      <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+          <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+      </div>
+      <div class="col-sm-3">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+          <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+      </div>
+  </div>
+
+
   {{ Form::hidden('searchQuery', '', array('id'=>'searchQuery')) }}
   {{ Form::hidden('searchType', '', array('id'=>'searchType')) }}
   <div class="form-group">
