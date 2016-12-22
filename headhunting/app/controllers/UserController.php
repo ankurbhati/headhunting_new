@@ -841,7 +841,7 @@ class UserController extends HelperController {
 				}
 			}
 		} else {
-			if( Auth::user()->hasRole(2) || Auth::user()->hasRole(3) ) {			
+			if( Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)  ) {			
 				$mail_groups = MailGroup::all()->lists('name', 'id');
 			} else {
 				$mail_groups = MailGroup::where("name", "!=", 'Clients')->lists('name', 'id');

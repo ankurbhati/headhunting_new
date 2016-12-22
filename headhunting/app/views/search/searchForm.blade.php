@@ -2,20 +2,21 @@
 @section('content')
 <form class="form-horizontal" id="searchForm" method="post">
   <div class="form-group">
-    <label for="inputQuery" class="col-sm-2 control-label">Job Title</label>
+    <label for="jobTitle" class="col-sm-2 control-label">Job Title</label>
     <div class="col-sm-7">
-      <input type="text" class="form-control" name="designation" />
+      <input type="text" class="form-control" id="jobTitle" name="designation" />
     </div>
   </div>
   <div class="form-group">
-    <label for="inputQuery" class="col-sm-2 control-label">Visa</label>
+    <label for="visa" class="col-sm-2 control-label">Visa</label>
     <div class="col-sm-7">
-      {{ Form::select('visa', $visa, null, array('class' => 'form-control')) }}
+      {{ Form::select('visa', $visa, null, array('class' => 'form-control', 'id' => 'visa')) }}
       <!--<input type="text" class="form-control" name="visa" />-->
     </div>
   </div>
+
   <div class="form-group">
-    <label for="inputQuery" class="col-sm-2 control-label">Location</label>
+    <label for="region" class="col-sm-2 control-label">Location</label>
     <div class="col-sm-7">
       {{ Form::select('region', [], null, array('class' => 'form-control', 'id'=>'region')) }}
       <!--<input type="text" class="form-control" name="region" />-->

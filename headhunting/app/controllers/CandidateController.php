@@ -199,7 +199,7 @@ class CandidateController extends HelperController {
 		
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
-				$q->where('email', 'like', "%".Input::get('email')."%");
+				$q->where('candidates.email', 'like', "%".Input::get('email')."%");
 			} 
 			if(!empty(Input::get('first_name'))){
 				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
