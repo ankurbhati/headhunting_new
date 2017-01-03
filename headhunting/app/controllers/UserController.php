@@ -915,24 +915,39 @@ class UserController extends HelperController {
 				$disclaimer = ($setting->exists())?$setting->first()->value:'';
 				$signature = ($authUser->signature)?$authUser->signature:"";
 				Log::info("Limit Count : ".count($user_list));
+				$emails = array();
 				try{
+					Config::set('mail.username', $authUser->email);
+					Config::set('mail.from.address', $authUser->email);
+					Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
+	       			Config::set('mail.password', $authUser->email_password);
+
+	       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
 					foreach($user_list as $user) {
-						Config::set('mail.username', $authUser->email);
-						Config::set('mail.from.address', $authUser->email);
-						Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
-		       			Config::set('mail.password', $authUser->email_password);
+						array_push($emails, $user->email);
+						if($model != 'Thirdparty') {
+							Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+							{
 
-		       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
+							    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
 
-						Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+							    ->subject($mass_mail->subject)
+							    ->setBody($body_content, 'text/html');
+							});
+						}
+						// 1/4 i.e .25 second delay 
+						//usleep(10000);
+					}
+					if($model == 'Thirdparty' && count($emails) > 0) {
+						Mail::send([], [], function($message) use(&$mass_mail, &$authUser, &$body_content, &$emails)
 						{
 
-						    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+						    $message->to(trim($authUser->email), $authUser->first_name . " " . $authUser->last_name)
+						    ->bcc($emails)
+
 						    ->subject($mass_mail->subject)
 						    ->setBody($body_content, 'text/html');
 						});
-						// 1/4 i.e .25 second delay 
-						//usleep(10000);
 					}
 					$mass_mail->status = 3;
 					$mass_mail->save();
