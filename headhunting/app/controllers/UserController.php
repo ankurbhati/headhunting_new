@@ -962,35 +962,57 @@ class UserController extends HelperController {
 				$disclaimer = ($setting->exists())?$setting->first()->value:'';
 				$signature = ($authUser->signature)?$authUser->signature:"";
 				Log::info("Limit Count : ".count($user_list));
+				$emails = array();
 				try{
-					$thirdPartyBccList = array();
+					//$thirdPartyBccList = array();
+					Config::set('mail.username', $authUser->email);
+					Config::set('mail.from.address', $authUser->email);
+					Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
+	       			Config::set('mail.password', $authUser->email_password);
+
+	       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
+
 					foreach($user_list as $user) {
-						Config::set('mail.username', $authUser->email);
-						Config::set('mail.from.address', $authUser->email);
-						Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
-		       			Config::set('mail.password', $authUser->email_password);
-
-		       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
-
-                        if($model == 'Thirdparty'){
-                        	array_push($thirdPartyBccList, trim($user->email));
-                        } else {
-                        	Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+						array_push($emails, $user->email);
+						if($model != 'Thirdparty') {
+							Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
 							{
 
-							    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
-							    ->subject($mass_mail->subject)
-							    ->setBody($body_content, 'text/html');
-							});
-                        }
-					}
-					if($model == 'Thirdparty') {
+								$message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+
+
+		                        //if($model == 'Thirdparty'){
+		                        //	array_push($thirdPartyBccList, trim($user->email));
+		                        //} else {
+		                        	Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+									{
+
+									    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+									    ->subject($mass_mail->subject)
+									    ->setBody($body_content, 'text/html');
+									});
+		                        //}
+							}
+					/*if($model == 'Thirdparty') {
                     	Mail::send([], [], function($message) use(&$thirdPartyBccList, &$mass_mail, &$body_content) {
 						    $message->bcc($thirdPartyBccList)
 						    ->subject($mass_mail->subject)
 						    ->setBody($body_content, 'text/html');
 						});
-                    }
+                    }*/
+                		}
+						
+						
+					if($model == 'Thirdparty' && count($emails) > 0) {
+						Mail::send([], [], function($message) use(&$mass_mail, &$authUser, &$body_content, &$emails)
+						{
+
+						    $message->to(trim($authUser->email), $authUser->first_name . " " . $authUser->last_name)
+						    ->bcc($emails)
+						    ->subject($mass_mail->subject)
+						    ->setBody($body_content, 'text/html');
+						});
+					}
 					$mass_mail->status = 3;
 					$mass_mail->save();
 				}
