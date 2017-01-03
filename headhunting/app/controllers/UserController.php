@@ -162,6 +162,52 @@ class UserController extends HelperController {
 		return View::make('User.teamList')->with(array('title' => 'Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost, 'managerUsers' => $managerUsers));
 	}
 
+
+	/**
+	 *
+	 * getTeam() : get getPeers
+	 *
+	 * @return Object : JSON
+	 *
+	 */
+	public function getSalesTeam($id = 0) {
+
+		$jobPost = "";
+		$managerUsers = array();
+		$users = array();
+		$currentUserRole = Auth::user()->getRole();
+		$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
+			    $q->where('role_id', '>=', 2)
+			      ->where('role_id', '<=', 3)
+			      ->where('user_id', '!=', Auth::user()->id);
+		})->paginate(100);
+		
+		return View::make('User.teamList')->with(array('title' => 'Sales Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost, 'managerUsers' => $managerUsers));
+	}
+
+	/**
+	 *
+	 * getTeam() : get getPeers
+	 *
+	 * @return Object : JSON
+	 *
+	 */
+	public function getRecruitmentTeam($id = 0) {
+
+		$jobPost = "";
+		$managerUsers = array();
+		$users = array();
+		$currentUserRole = Auth::user()->getRole();
+		$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
+			    $q->where('role_id', '>=', 4)
+			      ->where('role_id', '<=', 5)
+			      ->where('user_id', '!=', Auth::user()->id);
+		})->paginate(100);
+
+		
+		return View::make('User.teamList')->with(array('title' => 'Recruitment Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost, 'managerUsers' => $managerUsers));
+	}
+
 	/**
 	 *
 	 * getCities() : get States
@@ -871,6 +917,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function sendMailFromCron() {
+		// picking massmails where status in process i.e 2 is less than equal to 5
 		if(MassMail::where('status', '=', '2')->count() <= 5) {
 
 			$mass_mail = MassMail::with(array('mailgroup'))->where('status', '=', '1');
@@ -916,6 +963,7 @@ class UserController extends HelperController {
 				$signature = ($authUser->signature)?$authUser->signature:"";
 				Log::info("Limit Count : ".count($user_list));
 				try{
+					$thirdPartyBccList = array();
 					foreach($user_list as $user) {
 						Config::set('mail.username', $authUser->email);
 						Config::set('mail.from.address', $authUser->email);
@@ -924,16 +972,25 @@ class UserController extends HelperController {
 
 		       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
 
-						Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
-						{
+                        if($model == 'Thirdparty'){
+                        	array_push($thirdPartyBccList, trim($user->email));
+                        } else {
+                        	Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+							{
 
-						    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+							    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+							    ->subject($mass_mail->subject)
+							    ->setBody($body_content, 'text/html');
+							});
+                        }
+					}
+					if($model == 'Thirdparty') {
+                    	Mail::send([], [], function($message) use(&$thirdPartyBccList, &$mass_mail, &$body_content) {
+						    $message->bcc($thirdPartyBccList)
 						    ->subject($mass_mail->subject)
 						    ->setBody($body_content, 'text/html');
 						});
-						// 1/4 i.e .25 second delay 
-						//usleep(10000);
-					}
+                    }
 					$mass_mail->status = 3;
 					$mass_mail->save();
 				}

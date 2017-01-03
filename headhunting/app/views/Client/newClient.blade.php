@@ -6,11 +6,11 @@
 
     <div class="form-group">
         {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
-        control-label')); }}
-        <div class="col-sm-8">{{ Form::text('email', "", array('class' =>
-            'form-control','id' => 'client-email' 'placeholder' => 'Enter Clients Email')); }}
+        control-label')) }}
+        <div class="col-sm-8">{{Form::text('email', "", array('class' =>
+            'form-control','id' => 'client-email', 'placeholder' => 'Enter Clients Email'))}}
             <span class='errorlogin email-client-ajax'></span> 
-            <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
+            <span class='errorlogin email-login'>{{$errors->first('email')}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 

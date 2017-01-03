@@ -331,4 +331,13 @@ class HelperController extends BaseController {
     		Log::info('Mail error! '.$subject. $e->getCode());
     	}
     }
+
+
+    public function saveActivity($type=None, $description=None) {
+        $activity = new UserActivity();
+        $activity->added_by = Auth::user()->id;
+        $activity->description = $description;
+        $activity->type = $type;
+        $activity->save();
+    }
 }

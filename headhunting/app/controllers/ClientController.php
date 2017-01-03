@@ -1,6 +1,6 @@
 <?php
 
-class ClientController extends \BaseController {
+class ClientController extends HelperController {
 
 
 	/**
@@ -36,15 +36,16 @@ class ClientController extends \BaseController {
 		$count = 0;
 		$message = '';
 		$already_exist = '';
+		$added_count = 0;
 		while (($line = fgetcsv($file)) !== FALSE) {
 			if ($count){
 				try{
+					$line[0] = str_ireplace(",", "", str_ireplace(",", "", trim($line[0])));
+					if(!filter_var($line[0], FILTER_VALIDATE_EMAIL)) {
+					    continue;
+					}
 					if(Client::where('email', '=', $line[0])->get()->isEmpty()) {
 						$client = new Client();
-						$line[0] = str_ireplace(",", "", str_ireplace(",", "", trim($line[0])));
-						if(!filter_var($line[0], FILTER_VALIDATE_EMAIL)) {
-						    continue;
-						}
 						$client->email = $line[0];
 						$client->first_name = $line[1];
 						$client->last_name = $line[2];
@@ -53,6 +54,7 @@ class ClientController extends \BaseController {
 						$client->company_name = $line[5];
 						$client->created_by = Auth::user()->id;
 						$client->save();
+						$added_count++;
 						$mail_group = new MailGroupMember();
 						$mail_group->group_id = 1;
 						$mail_group->user_id = $client->id;
@@ -68,6 +70,17 @@ class ClientController extends \BaseController {
 		}
 		fclose($file);
 		$message = $already_exist.$message.'<b><br />';
+
+		/* User activity */
+		$description = Config::get('activity.client_multi_upload');
+		$authUser = Auth::user();
+		$formatted_description = sprintf(
+			$description,
+			'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+			$added_count
+		);
+		$this->saveActivity('4', $formatted_description);
+
 		Session::flash('upload_result', $message);
 		Session::flash('flashmessagetxt', 'Uploaded Successfully!!');
 		return Redirect::route('client-upload');
@@ -120,6 +133,17 @@ class ClientController extends \BaseController {
 					$mail_group->group_id = 1;
 					$mail_group->user_id = $client->id;
 					$mail_group->save();
+
+					/* User activity */
+					$description = Config::get('activity.client_single_upload');
+					$authUser = Auth::user();
+					$formatted_description = sprintf(
+						$description,
+						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+						'<a href="/view-client/'.$client->id.'">'.$client->email.'</a>'
+					);
+					$this->saveActivity('5', $formatted_description);
+
 					Session::flash('flashmessagetxt', 'Added Successfully!!'); 
 					return Redirect::to('clients');
 				} else {

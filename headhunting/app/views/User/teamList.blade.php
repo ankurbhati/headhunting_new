@@ -14,7 +14,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$managerUsers->getTotal()}}</span></p>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{(count($managerUsers)>0)?$managerUsers->getTotal():0}}</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -70,10 +70,10 @@
                       </tr>
                     </tfoot>
                   </table>
-                  <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$managerUsers->getTotal()}}</span></p>
-                  </div>
                   @if (count($managerUsers) > 0)
+                    <div>
+                      <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$managerUsers->getTotal()}}</span></p>
+                    </div>
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Pages</span>
                       {{ $managerUsers->links() }}

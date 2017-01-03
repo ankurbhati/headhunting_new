@@ -82,7 +82,8 @@
                         <th>Email</th>
                         <th>Added By</th>
                         <th>Phone</th>
-                        <th>Added At(time, city, state)</th>
+                        <th>Added At</th>
+                        <th>Work State</th>
                         <th>Visa Id</th>
                         <th>Action</th>
                       </tr>
@@ -96,9 +97,8 @@
 		                        <td>{{$candidate->phone}}</td>
                             <td>
                               {{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
-                              @if($candidate->city){{$candidate->city->name}}@else{{"-"}}@endif
-                              @if($candidate->state){{$candidate->state->state}}@else{{"-"}}@endif
                             </td>
+                            <td>{{($candidate->workstate->id == 3)?$candidate->workstate->title."(".$candidate->thirdparty->email. ")": $candidate->workstate->title }}</td>
 		                        <td>{{$candidate->visa->title}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
@@ -123,7 +123,8 @@
                         <th>Email</th>
                         <th>Added By</th>
                         <th>Phone</th>
-                        <th>Added At(time, city, state)</th>
+                        <th>Added At</th>
+                        <th>Work State</th>
                         <th>Visa Id</th>
                         <th>Action</th>
                       </tr>

@@ -1,6 +1,6 @@
 <?php
 
-class ThirdpartyController extends \BaseController {
+class ThirdpartyController extends HelperController {
 
 
 	private $resume_target_dir = 'uploads/documents/';
@@ -41,13 +41,21 @@ class ThirdpartyController extends \BaseController {
 		$user_id = Auth::user()->id;
 		$message = '';
 		$already_exist = '';
+		$added_count = 0;
+		$existing_added_count = 0;
+
 		while (($line = fgetcsv($file)) !== FALSE) {
 			if ($count == 0){
 				$count++;
 				continue;
 			}
 			try{
+				$line[1] = str_ireplace(",", "", str_ireplace(",", "", trim($line[1])));
+				if(!filter_var($line[1], FILTER_VALIDATE_EMAIL)) {
+				    continue;
+				}
 				$thirdparty = Thirdparty::where('email', '=', $line[1])->get();
+
 				if(!$thirdparty->isEmpty()) {
 					$thirdparty = $thirdparty->first();
 					$thirdpartyuser = Thirdpartyuser::where('source_id', '=', $thirdparty->id)->where('user_id', '=', $user_id)->get();
@@ -60,12 +68,9 @@ class ThirdpartyController extends \BaseController {
 						$thirdpartyuser->user_id = $user_id;
 						$thirdpartyuser->source_id = $thirdparty->id;
 						$thirdpartyuser->save();
+						$existing_added_count++;
 					}
 				} else {
-					$line[1] = str_ireplace(",", "", str_ireplace(",", "", trim($line[1])));
-					if(!filter_var($line[1], FILTER_VALIDATE_EMAIL)) {
-					    continue;
-					}
 					$third_party = new Thirdparty();
 					$third_party->poc = $line[0];
 					$third_party->email = $line[1];
@@ -81,6 +86,7 @@ class ThirdpartyController extends \BaseController {
 					$thirdpartyuser->user_id = Auth::user()->id;
 					$thirdpartyuser->source_id = $third_party->id;
 					$thirdpartyuser->save();
+					$added_count++;
 				}
 			} catch(Exception $e){
 				$message .= "Error while adding email: ".$line[1]."<br />";
@@ -89,6 +95,18 @@ class ThirdpartyController extends \BaseController {
 		}
 		fclose($file);
 		$message = $already_exist.$message.'<b><br />Report : '.$failed.' already exists out of '.($count-1)."</b>";
+
+		/* User activity */
+		$description = Config::get('activity.third_party_multi_upload');
+		$authUser = Auth::user();
+		$formatted_description = sprintf(
+			$description,
+			'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+			$added_count,
+			$existing_added_count
+		);
+		$this->saveActivity('2', $formatted_description);
+
 		Session::flash('flashmessagetxt', 'Uploaded Successfully!!');
 		Session::flash('upload_result', $message);
 		return Redirect::route('vendor-third-party');
@@ -197,6 +215,17 @@ class ThirdpartyController extends \BaseController {
 						$thirdpartyuser->user_id = Auth::user()->id;
 						$thirdpartyuser->source_id = $thirdparty->id;
 						$thirdpartyuser->save();
+
+						/* User activity */
+						$description = Config::get('activity.third_party_single_upload');
+						$authUser = Auth::user();
+						$formatted_description = sprintf(
+							$description,
+							'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+							'<a href="/view-third-party/'.$thirdparty->id.'">'.$thirdparty->email.'</a>'
+						);
+						$this->saveActivity('3', $formatted_description);
+
 						Session::flash('flashmessagetxt', 'Added Successfully!!');
 						return Redirect::to('third-parties');
 					} else {

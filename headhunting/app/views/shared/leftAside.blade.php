@@ -83,7 +83,19 @@
                 <i class="fa fa-search"></i> <span>Search</span>
               </a>
             </li>
+            @if(Auth::user()->hasRole(1))
 			      <li>
+              <a href="{{ URL::route('salesteam') }}">
+                <i class="fa fa-users"></i> <span>Sales Team</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ URL::route('recruitmentteam') }}">
+                <i class="fa fa-users"></i> <span>Recruitment Team</span>
+              </a>
+            </li>
+            @endif
+            <li>
               <a href="{{ URL::route('peers') }}">
                 <i class="fa fa-users"></i> <span>My Team</span>
               </a>

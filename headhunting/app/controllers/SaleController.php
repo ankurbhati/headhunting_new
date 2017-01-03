@@ -66,6 +66,20 @@ class SaleController extends HelperController {
 		$jobPostAssignment->assigned_to_id = ($assignedTo == "")?$jobPostAssignment->assigned_by_id:$assignedTo;
 		$jobPostAssignment->status = 2;
 		if($jobPostAssignment->save()) {
+
+			/* User activity */
+			$description = Config::get('activity.job_post_assign');
+			$authUser = Auth::user();
+			$assigned_user = User::find($jobPostAssignment->assigned_to_id);
+			$job_post = JobPost::find($jobPostAssignment->job_post_id);
+			$formatted_description = sprintf(
+				$description,
+				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+				'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
+				'<a href="/view-employee/'.$assigned_user->id.'">'.$assigned_user->first_name." ".$assigned_user->last_name.'</a>'
+			);
+			$this->saveActivity('7', $formatted_description);
+
 			Session::flash('flashmessagetxt', 'Assigned Successfully!!'); 
 			if(Auth::user()->id == $jobPostAssignment->assigned_to_id) {
 				return Redirect::route('assigned-requirement', array($jobPostAssignment->assigned_to_id));
@@ -244,7 +258,6 @@ class SaleController extends HelperController {
 					if($city_record) {
 						$jobPost->city_id = $city_record->id;
 					} else {
-
 						$city_obj = new City();
 						$city_obj->name = $city;
 						$city_obj->save();
@@ -257,6 +270,17 @@ class SaleController extends HelperController {
 				$jobPost->status = 2;
 
 				if($jobPost->save()) {
+
+					/* User activity */
+					$description = Config::get('activity.job_post_creation');
+					$authUser = Auth::user();
+					$formatted_description = sprintf(
+						$description,
+						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+						'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+					);
+					$this->saveActivity('6', $formatted_description);
+
 					Session::flash('flashmessagetxt', 'Job Posted Successfully!!'); 
 					return Redirect::route('list-requirement');
 				} else {

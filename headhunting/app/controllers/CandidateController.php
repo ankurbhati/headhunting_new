@@ -125,6 +125,18 @@ class CandidateController extends HelperController {
 				// Checking Authorised or not
 				try {
 					if($candidate->save()) {
+
+						/* User activity */
+						$description = Config::get('activity.candidate_add');
+						$authUser = Auth::user();
+						$formatted_description = sprintf(
+							$description,
+							'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+							'<a href="/view-candidate/'.$candidate->id.'">'.$candidate->email.'</a>'
+						);
+						$this->saveActivity('10', $formatted_description);
+
+
 						Session::flash('flashmessagetxt', 'Candidate Added Successfully!!');
                         $rate = Input::get('rate');
 						if(isset($rate) && !empty($rate)){
@@ -608,6 +620,18 @@ class CandidateController extends HelperController {
 			$candidateApplication->status = 1;
 			$candidateApplication->created_at = date('Y-m-d H:i:s');
 			if($candidateApplication->save()) {
+
+				/* User activity */
+				$description = Config::get('activity.job_post_submission');
+				$authUser = Auth::user();
+				$job_post = JobPost::find($candidateApplication->job_post_id);
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>'
+				);
+				$this->saveActivity('9', $formatted_description);
+
 				Session::flash('flashmessagetxt', 'Submitted Successfully!!');
 				return Redirect::route('list-submittel', array('id' => $jobId));
 			} else {

@@ -181,10 +181,13 @@ if($('#msa-group').length > 0) {
 	  }
 	};
 
-  $("#description").wysihtml5(optionsText);
+  /*$("#description").wysihtml5(optionsText);
   $("#disclaimer").wysihtml5(optionsText);
-  $("#signature").wysihtml5(optionsText);
-
+  $("#signature").wysihtml5(optionsText);*/
+  CKEDITOR.replace('description');
+  CKEDITOR.replace('disclaimer');
+  CKEDITOR.replace('signature');
+ 
   function getState(country){
 	    $.ajax({
 	        url: '/states/' + country

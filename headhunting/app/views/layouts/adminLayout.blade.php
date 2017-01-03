@@ -79,6 +79,7 @@
 	    {{ HTML::script("dist/js/pages/dashboard.js")}}
     	{{ HTML::script("plugins/input-mask/jquery.inputmask.js")}}
 	    {{ HTML::script("plugins/input-mask/jquery.inputmask.date.extensions.js")}}
+	    <script src="//cdn.ckeditor.com/4.6.1/full/ckeditor.js"></script>
 	    {{ HTML::script("dist/js/script.js")}}
 	    <script>
 	    @if(Session::has('flashmessagetxt'))

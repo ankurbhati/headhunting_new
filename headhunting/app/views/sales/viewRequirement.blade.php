@@ -87,11 +87,11 @@
 	        		Comments:
 	        	</div>
 	        	<div class="col-sm-8">
-	        	@forelse($jobPost->comments as $comment)
-					{{$comment->comment."-<b>".$comment->user->first_name." ".$comment->user->last_name."</b><br/>"}}
-				@empty
-	           		<p>No Comments Yet</p>
-				@endforelse
+		        	@forelse($jobPost->comments as $comment)
+						{{$comment->comment."-<b>".$comment->user->first_name." ".$comment->user->last_name."</b><br/>"}}
+					@empty
+		           		<p>No Comments Yet</p>
+					@endforelse
 	        	</div>
 	    	</div>
 			<div class="row" style="padding-top:15px; padding-bottom:15px;">
