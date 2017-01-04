@@ -973,44 +973,28 @@ class UserController extends HelperController {
 	       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
 
 					foreach($user_list as $user) {
-						array_push($emails, $user->email);
-						if($model != 'Thirdparty') {
-							Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
-							{
+						if(!filter_var($user->email, FILTER_VALIDATE_EMAIL) === false) {
+							array_push($emails, $user->email);
+							if($model != 'Thirdparty') {
+								Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+								{
 
-								$message->to(trim($user->email), $user->first_name . " " . $user->last_name)
 
 
-		                        //if($model == 'Thirdparty'){
-		                        //	array_push($thirdPartyBccList, trim($user->email));
-		                        //} else {
-		                        	Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
-									{
-
-									    $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
-									    ->subject($mass_mail->subject)
-									    ->setBody($body_content, 'text/html');
-									});
-		                        //}
+									$message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+									    	->subject($mass_mail->subject)
+										    ->setBody($body_content, 'text/html');
+								});
 							}
-					/*if($model == 'Thirdparty') {
-                    	Mail::send([], [], function($message) use(&$thirdPartyBccList, &$mass_mail, &$body_content) {
-						    $message->bcc($thirdPartyBccList)
-						    ->subject($mass_mail->subject)
-						    ->setBody($body_content, 'text/html');
-						});
-                    }*/
-                		}
-						
-						
+						}
+                	}
 					if($model == 'Thirdparty' && count($emails) > 0) {
 						Mail::send([], [], function($message) use(&$mass_mail, &$authUser, &$body_content, &$emails)
 						{
-
 						    $message->to(trim($authUser->email), $authUser->first_name . " " . $authUser->last_name)
-						    ->bcc($emails)
-						    ->subject($mass_mail->subject)
-						    ->setBody($body_content, 'text/html');
+								    ->bcc($emails)
+								    ->subject($mass_mail->subject)
+								    ->setBody($body_content, 'text/html');
 						});
 					}
 					$mass_mail->status = 3;
