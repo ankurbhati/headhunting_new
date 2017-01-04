@@ -98,7 +98,7 @@
                             <td>
                               {{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
                             </td>
-                            <td>{{($candidate->workstate->id == 3)?$candidate->workstate->title."(".$candidate->thirdparty->email. ")": $candidate->workstate->title }}</td>
+                            <td>{{($candidate->workstate->id == 3)?$candidate->workstate->title:$candidate->workstate->title }}{{($candidate->source_id != "" && $candidate->workstate->id == 3)?"(<a href='".URL::route('view-third-party', array('id' => $candidate->thirdparty->id))."'>".$candidate->thirdparty->email."</a>)":""}}</td>
 		                        <td>{{$candidate->visa->title}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
