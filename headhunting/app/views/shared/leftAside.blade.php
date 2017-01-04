@@ -83,23 +83,26 @@
                 <i class="fa fa-search"></i> <span>Search</span>
               </a>
             </li>
+
+
             @if(Auth::user()->hasRole(1))
-			      <li>
-              <a href="{{ URL::route('salesteam') }}">
-                <i class="fa fa-users"></i> <span>Sales Team</span>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-users"></i> <span>My Team</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ URL::route('salesteam') }}"><i class="fa fa-users"></i> <span>Sales Team</span></a></li>
+                <li><a href="{{ URL::route('recruitmentteam') }}"><i class="fa fa-users"></i> <span>Recruitment Team</span></a></li>
+              </ul>
             </li>
-            <li>
-              <a href="{{ URL::route('recruitmentteam') }}">
-                <i class="fa fa-users"></i> <span>Recruitment Team</span>
-              </a>
-            </li>
-            @endif
+            @else
             <li>
               <a href="{{ URL::route('peers') }}">
                 <i class="fa fa-users"></i> <span>My Team</span>
               </a>
             </li>
+            @endif
+
             @if(Auth::user()->getRole() <= 6 || Auth::user()->hasRole(8))
             <li>
               <a href="{{ URL::route('mass-mail') }}">
