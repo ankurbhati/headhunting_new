@@ -90,6 +90,7 @@
                           <th>MSA Activation Date</th>
                         @endif
                         <th>Added At</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -119,11 +120,25 @@
                   <td>{{($thirdparty->msa_activation_date != "" && $thirdparty->msa_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->msa_activation_date)):""}}</td>
                 @endif
                 <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
+                <td>
+                  @if($thirdparty->status == 1)
+                  Blacklisted
+                  @else
+                  Active
+                  @endif
+                </td>
 									<td>
 										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
 								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 										  <a href="{{ URL::route('edit-third-party', array($thirdparty->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
 								  @endif
+                  @if($thirdparty->status == 1)
+                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->id)) }}" title="Unblock Third Party">
+                    <i class="fa fa-fw fa-ban text-danger"></i>
+                    </a>
+                  @else
+                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Block Third Party"><i class="fa fa-fw fa-ban text-danger"></i></a>
+                  @endif
 										@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 											<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 										@endif
@@ -146,6 +161,7 @@
                           <th>MSA Activation Date</th>
                         @endif
                         <th>Added At</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

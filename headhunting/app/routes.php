@@ -617,6 +617,22 @@ Route::group(array('before' => 'auth'), function() {
 	));
 
 	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/unblock-third-party/{id}', array(
+			'as'    =>    'unblock-third-party',
+			'uses'    =>    'ThirdpartyController@unblockThirdparty'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/block-third-party/{id}', array(
+			'as'    =>    'block-third-party',
+			'uses'    =>    'ThirdpartyController@blockThirdparty'
+	));
+
+	/**
 	 * Routes For REST API for states
 	 */
 	Route::match(array('GET'), '/third_party/', array(

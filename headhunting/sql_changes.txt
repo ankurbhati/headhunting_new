@@ -357,3 +357,7 @@ CREATE TABLE IF NOT EXISTS `user_activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 ALTER TABLE `user_activity` CHANGE `type` `type` SMALLINT NOT NULL COMMENT '1=>''submission_activity'', 2=>''candidate_multi_upload'', 3=>''candidate_single_upload'', 4=>''client_multi_upload'', 5=>''client_single_upload'', 6=>''job_post_creation'',7=>''job_post_assign'',8=>''job_post_submission'',9=>''job_post_submission_submit'';
+
+
+ALTER TABLE `sources` ADD `status` TINYINT( 2 ) NOT NULL DEFAULT '0' COMMENT '1=>Active, 0=>Blacklisted';
+

@@ -255,6 +255,9 @@ class ThirdpartyController extends HelperController {
 			if(!empty(Input::get('poc'))){
 				$q->where('poc', 'like', "%".Input::get('poc')."%");	
 			}
+			if(!empty(Input::get('status')) || Input::get('status') == '0' ) {
+				$q->where('status', '=', Input::get('status'));	
+			}
 			if(!empty(Input::get('phone'))) {
 				$q->where('phone', 'like', "%".Input::get('phone')."%");	
 			}
@@ -507,6 +510,40 @@ class ThirdpartyController extends HelperController {
 				Session::flash('flashmessagetxt', 'Deleted Successfully!!');
 				return Redirect::route('third-party-list');
 			}
+		}
+	}
+
+	/**
+	 *
+	 * deleteVendor() : Delete Vendor
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function unblockThirdparty($id) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) ) {
+			$thirdparty = Thirdparty::find($id);
+			$thirdparty->status = 0;
+			$thirdparty->save();
+			Session::flash('flashmessagetxt', 'Unblocked Successfully!!');
+			return Redirect::route('third-party-list');
+		}
+	}
+
+	/**
+	 *
+	 * deleteVendor() : Delete Vendor
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function blockThirdparty($id) {
+		if( Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) ) {
+			$thirdparty = Thirdparty::find($id);
+			$thirdparty->status = 1;
+			$thirdparty->save();
+			Session::flash('flashmessagetxt', 'Blocked Successfully!!');
+			return Redirect::route('third-party-list');
 		}
 	}
 	
