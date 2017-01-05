@@ -214,10 +214,10 @@ class CandidateController extends HelperController {
 				$q->where('candidates.email', 'like', "%".Input::get('email')."%");
 			} 
 			if(!empty(Input::get('first_name'))){
-				$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
+				$q->where('candidates.first_name', 'like', "%".Input::get('first_name')."%");	
 			}
 			if(!empty(Input::get('last_name'))) {
-				$q->where('last_name', 'like', "%".Input::get('last_name')."%");	
+				$q->where('candidates.last_name', 'like', "%".Input::get('last_name')."%");	
 			}
 			if(!empty(Input::get('visa_id'))) {
 				$q->where('visa_id', '=', Input::get('visa_id'));	
