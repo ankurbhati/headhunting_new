@@ -285,6 +285,51 @@ class ThirdpartyController extends HelperController {
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));
 	}
 
+	/**
+	 *
+	 * vendorList() : Vendor List
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function blacklistthirdpartyList() {
+
+		$q = Thirdparty::query();
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('email'))) {
+				$q->where('email', 'like', "%".Input::get('email')."%");
+			} 
+			if(!empty(Input::get('poc'))){
+				$q->where('poc', 'like', "%".Input::get('poc')."%");	
+			}
+			if(!empty(Input::get('phone'))) {
+				$q->where('phone', 'like', "%".Input::get('phone')."%");	
+			}
+			if(!empty(Input::get('phone_ext'))) {
+				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
+			}
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
+		}
+
+
+
+		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {
+			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
+				{
+				    $q->where('user_id','=', Auth::user()->id)->where('status', '=', '1');
+				})->paginate(100);
+		} else {
+			$thirdparties = $q->where('status', '=', '1')->paginate(100);
+		}
+
+		return View::make('Thirdparty.blacklistthirdpartyList')->with(array('title' => 'Black List Third Party List', 'thirdparties' => $thirdparties));
+	}
+
 
 	/**
 	 *

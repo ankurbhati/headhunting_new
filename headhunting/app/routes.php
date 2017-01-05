@@ -579,6 +579,14 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
+	Route::match(array('GET' , 'POST'), '/blacklist-third-parties', array(
+			'as'    =>    'blacklist-third-party-list',
+			'uses'    =>    'ThirdpartyController@blacklistthirdpartyList'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
 	Route::match(array('GET', 'POST'), '/source-list/{id}', array(
 			'as'    =>    'third-party-list-with-document',
 			'uses'    =>    'ThirdpartyController@thirdpartyListHasDocument'

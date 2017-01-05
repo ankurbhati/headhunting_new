@@ -127,7 +127,7 @@
                     <i class="fa fa-fw fa-ban text-danger"></i>
                     </a>
                   @else
-                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Block Third Party"><i class="fa fa-fw fa-ban text-danger"></i></a>
+                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Blacklist Third Party"><i class="fa fa-fw fa-ban text-danger"></i></a>
                   @endif
 									@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 										<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
