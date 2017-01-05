@@ -1111,4 +1111,47 @@ class UserController extends HelperController {
 	
 	// */1 * * * * /usr/bin/curl -k http://apetan.portal.com/send-mail-from-cron
 
+	/**
+	 *
+	 * activityList() : Activity List
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function activityList() {
+
+		
+		$types = array(
+			'2'=>'third-party-multi-upload',
+			'3'=>'third-party-single-upload',
+			'4'=>'client-multi-upload',
+			'5'=>'client-single-upload',
+			'6'=>'job-post-creation',
+			'7'=>'job-post-assign',
+			'9'=>'job-post-submission',
+			'10'=>'candidate-add'
+		);
+
+		$q = UserActivity::query();
+		$q->where('added_by', '=', Auth::user()->id);
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(!empty(Input::get('type'))) {
+				$q->where('type', '=', Input::get('type'));	
+			}
+
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
+
+		}
+		
+		$activities = $q->paginate(100);
+
+		return View::make('User.activityList')->with(array('title' => 'Activity List', 'activities' => $activities, 'types' => $types));
+	}
+
+
 }

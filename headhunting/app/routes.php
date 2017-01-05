@@ -656,4 +656,12 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'UserController@saveSettings'
 	));
 	/** ANKUR BHATI **/
+
+	/**
+	 * Routes For REST API for new Employee
+	 */
+	Route::match(array('GET', 'POST'), '/my-activity', array(
+			'as'    =>    'my-activity',
+			'uses'    =>    'UserController@activityList'
+	));
 });

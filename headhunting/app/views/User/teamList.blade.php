@@ -23,9 +23,7 @@
                         <th>Email</th>
                         <th>Designation</th>
                         <th>Roles</th>
-                        @if($jobPostId > 0)
-                          <th>Action</th>
-                        @endif
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -35,13 +33,16 @@
                             <td>{{$managerUser->email}}</td>
                             <td>{{$managerUser->designation}}</td>
                             <td>{{$managerUser->userRoles[0]->roles->role}}</td>
+                            <td>
                             @if($jobPostId > 0 && $jobPost->jobsAssignedToId($managerUser->id)->count() == 0)
-                              <th><a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $managerUser->id )) }}" title="Assign To {{$managerUser->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a></th>
+                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $managerUser->id )) }}" title="Assign To {{$managerUser->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a>
                             @else
                               @if($jobPostId > 0)
-                                <th>Already Assigned</th>
+                                Already Assigned
                               @endif
                             @endif
+                            <a href="{{ URL::route('my-activity') }}" title="My Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            </td>
                           </tr> 
                       @endforeach
 	                    @foreach($users as $user)
@@ -50,11 +51,16 @@
 		                        <td>{{$user->peer->email}}</td>
 		                        <td>{{$user->peer->designation}}</td>
 		                        <td>{{$user->peer->userRoles[0]->roles->role}}</td>
+                            <td>
                             @if($jobPostId > 0 && $jobPost->jobsAssignedToId($user->peer->id)->count() == 0)
-                              <th><a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $user->peer->id )) }}" title="Assign To {{$user->peer->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a></th>
+                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $user->peer->id )) }}" title="Assign To {{$user->peer->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a>
                             @else
-                              <th>Already Assigned</th>
+                              @if($jobPostId > 0)
+                                Already Assigned
+                              @endif
                             @endif
+                            <a href="{{ URL::route('my-activity') }}" title="My Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            </td>
 		                      </tr> 
 						          @endforeach
                     </tbody>
@@ -64,9 +70,7 @@
                         <th>Email</th>
                         <th>Designation</th>
                         <th>Roles</th>
-                        @if($jobPostId > 0)
-                          <th>Action</th>
-                        @endif
+                        <th>Action</th>
                       </tr>
                     </tfoot>
                   </table>
