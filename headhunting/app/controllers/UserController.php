@@ -944,6 +944,7 @@ class UserController extends HelperController {
 										{
 										    $q->where('user_id','=', $authUser->id);
 										})
+										->where('status', '=', 0)
 										->offset($mass_mail->limit_lower)
 						                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
 										->get();
