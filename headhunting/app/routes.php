@@ -684,7 +684,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Employee
 	 */
-	Route::match(array('GET', 'POST'), '/my-activity', array(
+	Route::match(array('GET', 'POST'), '/my-activity/{id}', array(
 			'as'    =>    'my-activity',
 			'uses'    =>    'UserController@activityList'
 	));
