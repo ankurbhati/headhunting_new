@@ -41,7 +41,7 @@
                                 Already Assigned
                               @endif
                             @endif
-                            <a href="{{ URL::route('my-activity') }}" title="My Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            <a href="{{ URL::route('my-activity', array('id' => $managerUser->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
                             </td>
                           </tr> 
                       @endforeach
@@ -59,7 +59,7 @@
                                 Already Assigned
                               @endif
                             @endif
-                            <a href="{{ URL::route('my-activity') }}" title="My Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            <a href="{{ URL::route('my-activity', array('id' => $user->peer->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
                             </td>
 		                      </tr> 
 						          @endforeach

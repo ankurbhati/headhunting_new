@@ -4,12 +4,6 @@
           <div class="row">
             <div class="col-xs-12">
             <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Data Table With Full Features</h3>
-                </div>
-
-
-
               {{ Form::open(array('class' =>
               'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
 
@@ -45,7 +39,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                 <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{$activities->getTotal()}}</span></p>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Records :  <span class="text-bold">{{$activities->getTotal()}}</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -64,7 +58,7 @@
                           </tr>
                       @empty
                         <p>No Activity Found</p>
-            @endforelse
+                      @endforelse
                     </tbody>
                     <tfoot>
                       <tr>
