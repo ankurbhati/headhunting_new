@@ -5,7 +5,7 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Data Table With Full Features</h3>
+                  <h3 class="box-title">Blacklisted Third Party Sources</h3>
                 </div><!-- /.box-header -->
 
                 {{ Form::open(array('class' =>
@@ -30,6 +30,15 @@
         <div class="col-sm-8">{{ Form::text('poc', "", array('class' =>
             'form-control', 'placeholder' => 'Enter Point Of Contact')); }} 
             <span class='errorlogin email-login'>{{$errors->first('poc');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::select('status', array('' => 'Please select status', '0'=>'Active', '1'=>'Blacklisted'), '', array('class' => 'form-control')) }}
+            <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 
@@ -65,7 +74,7 @@
 
                 <div class="box-body">
                 <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Third Parties Sources :  <span class="text-bold">{{$thirdparties->getTotal()}}</span></p>
+                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Blocked Third Parties Sources :  <span class="text-bold">{{$thirdparties->getTotal()}}</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -76,6 +85,7 @@
                         <th>NCA Document</th>
                         <th>MSA Document</th>
                         <th>Added At</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -100,6 +110,13 @@
                   <td>-</td>
                 @endif
                 <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
+                <td>
+                  @if($thirdparty->status == 1)
+                  Blacklisted
+                  @else
+                  Active
+                  @endif
+                </td>
 
 									<td>
 										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
@@ -112,6 +129,8 @@
                     </a>
                   @else
                     <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Block Third Party"><i class="fa fa-fw fa-ban text-danger"></i></a>
+                    <i class="fa fa-fw fa-check text-success"></i>
+                    </a>
                   @endif
 									@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 										<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
@@ -129,6 +148,7 @@
                         <th>Phone</th>
                         <th>NCA Document</th>
                         <th>MSA Document</th>
+                        <th>Added At</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>

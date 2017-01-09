@@ -944,6 +944,7 @@ class UserController extends HelperController {
 										{
 										    $q->where('user_id','=', $authUser->id);
 										})
+										->where('status', '=', 0)
 										->offset($mass_mail->limit_lower)
 						                ->limit($mass_mail->limit_upper - $mass_mail->limit_lower)
 										->get();
@@ -1118,7 +1119,7 @@ class UserController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
-	public function activityList() {
+	public function activityList($id) {
 
 		
 		$types = array(
@@ -1133,7 +1134,7 @@ class UserController extends HelperController {
 		);
 
 		$q = UserActivity::query();
-		$q->where('added_by', '=', Auth::user()->id);
+		$q->where('added_by', '=', $id);
 
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('type'))) {
