@@ -181,12 +181,18 @@ if($('#msa-group').length > 0) {
 	  }
 	};
 
-  $("#description").wysihtml5(optionsText);
+  /*$("#description").wysihtml5(optionsText);
   $("#disclaimer").wysihtml5(optionsText);
   $("#signature").wysihtml5(optionsText);
-  /*CKEDITOR.replace('description');
+  CKEDITOR.replace('description');
   CKEDITOR.replace('disclaimer');
   CKEDITOR.replace('signature');*/
+  bkLib.onDomLoaded(function() {
+  	new nicEditor({fullPanel : true, iconsPath : 'nicEdit/nicEditorIcons.gif'}).panelInstance('description');
+  	new nicEditor({fullPanel : true, iconsPath : 'nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
+  	new nicEditor({fullPanel : true, iconsPath : 'nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
+  });
+
  
   function getState(country){
 	    $.ajax({
