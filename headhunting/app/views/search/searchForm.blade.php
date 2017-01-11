@@ -1,6 +1,6 @@
 @extends('layouts.adminLayout')
 @section('content')
-<form class="form-horizontal" id="searchForm" method="post">
+<form class="form-horizontal" id="searchForm" method="get" action="{{ URL::route('search-result', array($jobId)) }}">
   <div class="form-group">
     <label for="jobTitle" class="col-sm-2 control-label">Job Title</label>
     <div class="col-sm-7">

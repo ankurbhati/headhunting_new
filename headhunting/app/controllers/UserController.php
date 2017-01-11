@@ -74,7 +74,7 @@ class UserController extends HelperController {
 		$q = User::query();
 		$q->with(array('userRoles'))->where('id', '!=', Auth::user()->id);
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
 				$q->where('email', 'like', "%".Input::get('email')."%");
 			} 
@@ -94,7 +94,7 @@ class UserController extends HelperController {
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
 
-		}
+		//}
 		
 		$users = $q->paginate(100);
 
@@ -742,7 +742,7 @@ class UserController extends HelperController {
 
 		$q = MassMail::query();
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('subject'))) {
 				$q->where('subject', 'like', "%".Input::get('subject')."%");
 			} 
@@ -762,7 +762,7 @@ class UserController extends HelperController {
 				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
-		}
+		//}
 
 		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8) ){
 			$mass_mails = $q->with('sendby')->orderBy('id', 'DESC')->paginate(100);

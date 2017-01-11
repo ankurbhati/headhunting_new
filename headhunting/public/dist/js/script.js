@@ -187,11 +187,7 @@ if($('#msa-group').length > 0) {
   CKEDITOR.replace('description');
   CKEDITOR.replace('disclaimer');
   CKEDITOR.replace('signature');*/
-  bkLib.onDomLoaded(function() {
-  	new nicEditor({fullPanel : true, iconsPath : 'nicEdit/nicEditorIcons.gif'}).panelInstance('description');
-  	new nicEditor({fullPanel : true, iconsPath : 'nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
-  	new nicEditor({fullPanel : true, iconsPath : 'nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
-  });
+  
 
  
   function getState(country){
@@ -316,6 +312,17 @@ if($('#msa-group').length > 0) {
 		//$form.submit();
 	});
 
+	bkLib.onDomLoaded(function() {
+		if($('#description').length>0){
+			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('description');
+		}
+		if($('#disclaimer').length>0){
+			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
+		}
+		if($('#signature').length>0){
+			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
+		}
+	});
 }(jQuery));
 
 

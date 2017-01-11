@@ -193,7 +193,7 @@ class SaleController extends HelperController {
 		}
 
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('title'))) {
 				$q->where('title', 'like', "%".Input::get('title')."%");
 			} 
@@ -205,7 +205,7 @@ class SaleController extends HelperController {
 				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
-		}
+		//}
 
 		$jobPost = $q->paginate(100);
 		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
@@ -407,7 +407,7 @@ class SaleController extends HelperController {
 			$join->on('submitted_by', '=', 'users.id');
 		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('submitted_by'))) {
 				$q->where('submitted_by', '=', Input::get('submitted_by'));	
 			}
@@ -419,7 +419,7 @@ class SaleController extends HelperController {
 				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
-		}
+		//}
 
 		if($id == 0) {
 			$candidateApplications = $q->paginate(100);

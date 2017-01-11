@@ -498,7 +498,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Employee
 	 */
-	Route::match(array('POST'), '/advance-search/{jobId?}', array(
+	Route::match(array('GET'), '/advance-search-result/{jobId?}', array(
 			'as'    =>    'search-result',
 			'uses'    =>    'SearchController@searchResult'
 	));

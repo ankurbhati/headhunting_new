@@ -12,7 +12,7 @@
 
 
                   {{ Form::open(array('class' =>
-  'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+  'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
                   <div class="form-group">
                       {{ Form::label('title', 'Job Title: ', array('class' => 'col-sm-3
                       control-label')); }}

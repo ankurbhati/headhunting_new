@@ -52,7 +52,7 @@
         {{ Form::label('description', 'Text: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::textarea('description', '', array('class' =>
-            'form-control', 'placeholder' => 'ex. Hello User,', 'required')); }}
+            'form-control', 'placeholder' => 'ex. Hello User,')); }}
             <span class='errorlogin'>{{$errors->first('description');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>

@@ -209,7 +209,7 @@ class CandidateController extends HelperController {
 		
 		$q = Candidate::query();
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
 				$q->where('candidates.email', 'like', "%".Input::get('email')."%");
 			} 
@@ -232,7 +232,7 @@ class CandidateController extends HelperController {
 				$q->whereBetween('candidates.created_at', [$fromDateTime, $toDateTime]);
 				//var_dump($result, DB::getQueryLog());exit;
 			}
-		}
+		//}
 
 		$candidates = $q->leftJoin('candidate_resumes', function($join) {
 	      $join->on('candidates.id', '=', 'candidate_resumes.candidate_id');

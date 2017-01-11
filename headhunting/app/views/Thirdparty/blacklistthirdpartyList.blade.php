@@ -9,7 +9,7 @@
                 </div><!-- /.box-header -->
 
                 {{ Form::open(array('class' =>
-'form-horizontal','id' => 'login-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
+'form-horizontal','id' => 'login-form',  'method' => 'GET', 'enctype' => 'multipart/form-data')) }}
 
     <div class="form-group">
         {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
@@ -30,15 +30,6 @@
         <div class="col-sm-8">{{ Form::text('poc', "", array('class' =>
             'form-control', 'placeholder' => 'Enter Point Of Contact')); }} 
             <span class='errorlogin email-login'>{{$errors->first('poc');}}@if(!empty($message)){{$message}}@endIf</span>
-        </div>
-    </div>
-
-    <div class="form-group">
-
-        {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
-        control-label')); }}
-        <div class="col-sm-8">{{ Form::select('status', array('' => 'Please select status', '0'=>'Active', '1'=>'Blacklisted'), '', array('class' => 'form-control')) }}
-            <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 

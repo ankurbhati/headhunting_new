@@ -167,7 +167,7 @@ class ClientController extends HelperController {
 			$q->where('created_by', '=', Auth::user()->id);
 		}
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('company_name'))) {
 				$q->where('company_name', 'like', "%".Input::get('company_name')."%");
 			}
@@ -191,7 +191,7 @@ class ClientController extends HelperController {
 				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
-		}
+		//}
 		
 		$clients = $q->paginate(100);
 

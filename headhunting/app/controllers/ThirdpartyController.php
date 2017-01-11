@@ -248,7 +248,7 @@ class ThirdpartyController extends HelperController {
 
 		$q = Thirdparty::query();
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
 				$q->where('email', 'like', "%".Input::get('email')."%");
 			} 
@@ -269,7 +269,7 @@ class ThirdpartyController extends HelperController {
 				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
-		}
+		//}
 
 
 
@@ -296,7 +296,7 @@ class ThirdpartyController extends HelperController {
 
 		$q = Thirdparty::query();
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
 				$q->where('email', 'like', "%".Input::get('email')."%");
 			} 
@@ -314,7 +314,7 @@ class ThirdpartyController extends HelperController {
 				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
-		}
+		//}
 
 
 
@@ -342,7 +342,7 @@ class ThirdpartyController extends HelperController {
 
 		$q = Thirdparty::query();
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			if(!empty(Input::get('email'))) {
 				$q->where('email', 'like', "%".Input::get('email')."%");
 			} 
@@ -368,7 +368,7 @@ class ThirdpartyController extends HelperController {
 				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 			}
 			
-		}
+		//}
 		if($id == 1) {
 			$q->where('msa_document', '!=', "");
 		} else {
