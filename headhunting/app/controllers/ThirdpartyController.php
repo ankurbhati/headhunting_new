@@ -248,30 +248,48 @@ class ThirdpartyController extends HelperController {
 
 		$q = Thirdparty::query();
 		
-		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if(!empty(Input::get('email'))) {
-				$q->where('email', 'like', "%".Input::get('email')."%");
-			} 
-			if(!empty(Input::get('poc'))){
-				$q->where('poc', 'like', "%".Input::get('poc')."%");	
-			}
-			if(!empty(Input::get('status')) || Input::get('status') == '0' ) {
-				$q->where('status', '=', Input::get('status'));	
-			}
-			if(!empty(Input::get('phone'))) {
-				$q->where('phone', 'like', "%".Input::get('phone')."%");	
-			}
-			if(!empty(Input::get('phone_ext'))) {
-				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
-			}
-			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
-				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
-				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
-				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
-			}
-		//}
+		if(!empty(Input::get('email'))) {
+			$q->where('email', 'like', "%".Input::get('email')."%");
+		} 
+		if(!empty(Input::get('poc'))){
+			$q->where('poc', 'like', "%".Input::get('poc')."%");	
+		}
+		if(!empty(Input::get('status')) || Input::get('status') == '0' ) {
+			$q->where('status', '=', Input::get('status'));	
+		}
+		if(!empty(Input::get('phone'))) {
+			$q->where('phone', 'like', "%".Input::get('phone')."%");	
+		}
+		if(!empty(Input::get('phone_ext'))) {
+			$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
+		}
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
+		if(!empty(Input::get('csv_download_input'))) {
+			$arrSelectFields = array('email', 'poc', 'phone', 'phone_ext', 'status');
 
+	        $q->select($arrSelectFields);
+	        $data = $q->whereHas('thirdPartyUsers', function($q) {
+			    $q->where('user_id','=', Auth::user()->id);
+			})->get();
 
+	        // passing the columns which I want from the result set. Useful when we have not selected required fields
+	        $arrColumns = array('email', 'poc', 'phone', 'phone_ext', 'status');
+	         
+	        // define the first row which will come as the first row in the csv
+	        $arrFirstRow = array('Email', 'Point Of Contact', 'Phone', 'Phone Ext', 'Status(0=>Blacklisted, 1=>Active)');
+	         
+	        // building the options array
+	        $options = array(
+	          'columns' => $arrColumns,
+	          'firstRow' => $arrFirstRow,
+	        );
+
+	        return $this->convertToCSV($data, $options);
+		}
 
 		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {
 			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
@@ -296,25 +314,46 @@ class ThirdpartyController extends HelperController {
 
 		$q = Thirdparty::query();
 		
-		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if(!empty(Input::get('email'))) {
-				$q->where('email', 'like', "%".Input::get('email')."%");
-			} 
-			if(!empty(Input::get('poc'))){
-				$q->where('poc', 'like', "%".Input::get('poc')."%");	
-			}
-			if(!empty(Input::get('phone'))) {
-				$q->where('phone', 'like', "%".Input::get('phone')."%");	
-			}
-			if(!empty(Input::get('phone_ext'))) {
-				$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
-			}
-			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
-				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
-				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
-				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
-			}
-		//}
+		if(!empty(Input::get('email'))) {
+			$q->where('email', 'like', "%".Input::get('email')."%");
+		} 
+		if(!empty(Input::get('poc'))){
+			$q->where('poc', 'like', "%".Input::get('poc')."%");	
+		}
+		if(!empty(Input::get('phone'))) {
+			$q->where('phone', 'like', "%".Input::get('phone')."%");	
+		}
+		if(!empty(Input::get('phone_ext'))) {
+			$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
+		}
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
+		
+		if(!empty(Input::get('csv_download_input'))) {
+			$arrSelectFields = array('email', 'poc', 'phone', 'phone_ext', 'status');
+
+	        $q->select($arrSelectFields);
+	        $data = $q->whereHas('thirdPartyUsers', function($q) {
+			    $q->where('user_id','=', Auth::user()->id)->where('status', '=', '1');
+			})->get();
+
+	        // passing the columns which I want from the result set. Useful when we have not selected required fields
+	        $arrColumns = array('email', 'poc', 'phone', 'phone_ext', 'status');
+	         
+	        // define the first row which will come as the first row in the csv
+	        $arrFirstRow = array('Email', 'Point Of Contact', 'Phone', 'Phone Ext', 'Status(0=>Blacklisted, 1=>Active)');
+	         
+	        // building the options array
+	        $options = array(
+	          'columns' => $arrColumns,
+	          'firstRow' => $arrFirstRow,
+	        );
+
+	        return $this->convertToCSV($data, $options);
+		}
 
 
 
@@ -342,37 +381,59 @@ class ThirdpartyController extends HelperController {
 
 		$q = Thirdparty::query();
 		
-		//if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if(!empty(Input::get('email'))) {
-				$q->where('email', 'like', "%".Input::get('email')."%");
-			} 
-			if(!empty(Input::get('poc'))){
-				$q->where('poc', 'like', "%".Input::get('poc')."%");	
+		
+		if(!empty(Input::get('email'))) {
+			$q->where('email', 'like', "%".Input::get('email')."%");
+		} 
+		if(!empty(Input::get('poc'))){
+			$q->where('poc', 'like', "%".Input::get('poc')."%");	
+		}
+		if(!empty(Input::get('phone'))) {
+			$q->where('phone', 'like', "%".Input::get('phone')."%");	
+		}
+		if($id != 1) {
+			if(!empty(Input::get('company_name'))) {
+				$q->where('nca_company_name', 'like', "%".Input::get('company_name')."%");	
 			}
-			if(!empty(Input::get('phone'))) {
-				$q->where('phone', 'like', "%".Input::get('phone')."%");	
+		} else {
+			if(!empty(Input::get('company_name'))) {
+				$q->where('msa_company_name', 'like', "%".Input::get('company_name')."%");	
 			}
-			if($id != 1) {
-				if(!empty(Input::get('company_name'))) {
-					$q->where('nca_company_name', 'like', "%".Input::get('company_name')."%");	
-				}
-			} else {
-				if(!empty(Input::get('company_name'))) {
-					$q->where('msa_company_name', 'like', "%".Input::get('company_name')."%");	
-				}
-			}
+		}
 
-			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
-				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
-				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
-				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
-			}
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
 			
-		//}
 		if($id == 1) {
 			$q->where('msa_document', '!=', "");
 		} else {
 			$q->where('nca_document', '!=', "");
+		}
+		
+		if(!empty(Input::get('csv_download_input'))) {
+			$arrSelectFields = array('email', 'poc', 'phone', 'phone_ext', 'status');
+
+	        $q->select($arrSelectFields);
+	        $data = $q->whereHas('thirdPartyUsers', function($q) {
+			    $q->where('user_id','=', Auth::user()->id);
+			})->get();
+
+	        // passing the columns which I want from the result set. Useful when we have not selected required fields
+	        $arrColumns = array('email', 'poc', 'phone', 'phone_ext', 'status');
+	         
+	        // define the first row which will come as the first row in the csv
+	        $arrFirstRow = array('Email', 'Point Of Contact', 'Phone', 'Phone Ext', 'Status(0=>Blacklisted, 1=>Active)');
+	         
+	        // building the options array
+	        $options = array(
+	          'columns' => $arrColumns,
+	          'firstRow' => $arrFirstRow,
+	        );
+
+	        return $this->convertToCSV($data, $options);
 		}
 
 		if(Auth::user()->getRole() == 4 || Auth::user()->getRole() == 5) {

@@ -46,8 +46,10 @@ if($('#msa-group').length > 0) {
   		var flag = setQuery();
   		console.log(flag);
   	}
+  	$('#csv_download_input').val("");
   	$("#searchForm").submit();
   });
+  
   if($('select#state_id').val() !== undefined) {
 
 	  $('select#country_id').change(function() {
@@ -296,6 +298,16 @@ if($('#msa-group').length > 0) {
 	    $('input[name="checkall"]').prop('checked', this.checked);
 	});
 
+	$('#download-button').on('click', function() {
+		$('#csv_download_input').val(1);
+	    $(this).closest('form').submit();
+	});
+
+	$('#search-button').on('click', function() {
+		$('#csv_download_input').val("");
+	    $(this).closest('form').submit();
+	});
+
 	$('form[name="candidate_mass_mail"]').on('submit', function(event){
 		//event.preventDefault();
 		var $form = $(this);
@@ -320,7 +332,7 @@ if($('#msa-group').length > 0) {
 			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
 		}
 		if($('#signature').length>0){
-			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
+			new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
 		}
 	});
 }(jQuery));
