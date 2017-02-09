@@ -888,8 +888,8 @@ class UserController extends HelperController {
 						'mail_group_id' =>  'required',
 						'description' => 'required',
 						'subject' => 'required|max:257',
-						'limit_lower' => 'required|integer|min:0|digits_between: 1,4',
-	  					'limit_upper' => 'required_with:limit_lower|integer|greater_than_field:limit_lower|digits_between:1,4'
+						'limit_lower' => 'required|integer|min:0|digits_between: 1,6',
+	  					'limit_upper' => 'required_with:limit_lower|integer|greater_than_field:limit_lower|digits_between:1,6'
 					), 
 					array(
 						'limit_upper.greater_than_field' => 'Upper Limit should be greater than Lower Limit and difference should not be more than 500 emails'
