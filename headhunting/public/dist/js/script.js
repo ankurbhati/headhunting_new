@@ -276,7 +276,7 @@ if($('#msa-group').length > 0) {
 	setInterval( function() {
 		var newDate_india = new Date();
 		var newDate_sans_francisco = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*7));
-		var newDate_new_york = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
+		var newDate_new_york = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*5));
 		var newDate_denver = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*6));
 		var newDate_chicago = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*5));
 		
