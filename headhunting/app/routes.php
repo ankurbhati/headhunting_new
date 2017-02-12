@@ -688,4 +688,76 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'my-activity',
 			'uses'    =>    'UserController@activityList'
 	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/add-third-party-organisation', array(
+			'as'    =>    'add-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@create'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('POST'), '/add-third-party-organisation', array(
+			'as'    =>    'add-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@createThirdpartyOrganisation'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET' , 'POST'), '/third-party-organisations', array(
+			'as'    =>    'third-party-organisation-list',
+			'uses'    =>    'ThirdpartyOrganisationController@thirdpartyList'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/view-third-party-organisation/{id}', array(
+		'as'    =>    'view-third-party-organisation',
+		'uses'    =>    'ThirdpartyOrganisationController@viewThirdparty'
+	));
+
+	/**
+	 * Routes For REST API for edit Vendor
+	 */
+	Route::match(array('GET'), '/edit-third-party-organisation/{id}', array(
+			'as'    =>    'edit-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@editThirdparty'
+	));
+
+	/**
+	 * Routes For REST API for edit Vendor
+	 */
+	Route::match(array('POST'), '/edit-third-party-organisation/{id}', array(
+			'as'    =>    'update-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@updateThirdparty'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/delete-third-party-organisation/{id}', array(
+			'as'    =>    'delete-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@deleteThirdparty'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('GET'), '/third-party-upload-organisation', array(
+			'as'    =>    'vendor-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@thirdpartyUpload'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('POST'), '/upload-third-party-organisation-csv', array(
+			'as'    =>    'upload-third-party-organisation-csv',
+			'uses'    =>    'ThirdpartyOrganisationController@uploadThirdpartyCsv'
+	));
 });
