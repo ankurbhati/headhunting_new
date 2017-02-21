@@ -87,7 +87,6 @@
               <ul class="treeview-menu">
                 <li><a href="{{ URL::route('third-party-organisation-list') }}"><i class="fa fa-user"></i>Organisations List</a></li>
                 <li><a href="{{ URL::route('add-third-party-organisation') }}"><i class="fa fa-user-plus"></i>Add Organisation</a></li>
-                <li><a href="{{ URL::route('vendor-third-party-organisation') }}"><i class="fa fa-user"></i>Upload Organisations</a></li>
               </ul>
             </li>
             @endif
