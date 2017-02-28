@@ -108,6 +108,12 @@ class CandidateController extends HelperController {
 					} else {
 						$thirdparty = new Thirdparty();
 						$thirdparty->email = trim(Input::get('third_party_id'));
+						$org_array = $this->getThirdPartyOrganisation($thirdparty->email);
+						if (!$org_array[0]) {
+							// Setting status as mca and nsa data not provided
+							$thirdparty->status = 2;
+						}
+						$thirdparty->source_organisation_id = $org_array[1];
 						$thirdparty->save();
 						$mail_group = new MailGroupMember();
 						$mail_group->group_id = 3;
@@ -698,4 +704,25 @@ class CandidateController extends HelperController {
 		}
 		return $this->sendJsonResponseOnly($response);
 	}
+
+	private function getThirdPartyOrganisation($email) {
+		$result = array();
+		$domain = substr($email, strrpos($email, '@')+1);
+		$org = ThirdpartyOrganisation::where('domain', '=', $domain)->get();
+		if(!$org->isEmpty()) {
+			$org = $org->first();
+		} else {
+			$org = new ThirdpartyOrganisation();
+			$org->domain = $domain;
+			$org->save();
+		}
+		if($org->nca_document && $org->msa_document) {
+			$result[0] = 1;
+		} else {
+			$result[0] = 0;
+		}
+		$result[1] = $org->id;
+		return $result;
+	}
+
 }

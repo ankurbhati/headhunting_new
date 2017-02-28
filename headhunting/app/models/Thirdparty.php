@@ -48,4 +48,9 @@ class Thirdparty extends Eloquent {
         return $this->hasMany('Thirdpartyuser','source_id','id');
     }
 
+    public function organisation() {
+    
+        return $this->belongsTo('ThirdpartyOrganisation','source_organisation_id','id');
+    }
+
 }

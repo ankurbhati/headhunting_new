@@ -74,6 +74,12 @@ class ThirdpartyController extends HelperController {
 					$third_party = new Thirdparty();
 					$third_party->poc = $line[0];
 					$third_party->email = $line[1];
+					$org_array = $this->getThirdPartyOrganisation($third_party->email);
+					if (!$org_array[0]) {
+						// Setting status as mca and nsa data not provided
+						$third_party->status = 2;
+					}
+					$third_party->source_organisation_id = $org_array[1];
 					$third_party->phone = $line[2];
 					$third_party->phone_ext = $line[3];
 					$third_party->created_by = $user_id;
@@ -88,7 +94,7 @@ class ThirdpartyController extends HelperController {
 					$thirdpartyuser->save();
 					$added_count++;
 				}
-			} catch(Exception $e){
+			} catch(Exception $e) {
 				$message .= "Error while adding email: ".$line[1]."<br />";
 			} 
 			$count++;
@@ -161,10 +167,16 @@ class ThirdpartyController extends HelperController {
 					$thirdparty->phone = Input::get('phone');
 					$thirdparty->phone_ext = Input::get('phone_ext');
 					$thirdparty->created_by = $user_id;
-					$thirdparty->nca_company_name = Input::get('nca_company_name');
+					$org_array = $this->getThirdPartyOrganisation($thirdparty->email);
+					if (!$org_array[0]) {
+						// Setting status as mca and nsa data not provided
+						$thirdparty->status = 2;
+					}
+					$thirdparty->source_organisation_id = $org_array[1];
+					/*$thirdparty->nca_company_name = Input::get('nca_company_name');
 					$thirdparty->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
 					$thirdparty->msa_company_name = Input::get('msa_company_name');
-					$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+					$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));*/
 					
 					// Checking Authorised or not
 					if($thirdparty->save()) {
@@ -174,7 +186,7 @@ class ThirdpartyController extends HelperController {
 						$mail_group->user_id = $thirdparty->id;
 						$mail_group->save();
 						
-						if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+						/*if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
 							list($msg, $fileType) = $this->check_resume_validity("nca_document");
 							if($msg){
 								# error
@@ -210,7 +222,7 @@ class ThirdpartyController extends HelperController {
 							}
 						}
 
-						$thirdparty->save();
+						$thirdparty->save();*/
 						$thirdpartyuser = new Thirdpartyuser();
 						$thirdpartyuser->user_id = Auth::user()->id;
 						$thirdpartyuser->source_id = $thirdparty->id;
@@ -344,7 +356,7 @@ class ThirdpartyController extends HelperController {
 	        $arrColumns = array('email', 'poc', 'phone', 'phone_ext', 'status');
 	         
 	        // define the first row which will come as the first row in the csv
-	        $arrFirstRow = array('Email', 'Point Of Contact', 'Phone', 'Phone Ext', 'Status(0=>Blacklisted, 1=>Active)');
+	        $arrFirstRow = array('Email', 'Point Of Contact', 'Phone', 'Phone Ext', 'Status(1=>Blacklisted, 0=>Active)');
 	         
 	        // building the options array
 	        $options = array(
@@ -549,10 +561,10 @@ class ThirdpartyController extends HelperController {
 				$thirdparty->phone = Input::get('phone');
 				$thirdparty->phone_ext = Input::get('phone_ext');
 
-				$thirdparty->nca_company_name = Input::get('nca_company_name');
-					$thirdparty->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
-					$thirdparty->msa_company_name = Input::get('msa_company_name');
-					$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+				/*$thirdparty->nca_company_name = Input::get('nca_company_name');
+				$thirdparty->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+				$thirdparty->msa_company_name = Input::get('msa_company_name');
+				$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
 
 				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
 					list($msg, $fileType) = $this->check_resume_validity("nca_document");
@@ -588,7 +600,7 @@ class ThirdpartyController extends HelperController {
 							$thirdparty->msa_document = end($tmp);
 						}
 					}
-				}
+				}*/
 
 				// Checking Authorised or not
 				if($thirdparty->save()) {
@@ -687,6 +699,26 @@ class ThirdpartyController extends HelperController {
 	    }
 
 		return array($msg, $target_file);
+	}
+
+	private function getThirdPartyOrganisation($email) {
+		$result = array();
+		$domain = substr($email, strrpos($email, '@')+1);
+		$org = ThirdpartyOrganisation::where('domain', '=', $domain)->get();
+		if(!$org->isEmpty()) {
+			$org = $org->first();
+		} else {
+			$org = new ThirdpartyOrganisation();
+			$org->domain = $domain;
+			$org->save();
+		}
+		if($org->nca_document && $org->msa_document) {
+			$result[0] = 1;
+		} else {
+			$result[0] = 0;
+		}
+		$result[1] = $org->id;
+		return $result;
 	}
 
 }

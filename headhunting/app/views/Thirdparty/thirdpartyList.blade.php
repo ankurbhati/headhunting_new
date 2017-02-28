@@ -36,7 +36,7 @@
     <div class="form-group">
         {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::select('status', array('' => 'Please select status', '0'=>'Active', '1'=>'Blacklisted'), '', array('class' => 'form-control')) }}
+        <div class="col-sm-8">{{ Form::select('status', array('' => 'Please select status', '0'=>'Active', '1'=>'Blacklisted', '2'=>'MSA/NCA Incomplete'), '', array('class' => 'form-control')) }}
             <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
@@ -99,16 +99,16 @@
 								<td>{{$thirdparty->email}}</td>
 									<td>{{$thirdparty->poc}}</td>
 									<td>{{$thirdparty->phone}}</td>
-                @if($thirdparty->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document)))
+                @if($thirdparty->organisation->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document)))
                   <td>
-                    <a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
+                    <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
                   </td>
                 @else
                   <td>-</td>
                 @endif
-								@if($thirdparty->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document)))
+								@if($thirdparty->organisation->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document)))
                   <td>
-                    <a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
+                    <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
                   </td>
                 @else
                   <td>-</td>
@@ -117,6 +117,8 @@
                 <td>
                   @if($thirdparty->status == 1)
                   Blacklisted
+                  @elseif($thirdparty->status == 2)
+                  MSA/NCA Incomplete
                   @else
                   Active
                   @endif
