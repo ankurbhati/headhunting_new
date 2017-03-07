@@ -46,8 +46,10 @@ if($('#msa-group').length > 0) {
   		var flag = setQuery();
   		console.log(flag);
   	}
+  	$('#csv_download_input').val("");
   	$("#searchForm").submit();
   });
+  
   if($('select#state_id').val() !== undefined) {
 
 	  $('select#country_id').change(function() {
@@ -181,12 +183,14 @@ if($('#msa-group').length > 0) {
 	  }
 	};
 
-  $("#description").wysihtml5(optionsText);
+  /*$("#description").wysihtml5(optionsText);
   $("#disclaimer").wysihtml5(optionsText);
   $("#signature").wysihtml5(optionsText);
-  /*CKEDITOR.replace('description');
+  CKEDITOR.replace('description');
   CKEDITOR.replace('disclaimer');
   CKEDITOR.replace('signature');*/
+  
+
  
   function getState(country){
 	    $.ajax({
@@ -272,7 +276,7 @@ if($('#msa-group').length > 0) {
 	setInterval( function() {
 		var newDate_india = new Date();
 		var newDate_sans_francisco = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*7));
-		var newDate_new_york = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*4));
+		var newDate_new_york = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*5));
 		var newDate_denver = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*6));
 		var newDate_chicago = new Date((newDate_india.getTime() + (newDate_india.getTimezoneOffset() * 60000)) - (3600000*5));
 		
@@ -294,6 +298,16 @@ if($('#msa-group').length > 0) {
 	    $('input[name="checkall"]').prop('checked', this.checked);
 	});
 
+	$('#download-button').on('click', function() {
+		$('#csv_download_input').val(1);
+	    $(this).closest('form').submit();
+	});
+
+	$('#search-button').on('click', function() {
+		$('#csv_download_input').val("");
+	    $(this).closest('form').submit();
+	});
+
 	$('form[name="candidate_mass_mail"]').on('submit', function(event){
 		//event.preventDefault();
 		var $form = $(this);
@@ -310,6 +324,17 @@ if($('#msa-group').length > 0) {
 		//$form.submit();
 	});
 
+	bkLib.onDomLoaded(function() {
+		if($('#description').length>0){
+			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('description');
+		}
+		if($('#disclaimer').length>0){
+			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
+		}
+		if($('#signature').length>0){
+			new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
+		}
+	});
 }(jQuery));
 
 

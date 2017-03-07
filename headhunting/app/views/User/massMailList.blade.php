@@ -10,7 +10,7 @@
 
 
                 {{ Form::open(array('class' =>
-  'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+  'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
 
                 <div class="form-group">
                     {{ Form::label('subject', 'Subject: ', array('class' => 'col-sm-3

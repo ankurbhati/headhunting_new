@@ -79,6 +79,17 @@
               </ul>
             </li>
             @endif
+            @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8))
+              <li class="treeview">
+              <a href="#">
+                <i class="fa fa-users"></i> <span>Organisations</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ URL::route('third-party-organisation-list') }}"><i class="fa fa-user"></i>Organisations List</a></li>
+                <li><a href="{{ URL::route('add-third-party-organisation') }}"><i class="fa fa-user-plus"></i>Add Organisation</a></li>
+              </ul>
+            </li>
+            @endif
             <li>
               <a href="{{ URL::route('advance-search') }}">
                 <i class="fa fa-search"></i> <span>Search</span>

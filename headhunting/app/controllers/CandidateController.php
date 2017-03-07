@@ -108,6 +108,12 @@ class CandidateController extends HelperController {
 					} else {
 						$thirdparty = new Thirdparty();
 						$thirdparty->email = trim(Input::get('third_party_id'));
+						$org_array = $this->getThirdPartyOrganisation($thirdparty->email);
+						if (!$org_array[0]) {
+							// Setting status as mca and nsa data not provided
+							$thirdparty->status = 2;
+						}
+						$thirdparty->source_organisation_id = $org_array[1];
 						$thirdparty->save();
 						$mail_group = new MailGroupMember();
 						$mail_group->group_id = 3;
@@ -209,29 +215,48 @@ class CandidateController extends HelperController {
 		
 		$q = Candidate::query();
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if(!empty(Input::get('email'))) {
-				$q->where('candidates.email', 'like', "%".Input::get('email')."%");
-			} 
-			if(!empty(Input::get('first_name'))){
-				$q->where('candidates.first_name', 'like', "%".Input::get('first_name')."%");	
-			}
-			if(!empty(Input::get('last_name'))) {
-				$q->where('candidates.last_name', 'like', "%".Input::get('last_name')."%");	
-			}
-			if(!empty(Input::get('visa_id'))) {
-				$q->where('visa_id', '=', Input::get('visa_id'));	
-			}
-			if(!empty(Input::get('added_by'))) {
-				$q->where('added_by', '=', Input::get('added_by'));	
-			}
-			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
-				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
-				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
-				//DB::enableQueryLog();
-				$q->whereBetween('candidates.created_at', [$fromDateTime, $toDateTime]);
-				//var_dump($result, DB::getQueryLog());exit;
-			}
+		if(!empty(Input::get('email'))) {
+			$q->where('candidates.email', 'like', "%".Input::get('email')."%");
+		} 
+		if(!empty(Input::get('first_name'))){
+			$q->where('candidates.first_name', 'like', "%".Input::get('first_name')."%");	
+		}
+		if(!empty(Input::get('last_name'))) {
+			$q->where('candidates.last_name', 'like', "%".Input::get('last_name')."%");	
+		}
+		if(!empty(Input::get('visa_id'))) {
+			$q->where('visa_id', '=', Input::get('visa_id'));	
+		}
+		if(!empty(Input::get('added_by'))) {
+			$q->where('added_by', '=', Input::get('added_by'));	
+		}
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			//DB::enableQueryLog();
+			$q->whereBetween('candidates.created_at', [$fromDateTime, $toDateTime]);
+			//var_dump($result, DB::getQueryLog());exit;
+		}
+		
+		if(!empty(Input::get('csv_download_input'))) {
+			$arrSelectFields = array('email', 'first_name', 'last_name', 'phone', 'designation');
+
+	        $q->select($arrSelectFields);
+	        $data = $q->get();
+
+	        // passing the columns which I want from the result set. Useful when we have not selected required fields
+	        $arrColumns = array('email', 'first_name', 'last_name', 'phone', 'designation');
+	         
+	        // define the first row which will come as the first row in the csv
+	        $arrFirstRow = array('Email', 'First Name', 'Last Name', 'Phone', 'Designation');
+	         
+	        // building the options array
+	        $options = array(
+	          'columns' => $arrColumns,
+	          'firstRow' => $arrFirstRow,
+	        );
+
+	        return $this->convertToCSV($data, $options);
 		}
 
 		$candidates = $q->leftJoin('candidate_resumes', function($join) {
@@ -679,4 +704,25 @@ class CandidateController extends HelperController {
 		}
 		return $this->sendJsonResponseOnly($response);
 	}
+
+	private function getThirdPartyOrganisation($email) {
+		$result = array();
+		$domain = substr($email, strrpos($email, '@')+1);
+		$org = ThirdpartyOrganisation::where('domain', '=', $domain)->get();
+		if(!$org->isEmpty()) {
+			$org = $org->first();
+		} else {
+			$org = new ThirdpartyOrganisation();
+			$org->domain = $domain;
+			$org->save();
+		}
+		if($org->nca_document && $org->msa_document) {
+			$result[0] = 1;
+		} else {
+			$result[0] = 0;
+		}
+		$result[1] = $org->id;
+		return $result;
+	}
+
 }

@@ -498,7 +498,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Employee
 	 */
-	Route::match(array('POST'), '/advance-search/{jobId?}', array(
+	Route::match(array('GET'), '/advance-search-result/{jobId?}', array(
 			'as'    =>    'search-result',
 			'uses'    =>    'SearchController@searchResult'
 	));
@@ -688,4 +688,61 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'my-activity',
 			'uses'    =>    'UserController@activityList'
 	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/add-third-party-organisation', array(
+			'as'    =>    'add-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@create'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('POST'), '/add-third-party-organisation', array(
+			'as'    =>    'add-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@createThirdpartyOrganisation'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET' , 'POST'), '/third-party-organisations', array(
+			'as'    =>    'third-party-organisation-list',
+			'uses'    =>    'ThirdpartyOrganisationController@thirdpartyOrganisationList'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/view-third-party-organisation/{id}', array(
+		'as'    =>    'view-third-party-organisation',
+		'uses'    =>    'ThirdpartyOrganisationController@viewThirdpartyOrganisation'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/delete-third-party-organisation/{id}', array(
+			'as'    =>    'delete-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@deleteThirdpartyOrganisation'
+	));
+
+	/**
+	 * Routes For REST API for edit Vendor
+	 */
+	Route::match(array('GET'), '/edit-third-party-organisation/{id}', array(
+			'as'    =>    'edit-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@editThirdpartyOrganisation'
+	));
+
+	/**
+	 * Routes For REST API for edit Vendor
+	 */
+	Route::match(array('POST'), '/edit-third-party-organisation/{id}', array(
+			'as'    =>    'update-third-party-organisation',
+			'uses'    =>    'ThirdpartyOrganisationController@updateThirdpartyOrganisation'
+	));
+
 });

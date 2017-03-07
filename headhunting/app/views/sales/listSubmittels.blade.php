@@ -11,7 +11,7 @@
 
 
                 {{ Form::open(array('class' =>
-'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
 
                 <div class="form-group">
                     {{ Form::label('submitted_by', 'Submitted By: ', array('class' => 'col-sm-3

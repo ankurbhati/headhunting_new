@@ -193,18 +193,38 @@ class SaleController extends HelperController {
 		}
 
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if(!empty(Input::get('title'))) {
-				$q->where('title', 'like', "%".Input::get('title')."%");
-			} 
-			if(!empty(Input::get('type_of_employment'))){
-				$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
-			}
-			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
-				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
-				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
-				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
-			}
+		
+		if(!empty(Input::get('title'))) {
+			$q->where('title', 'like', "%".Input::get('title')."%");
+		} 
+		if(!empty(Input::get('type_of_employment'))){
+			$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
+		}
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
+
+		if(!empty(Input::get('csv_download_input'))) {
+			$arrSelectFields = array('title', 'mode_of_interview', 'duration', 'description');
+
+	        $q->select($arrSelectFields);
+	        $data = $q->get();
+
+	        // passing the columns which I want from the result set. Useful when we have not selected required fields
+	        $arrColumns = array('title', 'mode_of_interview', 'duration', 'description');
+	         
+	        // define the first row which will come as the first row in the csv
+	        $arrFirstRow = array('Title', 'Mode Of Interview', 'Duration(In Months)', 'Description');
+	         
+	        // building the options array
+	        $options = array(
+	          'columns' => $arrColumns,
+	          'firstRow' => $arrFirstRow,
+	        );
+
+	        return $this->convertToCSV($data, $options);
 		}
 
 		$jobPost = $q->paginate(100);
@@ -407,18 +427,16 @@ class SaleController extends HelperController {
 			$join->on('submitted_by', '=', 'users.id');
 		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if(!empty(Input::get('submitted_by'))) {
-				$q->where('submitted_by', '=', Input::get('submitted_by'));	
-			}
-			if(!empty(Input::get('status'))) {
-				$q->where('status', '=', Input::get('status'));	
-			}
-			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
-				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
-				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
-				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
-			}
+		if(!empty(Input::get('submitted_by'))) {
+			$q->where('submitted_by', '=', Input::get('submitted_by'));	
+		}
+		if(!empty(Input::get('status'))) {
+			$q->where('status', '=', Input::get('status'));	
+		}
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 		}
 
 		if($id == 0) {

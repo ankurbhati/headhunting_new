@@ -8,5 +8,7 @@ return array(
 	'job_post_creation'=>'%s has created %s requirement',  //type 6
 	'job_post_assign'=>'%s has assigned %s requirement to %s',  //type 7
 	'job_post_submission'=>'%s has submitted %s requirement', //type 9
-	'candidate_add' =>'%s has added %s candidate' //type 10
+	'candidate_add' =>'%s has added %s candidate', //type 10
+	'org_add' =>'%s has added %s organisation', //type 11
 );
+

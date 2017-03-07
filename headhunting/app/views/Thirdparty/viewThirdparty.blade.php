@@ -30,8 +30,8 @@
 	    <div class="row"><div class="col-sm-4">
 	        NCA Document:
 	        </div><div class="col-sm-8">
-	        	@if($thirdparty->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document)))
-					<a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>	
+	        	@if($thirdparty->organisation->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document)))
+					<a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>	
 				@else
 					{{"-"}}
 				@endif
@@ -41,8 +41,8 @@
 	        MSA Document:
 	        </div>
 	        <div class="col-sm-8">
-	        	@if($thirdparty->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document)))
-					<a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
+	        	@if($thirdparty->organisation->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document)))
+					<a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
 				@else
 					{{"-"}}
 				@endif
@@ -53,6 +53,18 @@
 	        </div>
 	        <div class="col-sm-8">
 	        	{{$thirdparty->createdby->first_name. " ".$thirdparty->createdby->last_name }}
+	        </div>
+	    </div>
+	    <div class="row"><div class="col-sm-4">
+	        Status:
+	        </div><div class="col-sm-8">
+	        	@if($thirdparty->status == 1)
+              		Blacklisted
+              	@elseif($thirdparty->status == 2)
+              		MSA/NCA Incomplete
+              	@else
+              		Active
+              	@endif
 	        </div>
 	    </div>
 	    <div class="row"><div class="col-sm-4">

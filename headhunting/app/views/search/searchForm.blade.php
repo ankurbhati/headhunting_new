@@ -1,6 +1,6 @@
 @extends('layouts.adminLayout')
 @section('content')
-<form class="form-horizontal" id="searchForm" method="post">
+<form class="form-horizontal" id="searchForm" method="get" action="{{ URL::route('search-result', array($jobId)) }}">
   <div class="form-group">
     <label for="jobTitle" class="col-sm-2 control-label">Job Title</label>
     <div class="col-sm-7">
@@ -43,9 +43,16 @@
   {{ Form::hidden('searchQuery', '', array('id'=>'searchQuery')) }}
   {{ Form::hidden('searchType', '', array('id'=>'searchType')) }}
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button id="submitSearch" type="submit" class="btn btn-primary">Search</button>
-    </div>
+    
   </div>
+  <div class="form-group row ">
+      <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
+      <div class="col-sm-3">
+        <button id="submitSearch" style="float:right" type="submit" class="btn btn-primary">Search</button>
+      </div>
+      <!--<div class="col-sm-8">
+          {{ Form::button('Download Csv', array('class' => 'btn btn-info', 'id' => 'download-button', 'style'=>"float:right") ); }}
+      </div>-->
+    </div>
 </form>
 @stop

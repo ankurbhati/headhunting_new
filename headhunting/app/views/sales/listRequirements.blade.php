@@ -12,7 +12,7 @@
 
 
                   {{ Form::open(array('class' =>
-  'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+  'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
                   <div class="form-group">
                       {{ Form::label('title', 'Job Title: ', array('class' => 'col-sm-3
                       control-label')); }}
@@ -41,10 +41,14 @@
                   </div>
 
                   <div class="form-group row ">
-                      <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
-                          btn-info', 'id' => 'requirement-button') ); }}</div>
-
-                 </div>
+                    <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
+                    <div class="col-sm-3">
+                        {{ Form::button('Search', array('class' => 'btn btn-info', 'id' => 'search-button', 'style'=>"float:right") ); }}
+                    </div>
+                    <div class="col-sm-8">
+                        {{ Form::button('Download Csv', array('class' => 'btn btn-info', 'id' => 'download-button', 'style'=>"float:right") ); }}
+                    </div>
+                  </div>
 
               {{ Form::close() }}
 

@@ -135,7 +135,26 @@ class SearchController extends HelperController {
 					}
 		    	}
 
+			 	if(!empty(Input::get('csv_download_input'))) {
+					$arrSelectFields = array('designation', 'visa', 'region', 'resume');
 
+			        $q->select($arrSelectFields);
+			        $data = $q->get();
+
+			        // passing the columns which I want from the result set. Useful when we have not selected required fields
+			        $arrColumns = array('designation', 'visa', 'region', 'resume');
+			         
+			        // define the first row which will come as the first row in the csv
+			        $arrFirstRow = array('Designation', 'Visa', 'Region', 'Resume');
+			         
+			        // building the options array
+			        $options = array(
+			          'columns' => $arrColumns,
+			          'firstRow' => $arrFirstRow,
+			        );
+
+			        return $this->convertToCSV($data, $options);
+				}
 
 		    	$candidate_resumes = $q->paginate(100);	
 
@@ -204,6 +223,26 @@ class SearchController extends HelperController {
 		    }
 	  	} else {
 	    	// Show all posts if no query is set
+	    	if(!empty(Input::get('csv_download_input'))) {
+				$arrSelectFields = array('designation', 'visa', 'region', 'resume');
+				$q = CandidateResume::query();
+		        $q->select($arrSelectFields);
+		        $data = $q->get();
+
+		        // passing the columns which I want from the result set. Useful when we have not selected required fields
+		        $arrColumns = array('designation', 'visa', 'region', 'resume');
+		         
+		        // define the first row which will come as the first row in the csv
+		        $arrFirstRow = array('Designation', 'Visa', 'Region', 'Resume');
+		         
+		        // building the options array
+		        $options = array(
+		          'columns' => $arrColumns,
+		          'firstRow' => $arrFirstRow,
+		        );
+
+		        return $this->convertToCSV($data, $options);
+			}
 	    	$candidate_resumes = CandidateResume::paginate(100);
 	    }
 	    $queries = DB::getQueryLog();

@@ -361,3 +361,37 @@ ALTER TABLE `user_activity` CHANGE `type` `type` SMALLINT NOT NULL COMMENT '1=>'
 
 ALTER TABLE `sources` ADD `status` TINYINT( 2 ) NOT NULL DEFAULT '0' COMMENT '1=>Active, 0=>Blacklisted';
 
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `source_organizations` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `domain` varchar(255) NOT NULL,
+  `nca_document` varchar(255) DEFAULT NULL,
+  `nca_description` text,
+  `nca_activation_date` datetime DEFAULT NULL,
+  `msa_document` varchar(255) DEFAULT NULL,
+  `msa_description` text,
+  `msa_activation_date` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `domain` (`domain`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+
+ALTER TABLE `sources` ADD `source_organisation_id` BIGINT NOT NULL AFTER `phone_ext` ;
+ALTER TABLE `sources` ADD INDEX ( `source_organisation_id` ) ;
+ALTER TABLE `sources` ADD FOREIGN KEY ( `source_organisation_id` ) REFERENCES `headhunting`.`source_organizations` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE;

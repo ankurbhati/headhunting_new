@@ -79,8 +79,10 @@
 	    {{ HTML::script("dist/js/pages/dashboard.js")}}
     	{{ HTML::script("plugins/input-mask/jquery.inputmask.js")}}
 	    {{ HTML::script("plugins/input-mask/jquery.inputmask.date.extensions.js")}}
+	    <script src="/nicEdit/nicEdit.js" type="text/javascript"></script>
 	    {{ HTML::script("dist/js/script.js")}}
-	    <!--<script src="//cdn.ckeditor.com/4.6.1/full/ckeditor.js"></script>-->
+	    <!-- <script src="//cdn.ckeditor.com/4.6.1/full/ckeditor.js"></script>
+	    <script src="ckeditor/ckeditor.js"></script>-->
 	    <script>
 	    @if(Session::has('flashmessagetxt'))
 			var message_text = {{ "'".Session::get('flashmessagetxt') ."'"}};
