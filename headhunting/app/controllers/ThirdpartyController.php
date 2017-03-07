@@ -403,14 +403,9 @@ class ThirdpartyController extends HelperController {
 		if(!empty(Input::get('phone'))) {
 			$q->where('phone', 'like', "%".Input::get('phone')."%");	
 		}
-		if($id != 1) {
-			if(!empty(Input::get('company_name'))) {
-				$q->where('nca_company_name', 'like', "%".Input::get('company_name')."%");	
-			}
-		} else {
-			if(!empty(Input::get('company_name'))) {
-				$q->where('msa_company_name', 'like', "%".Input::get('company_name')."%");	
-			}
+
+		if(!empty(Input::get('status')) || Input::get('status') == '0' ) {
+			$q->where('status', '=', Input::get('status'));	
 		}
 
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
@@ -418,11 +413,20 @@ class ThirdpartyController extends HelperController {
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 		}
-			
+
+		$q->join('source_organizations', 'sources.source_organisation_id', '=', 'source_organizations.id');
 		if($id == 1) {
-			$q->where('msa_document', '!=', "");
+            $q->where('source_organizations.msa_document', '!=', '');
+			/*$q->whereHas('organisation', function($a) use ($id)
+			{
+			    $a->where('msa_document', '!=', '');
+			});*/
 		} else {
-			$q->where('nca_document', '!=', "");
+			$q->where('source_organizations.nca_document', '!=', '');
+			/*$q->whereHas('organisation', function($q) 
+			{
+				$q->where('nca_document', '=', '')
+			});*/
 		}
 		
 		if(!empty(Input::get('csv_download_input'))) {
@@ -721,4 +725,7 @@ class ThirdpartyController extends HelperController {
 		return $result;
 	}
 
+	public function getDbFix($id) {
+		print 'In get db fix';exit;
+	}
 }
