@@ -34,11 +34,10 @@
         </div>
     </div>
     <div class="form-group">
-        {{ Form::label('company_name', 'Company Name: ', array('class' => 'col-sm-3
+        {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('company_name', "", array('class' =>
-            'form-control', 'placeholder' => 'Enter Company Name')); }} 
-            <span class='errorlogin email-login'>{{$errors->first('company_name');}}@if(!empty($message)){{$message}}@endIf</span>
+        <div class="col-sm-8">{{ Form::select('status', array('' => 'Please select status', '0'=>'Active', '1'=>'Blacklisted', '2'=>'MSA/NCA Incomplete'), '', array('class' => 'form-control')) }}
+            <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 
@@ -104,25 +103,25 @@
 		                    <tr>
 								<td>{{$thirdparty->email}}</td>
                 @if($id != 1)
-                  @if($thirdparty->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document)))
-                    <td>
-                      <a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
-                    </td>
+                   @if($thirdparty->organisation->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document)))
+                  <td>
+                    <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
+                  </td>
                   @else
                     <td>-</td>
                   @endif
-                  <td>{{$thirdparty->nca_company_name}}</td>
-                  <td>{{($thirdparty->nca_activation_date != "" && $thirdparty->nca_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->nca_activation_date)):""}}</td>
+                  <td>{{$thirdparty->organisation->name}}</td>
+                  <td>{{($thirdparty->organisation->nca_activation_date != "" && $thirdparty->organisation->nca_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->organisation->nca_activation_date)):""}}</td>
                 @else
-                  @if($thirdparty->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document)))
-                    <td>
-                      <a href="{{'/uploads/documents/'.$thirdparty->id.'/'.$thirdparty->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
-                    </td>
+                  @if($thirdparty->organisation->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document)))
+                  <td>
+                    <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
+                  </td>
                   @else
                     <td>-</td>
                   @endif
-                  <td>{{$thirdparty->msa_company_name}}</td>
-                  <td>{{($thirdparty->msa_activation_date != "" && $thirdparty->msa_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->msa_activation_date)):""}}</td>
+                  <td>{{$thirdparty->organisation->name}}</td>
+                  <td>{{($thirdparty->organisation->msa_activation_date != "" && $thirdparty->organisation->msa_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->organisation->msa_activation_date)):""}}</td>
                 @endif
                 <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
                 <td>

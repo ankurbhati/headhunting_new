@@ -745,4 +745,9 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'ThirdpartyOrganisationController@updateThirdpartyOrganisation'
 	));
 
+	Route::match(array('POST'), '/get-db-fix', array(
+			'as'    =>    'get-db-fix',
+			'uses'    =>    'ThirdpartyOrganisationController@getDbFix'
+	));
+
 });
