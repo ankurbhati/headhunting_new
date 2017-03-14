@@ -341,6 +341,51 @@ class HelperController extends BaseController {
         $activity->save();
     }
 
+    public function getBussinessHead() {
+        $user_roles = UserRole::where('role_id', '=', 1)->get();
+        if (!$user_roles->isEmpty()) {
+            $user_roles = $user_roles->first(); 
+            return $user_roles->user;
+        }
+        return False;
+    }
+
+    public function getTeamLeadForUser($id) {
+        $users = UserPeer::where("user_id", "=", $id)->get();
+        if (!$users->isEmpty()) {
+            $user = $users->first(); 
+            return $user->peer;
+        }
+        return False;
+    }
+
+    public function saveNotification($description=None, $user_ids=array(), $action_url=None, $bussiness_head=False) {
+        if($bussiness_head) {
+            $user = $this->getBussinessHead();
+            if($user){
+                $this->saveNotification($description, [$user->id], $action_url);
+            }
+        }
+        foreach($user_ids as $user_id) {
+            $notification = new Notification();
+            $notification->user_id = $user_id;
+            $notification->message = $description;
+            $notification->action_url = $action_url;
+            $notification->status = 0;
+            $notification->save();
+        }
+        return True;
+    }
+
+    public function updateNotification($id) {
+        $notification = Notification::where('id', '=', $id)->get();
+        if(!$notification->isEmpty()) {
+            $notification = $notification->first();
+            $notification->status = 1;
+            $notification->save();
+        }
+    }
+
     public function convertToCSV($data, $options) {
         
         // setting the csv header

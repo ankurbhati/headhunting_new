@@ -327,6 +327,22 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
+	Route::match(array('GET'), '/approve-requirement/{id}', array(
+			'as'    =>    'approve-requirement',
+			'uses'    =>    'SaleController@approveRequirement'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
+	Route::match(array('GET'), '/approve-candidate-recomendation/{id}', array(
+			'as'    =>    'approve-submittle',
+			'uses'    =>    'SaleController@approveSubmittle'
+	));	
+
+	/**
+	 * Routes for list-requirement
+	 */
 	Route::match(array('GET'), '/reopen-requirement/{id}', array(
 			'as'    =>    'reopen-requirement',
 			'uses'    =>    'SaleController@reopenRequirement'
@@ -684,7 +700,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Employee
 	 */
-	Route::match(array('GET', 'POST'), '/my-activity/{id}', array(
+	Route::match(array('GET', 'POST'), '/user-activity/{id}', array(
 			'as'    =>    'my-activity',
 			'uses'    =>    'UserController@activityList'
 	));
@@ -745,9 +761,9 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'ThirdpartyOrganisationController@updateThirdpartyOrganisation'
 	));
 
-	Route::match(array('POST'), '/get-db-fix', array(
+	Route::match(array('GET'), '/get-db-fix', array(
 			'as'    =>    'get-db-fix',
-			'uses'    =>    'ThirdpartyOrganisationController@getDbFix'
+			'uses'    =>    'ThirdpartyController@getDbFix'
 	));
 
 });

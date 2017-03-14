@@ -140,7 +140,7 @@ class UserController extends HelperController {
 	 */
 	public function getPeers($id) {
 		$peerRole = Role::find($id)->pear_role_id;
-		$users = UserRole::with(array('user'))->where("role_id", "=",$peerRole)->get();
+		$users = UserRole::with(array('user'))->where("role_id", "=", $peerRole)->get();
 		return $this->sendJsonResponseOnly($users);
 	}
 
@@ -165,10 +165,9 @@ class UserController extends HelperController {
 		} else {
 			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
 		}
-
 		if($id > 0) {
 			$jobPost = JobPost::find($id);
-			if($currentUserRole === 2 || $currentUserRole === 3 || $currentUserRole === 5) {
+			if($currentUserRole == 2 || $currentUserRole == 3 || $currentUserRole == 5) {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 5)
 				      ->where('role_id', '>=', 4);

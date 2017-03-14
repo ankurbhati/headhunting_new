@@ -725,7 +725,35 @@ class ThirdpartyController extends HelperController {
 		return $result;
 	}
 
-	public function getDbFix($id) {
-		print 'In get db fix';exit;
+	public function getDbFix() {
+		$thirdparties = Thirdparty::get();
+		foreach($thirdparties as $thirdparty) {
+			$domain = substr($thirdparty->email, strrpos($thirdparty->email, '@')+1);
+			$org = ThirdpartyOrganisation::where('domain', '=', $domain)->get();
+			if(!$org->isEmpty()) {
+				# Already Exists
+				$org = $org->first();
+				$thirdparty->source_organisation_id = $org->id;
+				$thirdparty->save();
+			} else {
+				# Create New One
+				$org = new ThirdpartyOrganisation();
+				$org->domain = $domain;
+				$org->nca_document = $thirdparty->nca_document;
+				$org->nca_activation_date = $thirdparty->nca_activation_date;
+				$org->msa_document = $thirdparty->msa_activation_date;;
+				$org->msa_activation_date = $thirdparty->msa_activation_date;;
+				$org->save();
+				try {
+					move_uploaded_file(DOCROOT.$this->resume_target_dir.$thirdparty->id.'/'.$thirdparty->nca_document, DOCROOT.$this->resume_target_dir.$org->id.'/'.$thirdparty->nca_document);
+					move_uploaded_file(DOCROOT.$this->resume_target_dir.$thirdparty->id.'/'.$thirdparty->nca_document, DOCROOT.$this->resume_target_dir.$org->id.'/'.$thirdparty->nca_document);	
+				} catch (Exception $e) {
+					print $e->getMessage();
+				}
+				
+			}
+		}
 	}
+
+
 }

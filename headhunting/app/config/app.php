@@ -190,5 +190,16 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
 	),
-
+	'job_post_submittle_status' => array(
+		'0'=>'Pending',
+		'1'=>'Open',
+		'2'=>'Reject',
+		'3'=>'Forwarded To Client',
+		'4'=>'Rejected By Prime Vendor',
+		'5'=>'Submitted To End Client',
+		'6'=>'Interview Scheduled',
+		'7'=>'Selected By End Client',
+		'8'=>'Rejected By End Client',
+		'9'=>'On Hold By End Client',
+	),
 );

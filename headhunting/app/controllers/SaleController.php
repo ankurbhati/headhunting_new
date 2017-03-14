@@ -72,13 +72,48 @@ class SaleController extends HelperController {
 			$authUser = Auth::user();
 			$assigned_user = User::find($jobPostAssignment->assigned_to_id);
 			$job_post = JobPost::find($jobPostAssignment->job_post_id);
-			$formatted_description = sprintf(
-				$description,
-				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
-				'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
-				'<a href="/view-employee/'.$assigned_user->id.'">'.$assigned_user->first_name." ".$assigned_user->last_name.'</a>'
-			);
+
+			if(Auth::user()->id == $jobPostAssignment->assigned_to_id) {
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
+					'self'
+				);
+			} else {
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
+					'<a href="/view-employee/'.$assigned_user->id.'">'.$assigned_user->first_name." ".$assigned_user->last_name.'</a>'
+				);
+			}
+			
 			$this->saveActivity('7', $formatted_description);
+			$to_notify_user = array($job_post->created_by);
+			/* Save Notification */
+			$description = Config::get('notification.job_post_assignment');
+			if(Auth::user()->id == $jobPostAssignment->assigned_to_id) {
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
+					'self'
+				);
+			} else {
+				array_push($to_notify_user, $jobPostAssignment->assigned_to_id);
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
+					'<a href="/view-employee/'.$assigned_user->id.'">'.$assigned_user->first_name." ".$assigned_user->last_name.'</a>'
+				);
+			}
+			$lead = $this->getTeamLeadForUser($job_post->created_by);
+			if(!empty($lead) && Auth::user()->id != $lead->id) {
+				array_push($to_notify_user, $lead->id);
+			}
+  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
 
 			Session::flash('flashmessagetxt', 'Assigned Successfully!!'); 
 			if(Auth::user()->id == $jobPostAssignment->assigned_to_id) {
@@ -127,10 +162,57 @@ class SaleController extends HelperController {
 			return View::make('sales.closeRequirement')->with(array('title' => 'Close Requirement - Headhunting', 'feedbacks'=>$feedbacks));
 		} else if($_SERVER['REQUEST_METHOD'] == 'POST' && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))) {
 			$jobPost = JobPost::find($id);
+			$jobPost->status = 3;
+			$jobPost->feedback = Input::get('feedback');
+			$jobPost->save();
+			/* Save Notification */
+			$description = Config::get('notification.job_post_close');
+			$authUser = Auth::user();
+			$formatted_description = sprintf(
+				$description,
+				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+			);
+			$to_notify_user = array($jobPost->created_by);
+			$lead = $this->getTeamLeadForUser($jobPost->created_by);
+			if(!empty($lead) && Auth::user()->id != $lead->id) {
+				array_push($to_notify_user, $lead->id);
+			}
+			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			Session::flash('flashmessagetxt', 'Job Closed Successfully!!'); 
+		}
+		return Redirect::route('list-requirement');
+	}
+
+	/**
+	 *
+	 * approveRequirement() : approveRequirement
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function approveRequirement($id) {
+		if($_SERVER['REQUEST_METHOD'] == 'GET' && (Auth::user()->hasRole(3) || Auth::user()->hasRole(1)) ) {
+			$jobPost = JobPost::find($id);
 			$jobPost->status = 2;
 			$jobPost->feedback = Input::get('feedback');
 			$jobPost->save();
-			Session::flash('flashmessagetxt', 'Job Closed Successfully!!'); 
+
+			/* Save Notification */
+			$description = Config::get('notification.job_post_approval');
+			$authUser = Auth::user();
+			$formatted_description = sprintf(
+				$description,
+				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+			);
+			$to_notify_user = array($jobPost->created_by);
+			$lead = $this->getTeamLeadForUser($jobPost->created_by);
+			if(!empty($lead) && Auth::user()->id != $lead->id) {
+				array_push($to_notify_user, $lead->id);
+			}
+			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			Session::flash('flashmessagetxt', 'Job Approved Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
 	}
@@ -147,6 +229,25 @@ class SaleController extends HelperController {
 			$jobPost = JobPost::find($id);
 			$jobPost->status = 1;
 			$jobPost->save();
+			
+			/* Save Notification */
+			$description = Config::get('notification.job_post_reopen');
+			$authUser = Auth::user();
+			$formatted_description = sprintf(
+				$description,
+				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+			);
+			$to_notify_user = array($jobPost->created_by);
+			$lead = $this->getTeamLeadForUser($jobPost->created_by);
+			if(!empty($lead) && Auth::user()->id != $lead->id) {
+				array_push($to_notify_user, $lead->id);
+			}
+  			if(Auth::user()->hasRole(1) ) {
+				$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			} else {
+				$this->saveNotification($formatted_description, $to_notify_user, '', True);
+			}
 			Session::flash('flashmessagetxt', 'Job Reopened Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
@@ -262,7 +363,6 @@ class SaleController extends HelperController {
 								->withErrors($validate)
 								->withInput();
 			} else {
-
 				$inputs = Input::except(array('_token', '_wysihtml5_mode', 'city'));
 				$jobPost = new JobPost();
 				$jobPost->setConnection('master');
@@ -287,7 +387,7 @@ class SaleController extends HelperController {
 				}
 
 				$jobPost->created_by = Auth::user()->id;
-				$jobPost->status = 2;
+				$jobPost->status = 1;
 
 				if($jobPost->save()) {
 
@@ -300,6 +400,21 @@ class SaleController extends HelperController {
 						'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 					);
 					$this->saveActivity('6', $formatted_description);
+
+					/* Save Notification */
+					$description = Config::get('notification.job_post_creation');
+					$authUser = Auth::user();
+					$formatted_description = sprintf(
+						$description,
+						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+						'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+					);
+					$lead = $this->getTeamLeadForUser(Auth::user()->id);
+					if($lead){
+						$this->saveNotification($formatted_description, [$lead->id], '', True);	
+					} else {
+						$this->saveNotification($formatted_description, [], '', True);
+					}
 
 					Session::flash('flashmessagetxt', 'Job Posted Successfully!!'); 
 					return Redirect::route('list-requirement');
@@ -422,6 +537,18 @@ class SaleController extends HelperController {
 		$q = CandidateApplication::query();
 
 		$y = CandidateApplication::query();
+		$submittle_status = array(
+          '0'=>'Pending',
+          '1'=>'Open',
+          '2'=>'Reject',
+          '3'=>'Forwarded To Client',
+          '4'=>'Rejected By Prime Vendor',
+          '5'=>'Submitted To End Client',
+          '6'=>'Interview Scheduled',
+          '7'=>'Selected By End Client',
+          '8'=>'Rejected By End Client',
+          '9'=>'On Hold By End Client',
+        );
 
 		$addedByList = $y->leftJoin('users', function($join){
 			$join->on('submitted_by', '=', 'users.id');
@@ -444,7 +571,9 @@ class SaleController extends HelperController {
 		} else {
 			$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
 		}
-		return View::make('sales.listSubmittels')->with(array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'addedByList'=>$addedByList));
+		$lead = $this->getTeamLeadForUser(Auth::user()->id);
+		$login_user = Auth::user();
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'lead' => $lead, 'login_user' => $login_user));
 	}
 
 	/**
@@ -499,5 +628,52 @@ class SaleController extends HelperController {
 				}
 			}
 		}
+	}
+
+	private function JobPostSubmittleStatus($candidateApplication, $status, $message=''){
+		$jpsStatus_obj = new JobPostSubmittleStatus();
+		$jpsStatus_obj->job_post_submittle_id = $candidateApplication;
+		$jpsStatus_obj->message = $message;
+		$jpsStatus_obj->status = $status;
+		$jpsStatus_obj->added_by = Auth::user()->id;
+		$jpsStatus_obj->save();
+		return $jpsStatus_obj;
+	}
+
+	public function approveSubmittle($id) {
+		if($_SERVER['REQUEST_METHOD'] == 'GET' ) {
+			$candidate_application = CandidateApplication::find($id);
+			$candidate = Candidate::find($candidate_application->candidate_id);
+			$lead = $this->getTeamLeadForUser($candidate_application->submitted_by);
+			$authUser = Auth::user();
+			if($authUser->id==$candidate_application->submitted_by || $authUser->hasRole(1) || (!empty($lead) && $lead->id = $authUser->id)) {
+
+				$candidate_application->status = 1;
+				$candidate_application->save();
+
+				$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, 1, '');
+
+				/* Save Notification */
+				$to_notify_user = array();
+				$description = Config::get('notification.job_post_submittle_approval');
+				if(Auth::user()->id != $candidate_application->submitted_by) {
+					array_push($to_notify_user, $candidate_application->submitted_by);
+				}
+				$job_post = JobPost::find($candidate_application->job_post_id);
+				$to_notify_user = array($job_post->created_by);
+				if(!empty($lead) && $authUser->id != $lead->id) {
+					array_push($to_notify_user, $lead->id);
+				}
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-candidate/'.$candidate->id.'">'.$candidate->first_name." ".$candidate->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>'
+				);
+	  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+				Session::flash('flashmessagetxt', 'Candidate Recommendation Approved Successfully!!'); 
+			}
+		}
+		return Redirect::route('list-requirement');		
 	}
 }

@@ -626,6 +626,15 @@ class CandidateController extends HelperController {
 		return array($msg, $target_file);
 	}
 
+	private function JobPostSubmittleStatus($candidateApplication, $status, $message=''){
+		$jpsStatus_obj = new JobPostSubmittleStatus();
+		$jpsStatus_obj->job_post_submittle_id = $candidateApplication;
+		$jpsStatus_obj->message = $message;
+		$jpsStatus_obj->status = $status;
+		$jpsStatus_obj->added_by = Auth::user()->id;
+		$jpsStatus_obj->save();
+		return $jpsStatus_obj;
+	}
 	/**
 	 * Submits for Job Post.
 	 *
@@ -638,13 +647,15 @@ class CandidateController extends HelperController {
 			 !CandidateApplication::where('candidate_id', '=', $userId)
 			 										->where('job_post_id', '=', $jobId)->exists()) {
 			$candidateApplication = new CandidateApplication();
+			$candidate = Candidate::find($userId);
 			$candidateApplication->setConnection('master');
 			$candidateApplication->candidate_id = $userId;
 			$candidateApplication->job_post_id = $jobId;
 			$candidateApplication->submitted_by = Auth::user()->id;
-			$candidateApplication->status = 1;
+			$candidateApplication->status = 0;
 			$candidateApplication->created_at = date('Y-m-d H:i:s');
 			if($candidateApplication->save()) {
+				$jpsStatus_obj = $this->JobPostSubmittleStatus($candidateApplication->id, 0, '');
 
 				/* User activity */
 				$description = Config::get('activity.job_post_submission');
@@ -657,6 +668,20 @@ class CandidateController extends HelperController {
 				);
 				$this->saveActivity('9', $formatted_description);
 
+				/* Save Notification */
+				$to_notify_user = array();
+				$description = Config::get('notification.job_post_submittle_open');
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-candidate/'.$candidate->id.'">'.$candidate->first_name." ".$candidate->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>'
+				);
+				$lead = $this->getTeamLeadForUser($candidateApplication->submitted_by);
+				if(!empty($lead) && Auth::user()->id != $lead->id) {
+					array_push($to_notify_user, $lead->id);
+				}
+	  			$this->saveNotification($formatted_description, $to_notify_user, '<a href="/list-submittel/'.$jobId.'"></a>', True);
 				Session::flash('flashmessagetxt', 'Submitted Successfully!!');
 				return Redirect::route('list-submittel', array('id' => $jobId));
 			} else {

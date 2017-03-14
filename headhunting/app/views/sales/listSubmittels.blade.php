@@ -24,7 +24,7 @@
                 <div class="form-group">
                     {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
                     control-label')); }}
-                    <div class="col-sm-4">{{ Form::select('status', array(0=>"Select Type Of Status", 1=>"Not Interviewed", 2=> "PO"), "", array('class' => 'form-control')) }}
+                    <div class="col-sm-4">{{ Form::select('status', $submittle_status, "", array('class' => 'form-control')) }}
                         <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
@@ -70,12 +70,17 @@
             								<td>{{($candidateApplication->requirement->type_of_employment == 1)?"Contractual": ($candidateApplication->requirement->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
             								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
             								<td>{{$candidateApplication->candidate->email}}</td>
-            								<td>{{($candidateApplication->status == 1)?"Not Interviewed":"PO";}}</td>
+            								<td>{{$submittle_status[$candidateApplication->status]}}</td>
                             <td>{{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
                               <a href="{{ URL::route('add-comment-job-post-view', array($candidateApplication->requirement->id)) }}" title="Add Comments"><i class="fa fa-fw fa-edit"></i></a>
+                              @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (!empty($lead) && $login_user->id == $lead->id) ) )
+                                <a href="{{ URL::route('approve-submittle', array($candidateApplication->id)) }}" title="Approve Candidate Recomendation">
+                                  <i class="glyphicon glyphicon-ok"></i>
+                                </a>
+                              @endif
 		                        </td>
 		                      </tr>
 	                   	@empty

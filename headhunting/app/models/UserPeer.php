@@ -40,6 +40,6 @@ class UserPeer extends Eloquent {
      */
     public function peer() {
     
-    	return $this->belongsTo('User','user_id','id');
+    	return $this->belongsTo('User','peer_id','id');
     }
 }
