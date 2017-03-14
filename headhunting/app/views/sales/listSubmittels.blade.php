@@ -81,6 +81,11 @@
                                   <i class="glyphicon glyphicon-ok"></i>
                                 </a>
                               @endif
+                              @if ( ($candidateApplication->status == 1 || $candidateApplication->status == 3 || $candidateApplication->status == 5 || $candidateApplication->status == 6) && ($login_user->id == $candidateApplication->requirement->created_by))
+                                <a href="javascript:void(0);" class="updatejobstatus" data-status="{{$candidateApplication->status}}" data-candapp="{{$candidateApplication->id}}" title="Update Status">
+                                  <i class="glyphicon glyphicon-ok"></i>
+                                </a>                              
+                              @endif
 		                        </td>
 		                      </tr>
 	                   	@empty
@@ -100,6 +105,23 @@
                       </tr>
                     </tfoot>
                   </table>
+                  
+                  <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="closemodal">&times;</span>
+                        <h2>Update Status</h2>
+                      </div>
+                      <div class="modal-body">
+                        <form method="post" action="{{ URL::route('update-submittle-status')}}" name="model-form">
+                        <input type="hidden" value="" name="cand_app">
+                        <input id="login-button" class="btn btn-info" type="submit" value="Submit">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  
                   @if (count($candidateApplications) > 100)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>

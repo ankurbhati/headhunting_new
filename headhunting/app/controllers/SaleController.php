@@ -537,18 +537,7 @@ class SaleController extends HelperController {
 		$q = CandidateApplication::query();
 
 		$y = CandidateApplication::query();
-		$submittle_status = array(
-          '0'=>'Pending',
-          '1'=>'Open',
-          '2'=>'Reject',
-          '3'=>'Forwarded To Client',
-          '4'=>'Rejected By Prime Vendor',
-          '5'=>'Submitted To End Client',
-          '6'=>'Interview Scheduled',
-          '7'=>'Selected By End Client',
-          '8'=>'Rejected By End Client',
-          '9'=>'On Hold By End Client',
-        );
+		$submittle_status = Config::get('app.job_post_submittle_status');
 
 		$addedByList = $y->leftJoin('users', function($join){
 			$join->on('submitted_by', '=', 'users.id');
@@ -676,4 +665,48 @@ class SaleController extends HelperController {
 		}
 		return Redirect::route('list-requirement');		
 	}
+
+	public function updateSubmittleStatus() {
+		if($_SERVER['REQUEST_METHOD'] == 'POST' ) {
+
+			if( !empty(Input::get('cand_app')) && !empty(Input::get('job_status')) ){
+				$cand_app = Input::get('cand_app');
+				$status = Input::get('job_status');
+				$submittle_status = Config::get('app.job_post_submittle_status');
+				$candidate_application = CandidateApplication::find($cand_app);
+				$candidate = Candidate::find($candidate_application->candidate_id);
+				$lead = $this->getTeamLeadForUser($candidate_application->requirement->created_by);
+				$authUser = Auth::user();
+				if($authUser->id==$candidate_application->requirement->created_by) {
+
+					$candidate_application->status = $status;
+					$candidate_application->save();
+
+					$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, '');
+
+					/* Save Notification */
+					$to_notify_user = array();
+					//'job_post_submittle_updation' => '%s has updated %s requirement to %s', //type 2
+					$description = Config::get('notification.job_post_submittle_updation');
+					if(Auth::user()->id != $candidate_application->submitted_by) {
+						array_push($to_notify_user, $candidate_application->submitted_by);
+					}
+					$job_post = JobPost::find($candidate_application->job_post_id);
+					if(!empty($lead) && $authUser->id != $lead->id) {
+						array_push($to_notify_user, $lead->id);
+					}
+					$formatted_description = sprintf(
+						$description,
+						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+						'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
+						'"'.$submittle_status[$status].'"'
+					);
+		  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+					Session::flash('flashmessagetxt', 'Candidate Recommendation Updated Successfully!!'); 
+				}
+			}
+		}
+		return Redirect::route('list-submittel');		
+	}
+
 }

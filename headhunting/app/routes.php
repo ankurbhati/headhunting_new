@@ -766,4 +766,9 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'ThirdpartyController@getDbFix'
 	));
 
+	Route::match(array('POST'), '/update-candidate-recomendation/', array(
+			'as'    =>    'update-submittle-status',
+			'uses'    =>    'SaleController@updateSubmittleStatus'
+	));
+
 });

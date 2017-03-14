@@ -335,6 +335,63 @@ if($('#msa-group').length > 0) {
 			new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
 		}
 	});
+	// Get the modal
+	var modal = document.getElementById('myModal');
+	// Get the button that opens the modal
+	$('a.updatejobstatus').on('click', function(event){
+		var job_post_submittle_status = [
+			'Pending',
+			'Open',
+			'Reject',
+			'Forwarded To Client',
+			'Rejected By Prime Vendor',
+			'Submitted To End Client',
+			'Interview Scheduled',
+			'Selected By End Client',
+			'Rejected By End Client',
+			'On Hold By End Client',
+		];
+		var status = $(this).data('status');
+		var cand_app = $(this).data('candapp');
+		var text = '';
+		if(status == 1) {
+			for(i=2; i<4;i++){
+				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+			}
+		} else if(status == 3) {
+			for(i=4; i<6;i++){
+				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+			}
+		} else if(status == 5) {
+			for(i=6; i<7;i++){
+				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+			}
+		} else if(status == 6) {
+			for(i=7; i<10;i++){
+				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+			}
+		}
+		$('form[name="model-form"]').prepend(text);
+		$('input[name="cand_app"]').val(cand_app);
+		modal.style.display = "block";
+	});
+	//var btn = document.getElementsByClassName("updatejobstatus");
+	// Get the <span> element that closes the modal
+	//var span = document.getElementsByClassName("close")[0];
+	// When the user clicks the button, open the modal 
+	//btn.onclick = function() {
+	//    modal.style.display = "block";
+	//}
+	// When the user clicks on <span> (x), close the modal
+	$('.closemodal').on('click', function(event){
+		modal.style.display = "none";
+	});
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
+	    }
+	}
 }(jQuery));
 
 

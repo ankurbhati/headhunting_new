@@ -403,3 +403,30 @@ Execute script
 
 ALTER TABLE `job_posts` CHANGE `status` `status` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT '1=>Pending, 2=>open, 3=>close';
 
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `action_url` varchar(257) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `user_id_2` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
+
+CREATE TABLE IF NOT EXISTS `job_post_submittle_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_post_submittle_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `message` text,
+  `added_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `job_post_id` (`job_post_submittle_id`,`added_by`),
+  KEY `job_post_submittle_id` (`job_post_submittle_id`),
+  KEY `added_by` (`added_by`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+
