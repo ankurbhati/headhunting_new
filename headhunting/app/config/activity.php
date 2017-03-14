@@ -11,3 +11,4 @@ return array(
 	'candidate_add' =>'%s has added %s candidate', //type 10
 	'org_add' =>'%s has added %s organisation', //type 11
 );
+
