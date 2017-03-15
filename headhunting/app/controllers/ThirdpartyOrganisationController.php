@@ -245,14 +245,15 @@ class ThirdpartyOrganisationController extends HelperController {
 			// Server Side Validation.
 			$validate=Validator::make (
 				Input::all(), array(
-					'name' =>  'required|max:247',
-					'domain' =>  'required|max:247'
+					'name' =>  'required',
+					'domain' =>  'required'
 				)
 			);
+
 			if($validate->fails()) {
 
 				return Redirect::route('edit-third-party-organisation', array('id' => $id))
-								->wifthErrors($validate)
+								->withErrors($validate)
 								->withInput();
 			} else {
 
@@ -272,17 +273,22 @@ class ThirdpartyOrganisationController extends HelperController {
 				$org->msa_description = Input::get('msa_description');
 				$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
 				$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
-
+				Log::info('ffffffffffffffffffff');
 				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+					Log::info('dddddddddddddddddd');
 					list($msg, $fileType) = $this->check_resume_validity("nca_document");
+					Log::info('AAAAAAAAAAAAAAAAAAAAA');
 					if($msg){
+						Log::info('BBBBBBBBBBBBBBBBB');
 						# error
 						Session::flash('nca_document_error', $msg);
 						return Redirect::route('add-third-party')->withInput();
 					} else {
+						Log::info('cccccccccccccccccccccccc');
 						# No error					
 						list($msg, $target_file) = $this->upload_document($org, "nca_document");
 						if($msg) {
+							Log::info('ddddddddddd');
 							//error, delete candidate or set flash message
 						} else {
 							$tmp = explode("/", $target_file);

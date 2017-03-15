@@ -713,7 +713,9 @@ class ThirdpartyController extends HelperController {
 			$org = $org->first();
 		} else {
 			$org = new ThirdpartyOrganisation();
+			$org->setConnection('master');
 			$org->domain = $domain;
+			$org->name = explode(".",$domain)[0];
 			$org->save();
 		}
 		if($org->nca_document && $org->msa_document) {
@@ -738,11 +740,13 @@ class ThirdpartyController extends HelperController {
 			} else {
 				# Create New One
 				$org = new ThirdpartyOrganisation();
+				$org->setConnection('master');
 				$org->domain = $domain;
+				$org->name = explode(".",$domain)[0];
 				$org->nca_document = $thirdparty->nca_document;
 				$org->nca_activation_date = $thirdparty->nca_activation_date;
-				$org->msa_document = $thirdparty->msa_activation_date;;
-				$org->msa_activation_date = $thirdparty->msa_activation_date;;
+				$org->msa_document = $thirdparty->msa_document;
+				$org->msa_activation_date = $thirdparty->msa_activation_date;
 				$org->save();
 				try {
 					move_uploaded_file(DOCROOT.$this->resume_target_dir.$thirdparty->id.'/'.$thirdparty->nca_document, DOCROOT.$this->resume_target_dir.$org->id.'/'.$thirdparty->nca_document);

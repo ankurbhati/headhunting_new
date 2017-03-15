@@ -42,4 +42,15 @@ class UserPeer extends Eloquent {
     
     	return $this->belongsTo('User','peer_id','id');
     }
+
+    /**
+     *
+     * state : Relation between User & Peers.
+     *
+     * @return Object belongs to Relation User Peers.
+     */
+    public function user() {
+    
+        return $this->belongsTo('User','user_id','id');
+    }
 }

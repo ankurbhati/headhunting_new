@@ -61,7 +61,7 @@
         <div class="form-group">
             {{ Form::label('msa_document', 'Upload Msa Document: ', array('class' => 'col-sm-3
             control-label')); }}
-            <div class="col-sm-8"><input type="file" name="nca_document" />
+            <div class="col-sm-8"><input type="file" name="msa_document" />
                 @if($org->msa_document && file_exists(public_path('/uploads/documents/'.$org->id.'/'.$org->msa_document)))
                 <a href="{{'/uploads/documents/'.$org->id.'/'.$org->msa_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
                 @else

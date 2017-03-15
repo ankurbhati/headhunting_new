@@ -117,10 +117,8 @@
 
 									<td>
 										<a href="{{ URL::route('view-third-party-organisation', array('id' => $org->id)) }}" title="View Organisation"><i class="fa fa-fw fa-eye"></i></a>
-								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 										  <a href="{{ URL::route('edit-third-party-organisation', array($org->id)) }}" title="Edit Organisation"><i class="fa fa-fw fa-edit"></i></a>
-								  @endif
-									@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
+									@if(Auth::user()->getRole() <= 1 || Auth::user()->hasRole(8) )
 										<a href="{{ URL::route('delete-third-party-organisation', array($org->id)) }}" title="Delete Organisation"><i class="fa fa-fw fa-ban text-danger"></i></a>
 									@endif
 								</td>

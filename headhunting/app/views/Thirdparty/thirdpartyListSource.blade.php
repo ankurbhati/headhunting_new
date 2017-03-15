@@ -127,6 +127,8 @@
                 <td>
                   @if($thirdparty->status == 1)
                   Blacklisted
+                  @elseif($thirdparty->status == 2)
+                  MSA/NCA Incomplete
                   @else
                   Active
                   @endif
@@ -141,7 +143,7 @@
                     <i class="fa fa-fw fa-check text-success"></i>
                     </a>
                   @else
-                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Blacklist Third Party"><i class="fa fa-fw fa-exclamation-triangle text-danger"></i></a>
+                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Blacklist Third Party"><i class="fa fa-fw fa-exclamation-triangle text-danger"></i>{{$thirdparty->id}}</a>
                   @endif
 										@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
 											<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>

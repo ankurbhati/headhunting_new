@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `source_organizations` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `domain` (`domain`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 
 ALTER TABLE `sources` ADD `source_organisation_id` BIGINT NOT NULL AFTER `phone_ext` ;
@@ -430,3 +430,10 @@ CREATE TABLE IF NOT EXISTS `job_post_submittle_status` (
   KEY `added_by` (`added_by`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
+ALTER TABLE `sources`
+  DROP `nca_document`,
+  DROP `nca_company_name`,
+  DROP `nca_activation_date`,
+  DROP `msa_document`,
+  DROP `msa_company_name`,
+  DROP `msa_activation_date`;

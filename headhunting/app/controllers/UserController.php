@@ -163,7 +163,7 @@ class UserController extends HelperController {
 				      ->where('user_id', '!=', Auth::user()->id);
 			})->paginate(100);
 		} else {
-			$users = UserPeer::with(array('peer', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
+			$users = UserPeer::with(array('user', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
 		}
 		if($id > 0) {
 			$jobPost = JobPost::find($id);

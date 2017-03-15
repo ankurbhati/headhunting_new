@@ -663,7 +663,7 @@ class SaleController extends HelperController {
 				Session::flash('flashmessagetxt', 'Candidate Recommendation Approved Successfully!!'); 
 			}
 		}
-		return Redirect::route('list-requirement');		
+		return Redirect::route('list-submittel');	
 	}
 
 	public function updateSubmittleStatus() {

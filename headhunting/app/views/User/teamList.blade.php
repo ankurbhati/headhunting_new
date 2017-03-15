@@ -47,19 +47,19 @@
                       @endforeach
 	                    @foreach($users as $user)
 		                      <tr>
-		                        <td>{{$user->peer->first_name. " ".$user->peer->last_name }}</td>
-		                        <td>{{$user->peer->email}}</td>
-		                        <td>{{$user->peer->designation}}</td>
-		                        <td>{{$user->peer->userRoles[0]->roles->role}}</td>
+		                        <td>{{$user->user->first_name. " ".$user->peer->last_name }}</td>
+		                        <td>{{$user->user->email}}</td>
+		                        <td>{{$user->user->designation}}</td>
+		                        <td>{{$user->user->userRoles[0]->roles->role}}</td>
                             <td>
-                            @if($jobPostId > 0 && $jobPost->jobsAssignedToId($user->peer->id)->count() == 0)
-                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $user->peer->id )) }}" title="Assign To {{$user->peer->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a>
+                            @if($jobPostId > 0 && $jobPost->jobsAssignedToId($user->user->id)->count() == 0)
+                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $user->user->id )) }}" title="Assign To {{$user->user->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a>
                             @else
                               @if($jobPostId > 0)
                                 Already Assigned
                               @endif
                             @endif
-                            <a href="{{ URL::route('my-activity', array('id' => $user->peer->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            <a href="{{ URL::route('my-activity', array('id' => $user->user->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
                             </td>
 		                      </tr> 
 						          @endforeach
