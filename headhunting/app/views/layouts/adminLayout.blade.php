@@ -1,88 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<title>{{$title}} - Headhunting</title>
-
-	{{ HTML::style('bootstrap/css/bootstrap.min.css'); }}
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Theme style -->
-    {{ HTML::style('dist/css/AdminLTE.min.css'); }}
-	{{ HTML::style('dist/css/skins/skin-blue.min.css'); }}
-	<!-- iCheck -->
-	{{ HTML::style('plugins/iCheck/flat/blue.css'); }}
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>{{$title}} - Headhunting</title>
+    {{ HTML::style('dist/css/main.css'); }}
+    {{ HTML::style('glyphicons/css/bootstrap.min.css'); }}
     {{ HTML::style('plugins/datepicker/datepicker3.css'); }}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    {{ HTML::style('plugins/daterangepicker/daterangepicker-bs3.css'); }}
-    {{ HTML::style('plugins/datatables/dataTables.bootstrap.css'); }}
+	{{ HTML::style('plugins/datatables/dataTables.bootstrap.css'); }}
 	{{ HTML::style('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); }} 
 	{{ HTML::style('plugins/ckeditor/skins/moono/editor.css'); }} 
-	{{ HTML::style('dist/css/style.css'); }}
-
-  </head>
-     <body class="hold-transition skin-blue sidebar-mini">
-        <div class="wrapper">
-			@include('shared.header')
-			@if(Auth::check())
-				@include('shared.leftAside')
-			@endIf
-			<div class="content-wrapper">
-			
-			    <section class="content-header">
-		          <h1>
-		            {{$title}}
-		            <small>Control panel</small>
-		          </h1>
-		          <ol class="breadcrumb">
-		            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-		            <li class="active">Dashboard</li>
-		          </ol>
-		        </section>
-		        <div id="status-area" style="text-align: center; margin-top: 10px;">
-	        		<!--<span class="flash_message " style="display: inline;">This is a message!</span>-->
-	        	</div>
-        		@yield('content')
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+    <body class="theme-body" >
+    	<div class="home">
+			@include('shared.new-header')
+			<div class="content-wrapper ofBody">
+				<div class="fill container-fluid">
+					<div class="container-body">
+				        <div id="status-area">
+			        		<!--<span class="flash_message " style="display: inline;">This is a message!</span>-->
+			        	</div>
+			        	<ol class="breadcrumb">
+				            <li><a href="{{ URL::route('dashboard-view') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+				            <li class="active">Dashboard</li>
+						</ol>
+		        		@yield('content')
+	        		</div>
+        		</div>
         	</div>
-        	@include('shared.footer')
         </div>
-        
-        <!-- jQuery 2.1.4 -->
-    	{{ HTML::script("plugins/jQuery/jQuery-2.1.4.min.js")}}
-    	{{ HTML::script("plugins/jQuery/jQuery-highlighter.js")}}
-	    <!-- jQuery UI 1.11.4 -->
-	    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-	    <script>
-	      $.widget.bridge('uibutton', $.ui.button);
-	    </script>
-	    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	    {{ HTML::script("bootstrap/js/bootstrap.min.js")}}
-	    <!-- daterangepicker -->
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-	    {{ HTML::script("plugins/daterangepicker/daterangepicker.js")}}
-	    <!-- datepicker -->
-	    {{ HTML::script("plugins/datepicker/bootstrap-datepicker.js")}}
-	    <!-- Bootstrap WYSIHTML5 -->
-	
-	    {{ HTML::script("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}
-	    {{ HTML::script("plugins/ckeditor/ckeditor.js")}}
-	    <!-- Slimscroll -->
-		{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
-	    {{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}
-	    {{ HTML::script("plugins/slimScroll/jquery.slimscroll.min.js")}}
-	    {{ HTML::script("plugins/fastclick/fastclick.min.js")}}
-	    {{ HTML::script("dist/js/app.min.js")}}
-	    {{ HTML::script("dist/js/pages/dashboard.js")}}
-    	{{ HTML::script("plugins/input-mask/jquery.inputmask.js")}}
-	    {{ HTML::script("plugins/input-mask/jquery.inputmask.date.extensions.js")}}
-	    <script src="/nicEdit/nicEdit.js" type="text/javascript"></script>
-	    {{ HTML::script("dist/js/script.js")}}
-	    <!-- <script src="//cdn.ckeditor.com/4.6.1/full/ckeditor.js"></script>
-	    <script src="ckeditor/ckeditor.js"></script>-->
+
+{{ HTML::script("plugins/jQuery/jQuery-2.1.4.min.js")}}
+{{ HTML::script("plugins/jQuery/jQuery-highlighter.js")}}
+{{ HTML::script("dist/js/vendor/vendor/jquery-ui.js")}}
+{{ HTML::script("dist/js/vendor/vendor/modernizr.custom.js")}}
+{{ HTML::script("dist/js/vendor/vendor/jquery.ui.widget.js")}}
+{{ HTML::script("dist/js/vendor/vendor/jquery-file-upload.js")}}
+{{ HTML::script("bootstrap/js/bootstrap.min.js")}}
+<!-- datepicker -->
+{{ HTML::script("plugins/daterangepicker/daterangepicker.js")}}
+<!-- datepicker -->
+{{ HTML::script("plugins/datepicker/bootstrap-datepicker.js")}}
+<!-- Bootstrap WYSIHTML5 -->
+
+{{ HTML::script("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}
+{{ HTML::script("plugins/ckeditor/ckeditor.js")}}
+<!-- Slimscroll -->
+{{ HTML::script("plugins/datatables/jquery.dataTables.min.js")}}
+{{ HTML::script("plugins/datatables/dataTables.bootstrap.min.js")}}
+{{ HTML::script("plugins/slimScroll/jquery.slimscroll.min.js")}}
+{{ HTML::script("plugins/fastclick/fastclick.min.js")}}
+{{ HTML::script("plugins/input-mask/jquery.inputmask.js")}}
+{{ HTML::script("plugins/input-mask/jquery.inputmask.date.extensions.js")}}
+{{ HTML::script("dist/js/vendor/vendor/moment.js")}}
+<!-- endbuild -->
+
+{{ HTML::script("/nicEdit/nicEdit.js")}}
+<!-- build:js({source, dist}) js/main.js -->
+{{ HTML::script("dist/js/script.js")}}
+{{ HTML::script("dist/js/modules/util.js")}}
+{{ HTML::script("dist/js/modules/header.js")}}
+{{ HTML::script("dist/js/modules/plugins.js")}}
+
 	    <script>
 	    @if(Session::has('flashmessagetxt'))
 			var message_text = {{ "'".Session::get('flashmessagetxt') ."'"}};

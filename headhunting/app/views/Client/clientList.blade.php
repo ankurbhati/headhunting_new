@@ -5,7 +5,7 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Data Table With Full Features</h3>
+                  <h3 class="box-title">Client List</h3>
                 </div><!-- /.box-header -->
 
 
@@ -60,10 +60,10 @@
                 <div class="form-group">
                     {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
                     control-label')); }}
-                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
-                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
@@ -71,10 +71,10 @@
                 <div class="form-group row ">
                     <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
                     <div class="col-sm-3">
-                        {{ Form::submit('Search', array('class' => 'btn btn-info', 'id' => 'search-button', 'style'=>"float:right") ); }}
+                        {{ Form::submit('Search', array('class' => 'btn btn-primary btn-white', 'id' => 'search-button', 'style'=>"float:right") ); }}
                     </div>
                     <div class="col-sm-8">
-                        {{ Form::button('Download Csv', array('class' => 'btn btn-info', 'id' => 'download-button', 'style'=>"float:right") ); }}
+                        {{ Form::button('Download Csv', array('class' => 'btn btn-secondary btn-white', 'id' => 'download-button', 'style'=>"float:right") ); }}
                     </div>
                 </div>
             {{ Form::close()}}
@@ -82,7 +82,7 @@
 
                 <div class="box-body">
                   <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of clients :  <span class="text-bold">{{$clients->getTotal()}}</span></p>
+                        <p class="result-total"><span class="text-bold">{{$clients->getTotal()}} results:</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -134,7 +134,7 @@
                   </div>
                   @if (count($clients) > 0)
                     <div>
-                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                       
                       {{ $clients->links() }}
                     </div>
                   @endif

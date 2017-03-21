@@ -325,16 +325,17 @@ if($('#msa-group').length > 0) {
 	});
 
 	bkLib.onDomLoaded(function() {
-		if($('#description').length>0){
-			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('description');
-		}
-		if($('#disclaimer').length>0){
-			new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
-		}
-		if($('#signature').length>0){
-			new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
-		}
+			if($('#description').length>0){
+				new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('description');
+			}
+			if($('#disclaimer').length>0){
+				new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
+			}
+			if($('#signature').length>0){
+				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
+			}
 	});
+
 	// Get the modal
 	var modal = document.getElementById('myModal');
 	// Get the button that opens the modal

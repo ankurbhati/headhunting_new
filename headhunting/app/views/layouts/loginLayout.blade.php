@@ -1,50 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<title>{{$title}}</title>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>{{$title}}</title>
 
-	
-	{{ HTML::style('bootstrap/css/bootstrap.min.css'); }}
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Theme style -->
-    {{ HTML::style('dist/css/AdminLTE.min.css'); }}
-	{{ HTML::style('dist/css/skins/skin-blue.min.css'); }}
-	<!-- iCheck -->
-	{{ HTML::style('plugins/iCheck/square/blue.css'); }}
-
+    {{ HTML::style('dist/css/main.css'); }}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
-  <body class="hold-transition login-page">
-    <div class="login-box">
-      <div class="login-logo">
-        <a href="/"><b>Headhunting</b></a>
-      </div><!-- /.login-logo -->
-        @yield('content')
-    </div><!-- /.login-box -->
+</head>
 
-	<!-- jQuery 2.1.4 -->
-    {{ HTML::script("plugins/jQuery/jQuery-2.1.4.min.js")}}
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	{{ HTML::script("bootstrap/js/bootstrap.min.js")}}
-    <!-- iCheck -->4
-    {{ HTML::script("plugins/iCheck/icheck.min.js")}}
-    <script>
-      $(function () {
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_square-blue',
-          radioClass: 'iradio_square-blue',
-          increaseArea: '20%' // optional
-        });
-      });
-    </script>
+  <body class="theme-body login-body" >
+    <div class="home">
+      <header>
+        <div class="top-header-wrapper">
+          <div class="container">
+            <a class="logo" href="/home.html">
+              <img src="/assets/images/logo.png" alt="logo"/>
+            </a>
+            <ul class="header-items">
+              <li class="login-container">
+                <a class="icon-member_signout member-login" href="">
+                  <span class="hidden-moblet">MEMBER LOGIN</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+        <div class="container">
+            <div class="login-box">
+              @yield('content')
+            </div>
+        </div>
+      <footer>
+        <div class="container">
+          <div class="legal-nav">
+            <div class="copyright">Apetan | © 2017</div>
+            <ul>
+              <li>
+                <a href="/">Contact Us</a>
+              </li>
+              <li>
+                <a href="/">About Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>

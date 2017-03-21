@@ -1,6 +1,13 @@
 @extends('layouts.adminLayout')
 @section('content')
 <div class="content">
+    <div class="row">
+            <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Add Candidate</h3>
+                </div><!-- /.box-header -->
+
 {{ Form::open(array('route' => 'add-candidate','class' =>
 'form-horizontal','id' => 'candidate-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
 
@@ -113,9 +120,13 @@
     </div>
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit('Add Candidate', array('class' => 'btn
-            btn-info pull-right', 'id' => 'login-button') ); }}</div>
+            btn-primary btn-white pull-right', 'id' => 'login-button') ); }}</div>
 
    </div>
 {{ Form::close() }}
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
 </div>
 @stop

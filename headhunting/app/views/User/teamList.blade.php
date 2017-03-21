@@ -14,7 +14,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Employees :  <span class="text-bold">{{(count($managerUsers)>0)?$managerUsers->getTotal():0}}</span></p>
+                        <p class="result-total"><span class="text-bold">{{(count($managerUsers)>0)?$managerUsers->getTotal():0}} results:</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>

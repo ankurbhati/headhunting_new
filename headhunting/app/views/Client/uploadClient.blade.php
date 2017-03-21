@@ -1,6 +1,12 @@
 @extends('layouts.adminLayout')
 @section('content')
 <div class="content">
+  <div class="row">
+            <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Upload Clients</h3>
+                </div><!-- /.box-header -->
 {{ Form::open(array('route' => 'upload-client-csv','class' =>
 'form-horizontal','id' => 'login-form',  'method' => 'POST', 'enctype' => 'multipart/form-data')) }}
 
@@ -18,11 +24,11 @@
 
     <div class="form-group row ">
     	<div class="col-sm-5">
-    		<a href="{{'/downloads/client/client.csv'}}" class="btn btn-info pull-left">Download Clients Csv Template</a>
+    		<a href="{{'/downloads/client/client.csv'}}" class="btn btn-secondary btn-white pull-left">Download Clients Csv Template</a>
         </div>
         <div class="col-sm-6">
         	{{ Form::submit('Upload Clients', array('class' => 'btn
-            btn-info pull-right', 'id' => 'login-button') ); }}
+            btn-primary btn-white pull-right', 'id' => 'login-button') ); }}
         </div>
    </div>
    @if(Session::has('upload_result'))
@@ -32,5 +38,8 @@
    </div>
    @endif
 {{ Form::close() }}
+</div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
 </div>
 @stop

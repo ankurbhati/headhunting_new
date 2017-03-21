@@ -1,6 +1,13 @@
 @extends('layouts.adminLayout')
 @section('content')
 <div class="content">
+    <div class="row">
+            <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Post Requirement</h3>
+                </div><!-- /.box-header -->
+
 @if($jobPost->id != "")
 	{{ Form::open(array('route' => array('update-requirement-action', $jobPost->id), 'class' =>
 	'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
@@ -100,9 +107,13 @@
 
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit(($jobPost->id == "")?'Post Requirement':'Update Requirement', array('class' => 'btn
-            btn-info pull-right', 'id' => 'requirement-button') ); }}</div>
+            btn-primary btn-white pull-right', 'id' => 'requirement-button') ); }}</div>
 
    </div>
+   </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+          </div>
 
 {{ Form::close() }}
 @stop

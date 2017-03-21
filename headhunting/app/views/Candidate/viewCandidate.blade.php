@@ -1,106 +1,107 @@
 @extends('layouts.adminLayout')
 @section('content')
-<div class="user-view search-view-user">
-	<input type="hidden" value="{{$searchingText}}" id="searchedValue">
-	@if($jobId > 0)
-	<div class="col-sm-2">
-				<a class="btn btn-primary" href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->id)) }}">
+	<div class="user-view search-view-user">
+		@if($jobId > 0)
+			<div class="col-sm-2">
+				<a class="btn btn-primary btn-white" href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->id)) }}">
 					<i class="fa fa-save"></i> <span>Mark Submittel</span>
 				</a>
-	</div>
-	@endif
-	<div class="col-sm-12 right-view">
-	    <div class="row"><div class="col-sm-4">
-	        Email:
-				</div><div class="col-sm-8">
-	        	{{$candidate->email}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        First Name:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->first_name}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Last Name:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->last_name}}
-	        </div>
-	    </div>
+			</div>
+		@endif
+		<div class="col-sm-12 right-view">
+		    <div class="row"><div class="col-sm-4">
 
-	    <div class="row"><div class="col-sm-4">
-	        Phone:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->phone}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Job Title:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->designation}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        City:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->city){{$candidate->city->name}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        State:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->state){{$candidate->state->state}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Country:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->country){{$candidate->country->country}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Rate:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->candidaterate){{$candidate->candidaterate->value}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Work State:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->workstate){{$candidate->workstate->title}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Third Party:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->thirdparty){{$candidate->thirdparty->email}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Visa:
-	        </div><div class="col-sm-8">
-	        	@if($candidate->visa){{$candidate->visa->title}}@else{{"-"}}@endif
-	        </div>
-	    </div>
-		<div class="row"><div class="col-sm-4">
-	        Created By:
-	        </div><div class="col-sm-8">
-	        	{{$candidate->createdby->first_name. " ".$candidate->createdby->last_name }}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Created At:
-	        </div><div class="col-sm-8">
-	        	{{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
-	        </div>
-	    </div>
-	    <div class="row"><div class="col-sm-4">
-	        Last Updated At:
-	        </div><div class="col-sm-8">
-	        	{{($candidate->updated_at != "" && $candidate->updated_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->updated_at)):"-"}}
-	        </div>
-	    </div>
+		        Email:
+					</div><div class="col-sm-8">
+		        	{{$candidate->email}}
+		        	<input type="hidden" value="{{$searchingText}}" id="searchedValue">
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        First Name:
+		        </div><div class="col-sm-8">
+		        	{{$candidate->first_name}}
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Last Name:
+		        </div><div class="col-sm-8">
+		        	{{$candidate->last_name}}
+		        </div>
+		    </div>
+
+		    <div class="row"><div class="col-sm-4">
+		        Phone:
+		        </div><div class="col-sm-8">
+		        	{{$candidate->phone}}
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Job Title:
+		        </div><div class="col-sm-8">
+		        	{{$candidate->designation}}
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        City:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->city){{$candidate->city->name}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        State:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->state){{$candidate->state->state}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Country:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->country){{$candidate->country->country}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Rate:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->candidaterate){{$candidate->candidaterate->value}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Work State:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->workstate){{$candidate->workstate->title}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Third Party:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->thirdparty){{$candidate->thirdparty->email}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Visa:
+		        </div><div class="col-sm-8">
+		        	@if($candidate->visa){{$candidate->visa->title}}@else{{"-"}}@endif
+		        </div>
+		    </div>
+			<div class="row"><div class="col-sm-4">
+		        Created By:
+		        </div><div class="col-sm-8">
+		        	{{$candidate->createdby->first_name. " ".$candidate->createdby->last_name }}
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Created At:
+		        </div><div class="col-sm-8">
+		        	{{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
+		        </div>
+		    </div>
+		    <div class="row"><div class="col-sm-4">
+		        Last Updated At:
+		        </div><div class="col-sm-8">
+		        	{{($candidate->updated_at != "" && $candidate->updated_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->updated_at)):"-"}}
+		        </div>
+		    </div>
 			@if($resume)
 				<div class="row">
 					<div class="col-sm-4">
@@ -108,32 +109,31 @@
 						 <a href="{{'/uploads/resumes/'.$resume->candidate_id.'/'.$resume->resume_path}}" title="Download Resume"><i class="glyphicon glyphicon-download"></i> Download Resume</a>
 					</div>
 				</div>
-        	<div class="row">
-			    <div class="col-sm-12" style="border:1px dashed #d8d8d8; margin-top:20px; padding:25px 10px;">
-			        	{{htmlspecialchars_decode($resume->resume)}}
-			    </div>
-	    	</div>
-        @else
-        @endif
+	        	<div class="row">
+				    <div class="col-sm-12" style="border:1px dashed #d8d8d8; margin-top:20px; padding:25px 10px;">
+				        	{{htmlspecialchars_decode($resume->resume)}}
+				    </div>
+		    	</div>
+	        @endif
+		</div>
 	</div>
-</div>
 @stop
 
 
 @if(trim($searchingText))
-<script>
-//var searchingText = {{"'".trim($searchingText)."'"}};
-//function replaceText() {
-/*    var jthis = $(this);
-    $("*").each(function() {
-    	//console.log(jthis); 
-        if(jthis.children().length==0 && jthis.text() != "") {
-        	console.log(searchingText);
-        	console.log(jthis.text());
-            jthis.text(jthis.text().replace("t", 'AAA:')); 
-        } 
-    });
-}
-*/
-</script>
+	<script>
+		//var searchingText = {{"'".trim($searchingText)."'"}};
+		//function replaceText() {
+		/*    var jthis = $(this);
+		    $("*").each(function() {
+		    	//console.log(jthis); 
+		        if(jthis.children().length==0 && jthis.text() != "") {
+		        	console.log(searchingText);
+		        	console.log(jthis.text());
+		            jthis.text(jthis.text().replace("t", 'AAA:')); 
+		        } 
+		    });
+		}
+		*/
+	</script>
 @endif

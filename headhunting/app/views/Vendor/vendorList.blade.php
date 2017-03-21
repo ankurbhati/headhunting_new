@@ -5,11 +5,11 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Data Table With Full Features</h3>
+                  <h3 class="box-title">Third Party List</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of vendors :  <span class="text-bold">{{$vendors->getTotal()}}</span></p>
+                        <p class="result-total"><span class="text-bold">{{$vendors->getTotal()}} results:</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -61,7 +61,7 @@
                   </div>
                   @if (count($vendors) > 0)
                     <div>
-                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                       
                       {{ $vendors->links() }}
                     </div>
                   @endif

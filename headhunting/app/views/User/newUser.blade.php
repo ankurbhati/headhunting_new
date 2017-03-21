@@ -99,7 +99,7 @@
     </div>
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit('Add Employee', array('class' => 'btn
-            btn-info pull-right', 'id' => 'login-button') ); }}</div>
+            btn-primary btn-white pull-right', 'id' => 'login-button') ); }}</div>
 
    </div>
 {{ Form::close() }}

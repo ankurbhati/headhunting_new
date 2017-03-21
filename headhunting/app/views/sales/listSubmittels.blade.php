@@ -32,17 +32,17 @@
                 <div class="form-group">
                     {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
                     control-label')); }}
-                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                    <div class="col-sm-2">{{ Form::text('from_date', "", array('placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
-                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                    <div class="col-sm-2">{{ Form::text('to_date', "", array('placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
 
                 <div class="form-group row ">
                     <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
-                        btn-info', 'id' => 'login-button') ); }}</div>
+                        btn-primary btn-white', 'id' => 'login-button') ); }}</div>
 
                </div>
             {{ Form::close() }}
@@ -124,7 +124,7 @@
                   
                   @if (count($candidateApplications) > 100)
                     <div>
-                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                       
                       {{ $candidateApplications->links() }}
                     </div>
                   @endif

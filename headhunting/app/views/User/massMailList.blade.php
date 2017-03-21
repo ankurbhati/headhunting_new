@@ -5,7 +5,7 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Data Table With Full Features</h3>
+                  <h3 class="box-title">Mass Mail List</h3>
                 </div><!-- /.box-header -->
 
 
@@ -40,16 +40,17 @@
                 <div class="form-group">
                     {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
                     control-label')); }}
-                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date')) }} 
+                    <div class="col-sm-2">{{ Form::text('from_date', "", array('placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
-                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date')) }} 
+                    <div class="col-sm-2">{{ Form::text('to_date', "", array('placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                   </div>
                 <div class="form-group row ">
-                    <div class="col-sm-11" style="text-align: center;">{{ Form::submit('Search', array('class' => 'btn
-                        btn-info', 'id' => 'requirement-button') ); }}</div>
+                    <div class="col-sm-11">
+                    {{ Form::submit('Search', array('class' => 'btn
+                        btn-primary btn-white pull-right', 'id' => 'requirement-button') ); }}</div>
 
                 </div>
 
@@ -60,7 +61,7 @@
 
                 <div class="box-body">
                 <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Mass Mails :  <span class="text-bold">{{$mass_mails->getTotal()}}</span></p>
+                        <p class="result-total"><span class="text-bold">{{$mass_mails->getTotal()}} results:</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -116,7 +117,7 @@
                   </div>
                   @if (count($mass_mails) > 0)
                     <div>
-                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Backend Load</span>
+                       
                       {{ $mass_mails->links() }}
                     </div>
                   @endif
