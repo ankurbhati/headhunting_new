@@ -437,3 +437,10 @@ ALTER TABLE `sources`
   DROP `msa_document`,
   DROP `msa_company_name`,
   DROP `msa_activation_date`;
+
+
+
+ALTER TABLE `job_post_submittle_status` ADD INDEX ( `job_post_submittle_id` ) ;
+ALTER TABLE `job_post_submittle_status` ADD FOREIGN KEY ( `job_post_submittle_id` ) REFERENCES `headhunting`.`candidate_applications` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE ;
