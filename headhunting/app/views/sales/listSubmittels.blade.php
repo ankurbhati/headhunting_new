@@ -119,9 +119,13 @@
                       </div>
                       <div class="modal-body">
                         <form method="post" action="{{ URL::route('update-submittle-status')}}" name="model-form">
+                        <div id="modal-form-content"></div>
                         <input type="hidden" value="" name="cand_app">
-                        <label style="padding: 0px 10px 10px 0px">Reason: </label><textarea value="" name="cand_app_msg"></textarea></br>
-                        <input id="login-button" style="margin: 0px 0px 15px 20px" class="btn btn-info" type="submit" value="Submit">
+                        <div>
+                          <label>Reason: </label><textarea value="" name="cand_app_msg"></textarea>
+                        </div>
+                        <input id="login-button" style="margin: 0px 0px 15px 20px" class="btn btn-primary btn-white" type="submit" value="Submit">
+                        <button type="reset" value="Reset" style="float: right;" class="btn btn-primary btn-white">Reset</button>
                         </form>
                       </div>
                     </div>

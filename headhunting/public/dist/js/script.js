@@ -357,22 +357,22 @@ if($('#msa-group').length > 0) {
 		var text = '';
 		if(status == 1) {
 			for(i=2; i<4;i++){
-				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
 			}
 		} else if(status == 3) {
 			for(i=4; i<6;i++){
-				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
 			}
 		} else if(status == 5) {
 			for(i=6; i<7;i++){
-				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
 			}
 		} else if(status == 6) {
 			for(i=7; i<10;i++){
-				text += '<input type="radio" name="job_status" value="'+i+'"/><label style="margin-left: 10px">'+job_post_submittle_status[i]+'</label><br/>';
+				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
 			}
 		}
-		$('form[name="model-form"]').prepend(text);
+		$('#modal-form-content').html(text);
 		$('input[name="cand_app"]').val(cand_app);
 		modal.style.display = "block";
 	});
