@@ -535,6 +535,7 @@ class SaleController extends HelperController {
 	public function listSubmittel($id=0) {
 
 		$q = CandidateApplication::query();
+		$login_user = Auth::user();
 
 		$y = CandidateApplication::query();
 		$submittle_status = Config::get('app.job_post_submittle_status');
@@ -554,14 +555,22 @@ class SaleController extends HelperController {
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 		}
+        
+        if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+        	/*$q->with(['requirement' => function($v) use($login_user){
+        		$v->where('created_by', $login_user->id);
+    		}]);*/
+    		//$q->with('requirement')->where('created_by', $login_user->id);
+	    }
 
 		if($id == 0) {
 			$candidateApplications = $q->paginate(100);
 		} else {
 			$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
 		}
-		$lead = $this->getTeamLeadForUser(Auth::user()->id);
-		$login_user = Auth::user();
+		//print_r($candidateApplications[0]);die();
+		$lead = $this->getTeamLeadForUser($login_user->id);
+		
 		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'lead' => $lead, 'login_user' => $login_user));
 	}
 
@@ -672,6 +681,7 @@ class SaleController extends HelperController {
 			if( !empty(Input::get('cand_app')) && !empty(Input::get('job_status')) ){
 				$cand_app = Input::get('cand_app');
 				$status = Input::get('job_status');
+				$message = Input::get('cand_app_msg');
 				$submittle_status = Config::get('app.job_post_submittle_status');
 				$candidate_application = CandidateApplication::find($cand_app);
 				$candidate = Candidate::find($candidate_application->candidate_id);
@@ -682,7 +692,7 @@ class SaleController extends HelperController {
 					$candidate_application->status = $status;
 					$candidate_application->save();
 
-					$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, '');
+					$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message);
 
 					/* Save Notification */
 					$to_notify_user = array();

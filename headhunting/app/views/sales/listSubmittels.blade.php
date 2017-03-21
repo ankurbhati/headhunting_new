@@ -59,6 +59,7 @@
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
                         <th>Status</th>
+                        <th>Message</th>
                         <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
@@ -71,6 +72,8 @@
             								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
             								<td>{{$candidateApplication->candidate->email}}</td>
             								<td>{{$submittle_status[$candidateApplication->status]}}</td>
+                            <?php $submittle_status_rec = JobPostSubmittleStatus::where('job_post_submittle_id', '=',$candidateApplication->id)->orderBy('created_at', 'desc')->first()?>
+                            <td>{{(!empty($submittle_status_rec->message))?$submittle_status_rec->message:'-'}}</td>
                             <td>{{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
@@ -100,6 +103,7 @@
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
                         <th>Status</th>
+                        <th>Message</th>
                         <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
@@ -109,14 +113,15 @@
                   <div id="myModal" class="modal">
                     <!-- Modal content -->
                     <div class="modal-content">
-                      <div class="modal-header">
+                      <div class="modal-header" style="margin-bottom: 5px">
                         <span class="closemodal">&times;</span>
-                        <h2>Update Status</h2>
+                        <h4>Update Status</h4>
                       </div>
                       <div class="modal-body">
                         <form method="post" action="{{ URL::route('update-submittle-status')}}" name="model-form">
                         <input type="hidden" value="" name="cand_app">
-                        <input id="login-button" class="btn btn-info" type="submit" value="Submit">
+                        <label style="padding: 0px 10px 10px 0px">Reason: </label><textarea value="" name="cand_app_msg"></textarea></br>
+                        <input id="login-button" style="margin: 0px 0px 15px 20px" class="btn btn-info" type="submit" value="Submit">
                         </form>
                       </div>
                     </div>
