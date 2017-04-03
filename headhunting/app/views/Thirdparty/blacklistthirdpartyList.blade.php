@@ -12,7 +12,7 @@
 'form-horizontal','id' => 'login-form',  'method' => 'GET', 'enctype' => 'multipart/form-data')) }}
 
     <div class="form-group">
-        {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
+        {{ Form::label('email', 'E-Mail/Domain: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('email', "", array('class' =>
             'form-control', 'placeholder' => 'Enter Vendor Email')); }} 
@@ -32,7 +32,7 @@
             <span class='errorlogin email-login'>{{$errors->first('poc');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
+    <!--
     <div class="form-group">
         {{ Form::label('phone', 'Phone: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -54,7 +54,7 @@
             <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
+    -->
     <div class="form-group row ">
       <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
       <div class="col-sm-3">

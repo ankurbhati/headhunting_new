@@ -643,6 +643,22 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
+	Route::match(array('GET'), '/delete-user-third-party/', array(
+			'as'    =>    'delete-user-third-party',
+			'uses'    =>    'ThirdpartyController@deleteThirdpartyByUser'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('POST'), '/delete-user-third-party/', array(
+			'as'    =>    'delete-user-third-party',
+			'uses'    =>    'ThirdpartyController@deleteThirdpartyByUser'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
 	Route::match(array('GET'), '/unblock-third-party/{id}', array(
 			'as'    =>    'unblock-third-party',
 			'uses'    =>    'ThirdpartyController@unblockThirdparty'

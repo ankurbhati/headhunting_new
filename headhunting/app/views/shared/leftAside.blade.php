@@ -77,6 +77,9 @@
                 <li><a href="{{ URL::route('blacklist-third-party-list')}}"><i class="fa fa-user"></i>Blacklist Third Party List</a></li>
                 <li><a href="{{ URL::route('add-third-party') }}"><i class="fa fa-user-plus"></i>Add Third Party</a></li>
                 <li><a href="{{ URL::route('vendor-third-party') }}"><i class="fa fa-user"></i>Upload Third Party</a></li>
+                @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
+                  <li><a href="{{ URL::route('delete-user-third-party') }}"><i class="fa fa-user"></i>Delete Third Party</a></li>
+                @endif
               </ul>
             </li>
             @endif

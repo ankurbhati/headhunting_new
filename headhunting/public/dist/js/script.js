@@ -331,6 +331,9 @@ if($('#msa-group').length > 0) {
 			if($('#disclaimer').length>0){
 				new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('disclaimer');
 			}
+			if($('#guidence').length>0){
+				new nicEditor({fullPanel : true, iconsPath : '/nicEdit/nicEditorIcons.gif'}).panelInstance('guidence');
+			}
 			if($('#signature').length>0){
 				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
 			}

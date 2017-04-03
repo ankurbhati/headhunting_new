@@ -463,3 +463,6 @@ CREATE TABLE IF NOT EXISTS `user_reports` (
 
 ALTER TABLE `user_reports`
   ADD CONSTRAINT `user_reports_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE `settings` CHANGE `type` `guidence` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+ALTER TABLE `settings` CHANGE `value` `disclaimer` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;

@@ -1122,7 +1122,7 @@ class UserController extends HelperController {
 		if(Auth::user()->hasRole(1) || Auth::user()->id == $id) {
 			$q = UserReport::query();
 			$q->where('user_id', '=', $id);
-			if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				
 				if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
 					$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d');
@@ -1169,7 +1169,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function settings() {
-		$setting = Setting::where('type', '=', 'disclaimer')->get();
+		$setting = Setting::get();
 		if(!$setting->isEmpty()) {
 			$setting = $setting->first();
 		} else {
@@ -1238,15 +1238,16 @@ class UserController extends HelperController {
 								->withErrors($validate)
 								->withInput();
 			} else {
-				$setting = Setting::where('type', '=', 'disclaimer')->get();
+				$setting = Setting::get();
 				if(!$setting->isEmpty()) {
 					$setting = $setting->first();
 				} else {
 					$setting = new Setting();
-					$setting->type = 'disclaimer';
 				}
 				
-				$setting->value = Input::get('disclaimer');
+				$setting->disclaimer = Input::get('disclaimer');
+				$setting->guidence = Input::get('guidence');
+				
 				// Checking Authorised or not
 				if($setting->save()) {
 

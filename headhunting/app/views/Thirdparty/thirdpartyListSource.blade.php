@@ -12,7 +12,7 @@
 'form-horizontal','id' => 'login-form',  'method' => 'GET', 'enctype' => 'multipart/form-data')) }}
 
     <div class="form-group">
-        {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
+        {{ Form::label('email', 'E-Mail/Domain: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::text('email', "", array('class' =>
             'form-control', 'placeholder' => 'Enter Vendor Email')); }} 
@@ -33,6 +33,7 @@
             <span class='errorlogin email-login'>{{$errors->first('poc');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+    <!--
     <div class="form-group">
         {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -62,7 +63,7 @@
             <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
+    -->
     <div class="form-group row ">
       <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
       <div class="col-sm-3">
@@ -134,19 +135,19 @@
                   @endif
                 </td>
 									<td>
-										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
+										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->ID)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
 								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
-										  <a href="{{ URL::route('edit-third-party', array($thirdparty->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
+										  <a href="{{ URL::route('edit-third-party', array($thirdparty->ID)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
 								  @endif
                   @if($thirdparty->status == 1)
-                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->id)) }}" title="Unblock Third Party">
+                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->ID)) }}" title="Unblock Third Party">
                     <i class="fa fa-fw fa-check text-success"></i>
                     </a>
                   @else
-                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Blacklist Third Party"><i class="fa fa-fw fa-exclamation-triangle text-danger"></i></a>
+                    <a href="{{ URL::route('block-third-party', array($thirdparty->ID)) }}" title="Blacklist Third Party"><i class="fa fa-fw fa-exclamation-triangle text-danger"></i></a>
                   @endif
 										@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
-											<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
+											<a href="{{ URL::route('delete-third-party', array($thirdparty->ID)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
 										@endif
 								</td>
 	              </tr>
