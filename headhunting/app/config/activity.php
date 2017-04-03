@@ -10,5 +10,7 @@ return array(
 	'job_post_submission'=>'%s has submitted %s requirement', //type 9
 	'candidate_add' =>'%s has added %s candidate', //type 10
 	'org_add' =>'%s has added %s organisation', //type 11
+	'report_upload' =>'%s has uploaded report for %s', //type 12
+	'report_update' =>'%s has updated report for %s', //type 13
 );
 

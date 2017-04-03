@@ -184,6 +184,11 @@
                       </a>
                     </li>
                   @endif
+                    <li class="dropdown padd-left-15">
+                      <a href="{{ URL::route('work-report') }}">
+                        <span>Upload Report</span>
+                      </a>
+                    </li>
                 </ul>
               </li>
           </ul>

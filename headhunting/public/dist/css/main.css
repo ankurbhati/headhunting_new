@@ -9606,3 +9606,13 @@ header .navbar {
 .modal-body div{
   clear: both;
 }
+
+.center-input {
+float: none !important;
+display: block;
+margin: auto;
+}
+
+.errorlogin {
+  color: red;
+}
