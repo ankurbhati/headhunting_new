@@ -64,6 +64,13 @@
                   <li class="dropdown">
                     <a href="{{ URL::route('post-requirement') }}">Post Requirement</a></li>
                 @endif
+                @if(Auth::user()->getRole() != 4)
+                  <li class="dropdown">
+                    <a href="{{ URL::route('pending-requirement') }}">
+                      Pending Requirements
+                    </a>
+                  </li>
+                @endif
                   <li class="dropdown">
                     <a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}">
                       Assigned Requirement</a>

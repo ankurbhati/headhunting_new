@@ -319,6 +319,14 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
+	Route::match(array('GET', 'POST'), '/pending-requirement/{id?}', array(
+			'as'    =>    'pending-requirement',
+			'uses'    =>    'SaleController@pendingRequirementList'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
 	Route::match(array('GET'), '/delete-requirement/{id}', array(
 			'as'    =>    'delete-requirement',
 			'uses'    =>    'SaleController@deleteRequirement'
