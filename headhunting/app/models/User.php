@@ -143,5 +143,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     
     	return $this->email;
     }
+
+    public function thirdpartyuser()
+    {
+        return $this->hasMany('Thirdpartyuser');
+    }
     
 }

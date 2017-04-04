@@ -42,6 +42,9 @@
                               @endif
                             @endif
                             <a href="{{ URL::route('my-activity', array('id' => $managerUser->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            @if(Auth::user()->hasRole(1))
+                            <a href="{{ URL::route('user-report', array('id' => $managerUser->id)) }}" title="View Reports"><i class="fa fa-fw fa-eye"></i></a>
+                            @endif
                             </td>
                           </tr> 
                       @endforeach

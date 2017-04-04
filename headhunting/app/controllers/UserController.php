@@ -27,6 +27,10 @@ class UserController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
+
+	private $report_target_dir = 'uploads/reports/';
+	private $report_size = 5000000;
+
 	public function loginView() {
 		return View::make('User.login')->with(array('title' => 'Login Page'));
 	}
@@ -1027,6 +1031,135 @@ class UserController extends HelperController {
 		}
 	}
 
+	/**
+	 * Show the form for creating a new client.
+	 *
+	 * @return Response
+	 */
+	public function workReport()
+	{
+		return View::make('User.uploadReport')->with(array('title' => 'Upload Report'));
+	}
+
+	/**
+	 * Show the form for creating a new client.
+	 *
+	 * @return Response
+	 */
+	public function uploadWorkReport()
+	{
+		// Server Side Validation.
+		$validate=Validator::make (
+			Input::all(), array(
+					'work_report' => 'required|mimes:pdf,doc,docx',
+					'for_date' => 'required'
+			)
+		);
+
+		if($validate->fails()) {
+			return Redirect::to('work-report')
+						   ->withErrors($validate)
+						   ->withInput();
+		} else {
+			list($msg, $fileType) = $this->check_report_validity();
+			if($msg){
+				# error
+				Session::flash('upload_report_error', $msg);
+				return Redirect::route('work-report')->withInput();
+			}
+			$update = false;
+			$authUser = Auth::user();
+			$for_date = datetime::createfromformat('m/d/Y', Input::get('for_date'))->format('Y-m-d');
+			$report = UserReport::where('for_date', $for_date)->where('user_id', $authUser->id)->first();
+			if($report) {
+				$update = true;
+			} else {
+				$report = new UserReport();
+				$report->for_date = $for_date;
+				$report->user_id = $authUser->id;
+			}
+			list($msg, $target_file) = $this->upload_report($report);
+			if($msg) {
+				Session::flash('upload_report_error', $msg);
+				return Redirect::route('work-report')->withInput();
+			} else {
+				$tmp = explode("/", $target_file);
+				$report->filename = end($tmp);
+				$report->save();
+			}
+			/* User activity */
+			if($update){
+				$description = Config::get('activity.report_update');	
+			}else{
+				$description = Config::get('activity.report_upload');	
+			}
+			$formatted_description = sprintf(
+				$description,
+				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+				$report->for_date
+			);
+			if($update){
+				$this->saveActivity('13', $formatted_description);
+				Session::flash('flashmessagetxt', 'Updated Successfully!!');
+			}else{
+				$this->saveActivity('12', $formatted_description);
+				Session::flash('flashmessagetxt', 'Uploaded Successfully!!');
+			}
+			return Redirect::route('work-report');
+		}
+	}
+
+
+	/**
+	 *
+	 * activityList() : Activity List
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function userReportList($id) {
+
+		if(Auth::user()->hasRole(1) || Auth::user()->id == $id) {
+			$q = UserReport::query();
+			$q->where('user_id', '=', $id);
+			if($_SERVER['REQUEST_METHOD'] == 'POST') {
+				
+				if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+					$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d');
+					$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d');
+					$q->whereBetween('for_date', [$fromDateTime, $toDateTime]);
+				}
+
+				if(!empty(Input::get('csv_download_input'))) {
+					$arrSelectFields = array('for_date');
+
+			        $q->select($arrSelectFields);
+			        $data = $q->get();
+
+			        // passing the columns which I want from the result set. Useful when we have not selected required fields
+			        $arrColumns = array('for_date');
+			         
+			        // define the first row which will come as the first row in the csv
+			        $arrFirstRow = array('For Date');
+			         
+			        // building the options array
+			        $options = array(
+			          'columns' => $arrColumns,
+			          'firstRow' => $arrFirstRow,
+			        );
+
+			        return $this->convertToCSV($data, $options);
+				}
+
+			}
+			
+			$reports = $q->paginate(100);
+
+			return View::make('User.reportList')->with(array('title' => 'Report List', 'reports' => $reports));
+		} else {
+			return Redirect::route('dashboard-view');	
+		}
+	}
 
 	/**
 	 *
@@ -1036,7 +1169,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function settings() {
-		$setting = Setting::where('type', '=', 'disclaimer')->get();
+		$setting = Setting::get();
 		if(!$setting->isEmpty()) {
 			$setting = $setting->first();
 		} else {
@@ -1045,7 +1178,8 @@ class UserController extends HelperController {
 		return View::make('User.settings')->with(array('title' => 'Portal Settings', 'setting' => $setting));
 	}
 
-		/**
+
+	/**
 	 *
 	 * loginView() : saveSettings
 	 *
@@ -1104,15 +1238,16 @@ class UserController extends HelperController {
 								->withErrors($validate)
 								->withInput();
 			} else {
-				$setting = Setting::where('type', '=', 'disclaimer')->get();
+				$setting = Setting::get();
 				if(!$setting->isEmpty()) {
 					$setting = $setting->first();
 				} else {
 					$setting = new Setting();
-					$setting->type = 'disclaimer';
 				}
 				
-				$setting->value = Input::get('disclaimer');
+				$setting->disclaimer = Input::get('disclaimer');
+				$setting->guidence = Input::get('guidence');
+				
 				// Checking Authorised or not
 				if($setting->save()) {
 
@@ -1147,7 +1282,10 @@ class UserController extends HelperController {
 			'6'=>'job-post-creation',
 			'7'=>'job-post-assign',
 			'9'=>'job-post-submission',
-			'10'=>'candidate-add'
+			'10'=>'candidate-add',
+			'11'=>'org-add',
+			'12'=>'report_upload',
+			'13'=>'report_update'	
 		);
 
 		$q = UserActivity::query();
@@ -1192,5 +1330,39 @@ class UserController extends HelperController {
 		return View::make('User.activityList')->with(array('title' => 'Activity List', 'activities' => $activities, 'types' => $types));
 	}
 
+	public function check_report_validity(){
+		$msg = false;
+		$fileType = strtolower(pathinfo($_FILES["work_report"]["name"],PATHINFO_EXTENSION));
+
+		// Check file size
+		if ($_FILES["work_report"]["size"] > $this->report_size) {
+		    $msg = "Sorry, your file is too large.";
+		}
+
+		// Allow certain file formats
+		if($fileType != "doc" && $fileType != "docx" && $fileType != "pdf") {
+		    $msg = "Sorry, only doc, docx and pdf files are allowed.";
+		}
+
+		return array($msg, $fileType);
+	}
+
+	public function upload_report($report) {
+		$msg = false;
+		$fileType = pathinfo($_FILES["work_report"]["name"],PATHINFO_EXTENSION);
+		$target_dir = DOCROOT.$this->report_target_dir.$report->id.'/';
+		$target_file = $target_dir . uniqid() . "." . $fileType;
+
+		if (!is_dir($target_dir)) {
+			mkdir($target_dir, 0777, true);
+		}
+
+		// if everything is ok, try to upload file
+	    if (!move_uploaded_file($_FILES["work_report"]["tmp_name"], $target_file)) {
+	        $msg = "Sorry, there was an error uploading your file.";
+	    }
+
+		return array($msg, $target_file);
+	}
 
 }

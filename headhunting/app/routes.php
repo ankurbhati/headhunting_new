@@ -643,6 +643,22 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
+	Route::match(array('GET'), '/delete-user-third-party/', array(
+			'as'    =>    'delete-user-third-party',
+			'uses'    =>    'ThirdpartyController@deleteThirdpartyByUser'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('POST'), '/delete-user-third-party/', array(
+			'as'    =>    'delete-user-third-party',
+			'uses'    =>    'ThirdpartyController@deleteThirdpartyByUser'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
 	Route::match(array('GET'), '/unblock-third-party/{id}', array(
 			'as'    =>    'unblock-third-party',
 			'uses'    =>    'ThirdpartyController@unblockThirdparty'
@@ -691,6 +707,22 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Client
 	 */
+	Route::match(array('GET'), '/work-report', array(
+			'as'    =>    'work-report',
+			'uses'    =>    'UserController@workreport'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('POST'), '/upload-work-report', array(
+			'as'    =>    'upload-work-report',
+			'uses'    =>    'UserController@uploadWorkReport'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
 	Route::match(array('POST'), '/settings', array(
 			'as'    =>    'settings',
 			'uses'    =>    'UserController@saveSettings'
@@ -703,6 +735,14 @@ Route::group(array('before' => 'auth'), function() {
 	Route::match(array('GET', 'POST'), '/user-activity/{id}', array(
 			'as'    =>    'my-activity',
 			'uses'    =>    'UserController@activityList'
+	));
+
+	/**
+	 * Routes For REST API for new Employee
+	 */
+	Route::match(array('GET', 'POST'), '/user-report/{id}', array(
+			'as'    =>    'user-report',
+			'uses'    =>    'UserController@userReportList'
 	));
 
 	/**

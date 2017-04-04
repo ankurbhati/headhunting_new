@@ -184,6 +184,16 @@
                       </a>
                     </li>
                   @endif
+                    <li class="dropdown padd-left-15">
+                      <a href="{{ URL::route('work-report') }}">
+                        <span>Upload Report</span>
+                      </a>
+                    </li>
+                    @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
+                      <li class="dropdown">
+                        <a href="{{ URL::route('delete-user-third-party') }}">Delete Third Party</a>
+                      </li>
+                    @endif
                 </ul>
               </li>
           </ul>

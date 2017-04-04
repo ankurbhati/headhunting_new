@@ -37,4 +37,8 @@ class Thirdpartyuser extends Eloquent {
         return $this->hasMany('Thirdparty','id','source_id');
     }
 
+    public function user() {
+        return $this->hasMany('User','user_id','id');
+    }
+
 }

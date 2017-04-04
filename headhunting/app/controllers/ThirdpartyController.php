@@ -414,7 +414,7 @@ class ThirdpartyController extends HelperController {
 			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 		}
 
-		$q->join('source_organizations', 'sources.source_organisation_id', '=', 'source_organizations.id');
+		$q->join('source_organizations', 'sources.source_organisation_id', '=', 'source_organizations.id')->select('sources.id as ID','sources.*', 'source_organizations.*');
 		if($id == 1) {
             $q->where('source_organizations.msa_document', '!=', '');
 			/*$q->whereHas('organisation', function($a) use ($id)
@@ -549,62 +549,10 @@ class ThirdpartyController extends HelperController {
 								->withInput();
 			} else {
 
-				$thirdparty = Thirdparty::find($id);
-
-				/*$email = Input::get('email');
-				if($email && $email != $thirdparty->email){
-					if(!Thirdparty::where('email', '=', $email)->get()->isEmpty()) {
-						return Redirect::route('edit-third-party', array('id' => $id))
-						               ->withInput()
-									   ->withErrors(array('email' => "Email is already in use"));
-					}
-					$thirdparty->email = $email;
-				}*/
-				
+				$thirdparty = Thirdparty::find($id);				
 				$thirdparty->poc = Input::get('poc');
 				$thirdparty->phone = Input::get('phone');
 				$thirdparty->phone_ext = Input::get('phone_ext');
-
-				/*$thirdparty->nca_company_name = Input::get('nca_company_name');
-				$thirdparty->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
-				$thirdparty->msa_company_name = Input::get('msa_company_name');
-				$thirdparty->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
-
-				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
-					list($msg, $fileType) = $this->check_resume_validity("nca_document");
-					if($msg){
-						# error
-						Session::flash('nca_document_error', $msg);
-						return Redirect::route('add-third-party')->withInput();
-					} else {
-						# No error					
-						list($msg, $target_file) = $this->upload_document($thirdparty, "nca_document");
-						if($msg) {
-							//error, delete candidate or set flash message
-						} else {
-							$tmp = explode("/", $target_file);
-							$thirdparty->nca_document = end($tmp);
-						}
-					}
-				}
-
-				if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
-					list($msg, $fileType) = $this->check_resume_validity("msa_document");
-					if($msg){
-						# error
-						Session::flash('msa_document_error', $msg);
-						return Redirect::route('add-third-party')->withInput();
-					} else {
-						# No error					
-						list($msg, $target_file) = $this->upload_document($thirdparty, "msa_document");
-						if($msg) {
-							//error, delete candidate or set flash message
-						} else {
-							$tmp = explode("/", $target_file);
-							$thirdparty->msa_document = end($tmp);
-						}
-					}
-				}*/
 
 				// Checking Authorised or not
 				if($thirdparty->save()) {
@@ -757,6 +705,26 @@ class ThirdpartyController extends HelperController {
 				
 			}
 		}
+	}
+
+
+	public function deleteThirdpartyByUser() {
+		$q = Thirdparty::query();
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
+			if($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$user_id = Input::get('user_id');
+				if(!empty($user_id)) {
+					Thirdpartyuser::where('user_id', '=', $user_id)->delete();
+					Session::flash('flashmessagetxt', 'Deleted Successfully');
+				} else {
+					Session::flash('error', 'Please select user');
+				}
+				return Redirect::route('delete-user-third-party');
+			}
+			$thirdparty_owners = User::has('thirdpartyuser')->lists('email', 'id');
+			return View::make('Thirdparty.deleteThirdParty')->with(array('title' => 'Delete Third Party', 'thirdparty_owners' => $thirdparty_owners));	
+		}
+		return Redirect::route('dashboard');
 	}
 
 

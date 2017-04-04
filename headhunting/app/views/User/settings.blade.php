@@ -7,9 +7,18 @@
     <div class="form-group">
         {{ Form::label('disclaimer', 'Mail Disclaimer: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::textarea('disclaimer', $setting->value, array('class' =>
+        <div class="col-sm-8">{{ Form::textarea('disclaimer', $setting->disclaimer, array('class' =>
             'form-control', 'placeholder' => 'ex. Disclaimer')); }}
             <span class='errorlogin'>{{$errors->first('disclaimer');}}@if(!empty($message)){{$message}}@endIf</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('guidence', 'Guidence: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::textarea('guidence', $setting->guidence, array('class' =>
+            'form-control', 'placeholder' => 'ex. Guidence')); }}
+            <span class='errorlogin'>{{$errors->first('guidence');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
 
