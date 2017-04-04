@@ -8,7 +8,6 @@
                   <h3 class="box-title">Client List</h3>
                 </div><!-- /.box-header -->
 
-
                 {{ Form::open(array('class' =>
 'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
 

@@ -28,10 +28,10 @@
                   <div class="form-group row ">
                     <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
                     <div class="col-sm-3">
-                        {{ Form::button('Search', array('class' => 'btn btn-info', 'id' => 'search-button', 'style'=>"float:right") ); }}
+                        {{ Form::button('Search', array('class' => 'btn btn-primary btn-white', 'id' => 'search-button', 'style'=>"float:right") ); }}
                     </div>
                     <div class="col-sm-8">
-                        {{ Form::button('Download Csv', array('class' => 'btn btn-info', 'id' => 'download-button', 'style'=>"float:right") ); }}
+                        {{ Form::button('Download Csv', array('class' => 'btn btn-secondary btn-white', 'id' => 'download-button', 'style'=>"float:right") ); }}
                     </div>
                   </div>
               {{ Form::close() }}
@@ -54,15 +54,13 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @forelse($activities as $activity)
+                      @foreach($activities as $activity)
                           <tr>
                             <td>{{$activity->description}}</td>
                             <td>{{$types[$activity->type]}}</td>
                             <td>{{($activity->created_at != "" && $activity->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($activity->created_at)):"-"}}</td>
                           </tr>
-                      @empty
-                        <p>No Activity Found</p>
-                      @endforelse
+                      @endforeach
                     </tbody>
                     <tfoot>
                       <tr>

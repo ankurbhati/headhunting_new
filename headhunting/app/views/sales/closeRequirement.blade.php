@@ -1,21 +1,26 @@
 @extends('layouts.adminLayout')
 @section('content')
-<div class="content">
-	{{ Form::open(array('class' =>
-	'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
-    @foreach($feedbacks as $key=>$value)
-        <div class="form-group">
-            <div class="col-sm-8" style="float:right;clear:both;">
-                <input type="radio" name="feedback" required="true" value="{{$key}}" >
-                <span><b>{{$value}}</b></span>
+<div class="row detail-view requirement-view">
+    <div class="box col-sm-12">
+        <div class="box-heading">Close Job Post</div>
+        <div class="box-view">
+        	{{ Form::open(array('class' =>
+        	'form-horizontal','id' => 'login-form',  'method' => 'POST')) }}
+            <div class="form-group">
+                @foreach($feedbacks as $key=>$value)
+                    <div class="col-xs-12 col-sm-3">
+                        <input type="radio" id="{{$key}}" name="feedback" required="true" value="{{$key}}">
+                        <label for="{{$key}}">{{$value}}</label>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="form-group row ">
+                <div class="col-sm-12">{{ Form::submit('Close Requirement', array('class' => 'btn
+                    btn-primary btn-white pull-right', 'id' => 'requirement-button') ); }}</div>
             </div>
         </div>
-    @endforeach
-
-    <div class="form-group row ">
-        <div class="col-sm-8" style="float: right;" >{{ Form::submit('Close Requirement', array('class' => 'btn
-            btn-info', 'id' => 'requirement-button') ); }}</div>
     </div>
-
+</div>
 {{ Form::close() }}
 @stop

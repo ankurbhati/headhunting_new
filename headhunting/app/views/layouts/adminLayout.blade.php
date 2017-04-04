@@ -22,11 +22,11 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-    <body class="theme-body" >
+    <body class="theme-body">
     	<div class="home">
 			@include('shared.new-header')
 			<div class="content-wrapper ofBody">
-				<div class="fill container-fluid">
+				<div class="fill container">
 					<div class="container-body">
 				        <div id="status-area">
 			        		<!--<span class="flash_message " style="display: inline;">This is a message!</span>-->
@@ -35,7 +35,7 @@
 				            <li><a href="{{ URL::route('dashboard-view') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 				            <li class="active">Dashboard</li>
 						</ol>
-		        		@yield('content')
+		        			@yield('content')
 	        		</div>
         		</div>
         	</div>

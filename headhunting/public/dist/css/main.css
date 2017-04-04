@@ -6458,7 +6458,7 @@ a {
 #testLoader {
   margin-top: 15px; }
 
-.errorMssg {
+.errorlogin {
   color: #ee0000 !important; }
 
 .ofBody {
@@ -6999,8 +6999,8 @@ footer {
   padding: 0 15px;
   color: #2d2d2d; }
   .content-wrapper .fill {
-    border-left: 1px solid rgba(0, 0, 7, 0.5);
-    border-right: 1px solid rgba(0, 0, 7, 0.5);
+    border-left: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
     min-height: 500px;
     padding-top: 15px;
     box-sizing: border-box; }
@@ -7055,14 +7055,16 @@ footer {
 
 #status-area .flash_message {
   position: absolute;
-  background-color: rgba(29, 67, 141, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
-  padding: 10px;
+  font-weight: 700;
+  padding: 25px;
   min-width: 400px;
-  transition: fadein 9s;
+  transition: fadein 10s;
   right: 106px;
-  top: 350px;
-  border-radius: 5px; }
+  top: 400px;
+  border-radius: 5px;
+  z-index: 9999; }
 
 .breadcrumb {
   background-color: #1d438d;
@@ -7118,6 +7120,11 @@ footer {
     color: #000;
     background-color: #d8d8d8;
     font-weight: 700; }
+.box .box-body a {
+  color: #337ab7; }
+  .box .box-body a:hover, .box .box-body a:focus {
+    color: #000;
+    font-weight: 700; }
 
 .search-form .form-horizontal .searchForm {
   margin-bottom: 15px; }
@@ -7132,11 +7139,12 @@ footer {
   color: #000;
   text-decoration: none; }
 
-a {
-  color: #337ab7; }
-  a:hover, a:focus {
-    color: #000;
-    font-weight: 700; }
+.box .box-body table tr .btn {
+  margin-bottom: 10px; }
+  .box .box-body table tr .btn:hover {
+    font-weight: 400; }
+.box .box-body table tr .text-label {
+  color: #a0a0a0; }
 
 /*! jQuery UI - v1.11.4 - 2015-03-11
 * http://jqueryui.com
@@ -9516,6 +9524,42 @@ header .navbar {
     width: 70% !important; } }
 .padd-left-15 {
   padding-left: 15px; }
+
+.detail-view .box {
+  margin-bottom: 15px;
+  background-color: #fff;
+  border-radius: 5px; }
+  .detail-view .box .box-heading {
+    color: #fff;
+    background-color: #133d8d;
+    padding: 10px;
+    border-radius: 5px 5px 0 0; }
+  .detail-view .box .box-view {
+    padding: 15px;
+    border: 1px solid #d8d8d8; }
+    .detail-view .box .box-view .row {
+      border-bottom: 1px solid #d8d8d8; }
+      .detail-view .box .box-view .row .view-label {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: #a0a0a0;
+        font-weight: 700; }
+      .detail-view .box .box-view .row .view-value {
+        padding-top: 5px;
+        padding-bottom: 5px; }
+      .detail-view .box .box-view .row:last-child {
+        border-bottom: none; }
+  .detail-view .box .box-action {
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid #d8d8d8;
+    width: 100%; }
+    .detail-view .box .box-action .btn {
+      margin-right: 20px; }
+.detail-view a {
+  color: #10254d; }
+  .detail-view a:hover {
+    color: #2d2d2d; }
 
 .error {
   color: #ee0000 !important; }

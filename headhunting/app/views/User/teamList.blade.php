@@ -9,7 +9,7 @@
                     <h3 class="box-title">Assign Job Post</h3>
                   @endif
                   @if($jobPostId == 0)
-                    <h3 class="box-title">My Team Area</h3>
+                    <h3 class="box-title">{{$title}}</h3>
                   @endif
                 </div><!-- /.box-header -->
                 <div class="box-body">

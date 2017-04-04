@@ -7,9 +7,6 @@
                 <div class="box-header">
                   <h3 class="box-title">Employee List</h3>
                 </div>
-
-
-
               {{ Form::open(array('class' =>
               'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
 

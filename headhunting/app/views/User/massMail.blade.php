@@ -59,7 +59,7 @@
 
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit('Send Mail', array('class' => 'btn
-            btn-info pull-right', 'id' => 'requirement-button') ); }}</div>
+            btn-primary btn-white pull-right', 'id' => 'requirement-button') ); }}</div>
 
     </div>
 

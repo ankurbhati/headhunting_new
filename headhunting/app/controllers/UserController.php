@@ -199,7 +199,7 @@ class UserController extends HelperController {
 			      ->where('user_id', '!=', Auth::user()->id);
 		})->paginate(100);
 		
-		return View::make('User.teamList')->with(array('title' => 'Sales Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost, 'managerUsers' => $managerUsers));
+		return View::make('User.teamList')->with(array('title' => 'Sales Team List', 'users' => $users, 'jobPostId' => $id, 'jobPost' => $jobPost, 'managerUsers' => $managerUsers, 'label' => 'Sales Team'));
 	}
 
 	/**

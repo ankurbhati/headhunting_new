@@ -7,12 +7,7 @@
                 <div class="box-header">
                   <h3 class="box-title">Job Postings</h3>
                 </div><!-- /.box-header -->
-
-
-
-
-                  {{ Form::open(array('class' =>
-  'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
+                {{ Form::open(array('class' => 'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
                   <div class="form-group">
                       {{ Form::label('title', 'Job Title: ', array('class' => 'col-sm-3
                       control-label')); }}
@@ -51,110 +46,88 @@
                   </div>
 
               {{ Form::close() }}
-
-
-
-
                 <div class="box-body">
                  <div>
-                        <p class="result-total"><span class="text-bold">{{$jobPost->getTotal()}} results:</span></p>
+                      <p class="result-total"><span class="text-bold">{{$jobPost->getTotal()}} Job Posted:</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Job ID</th>
-                        <th>Job Title</th>
-                        <th>Type Of Employment</th>
-                        <th>Added At</th>
-                        <th>City, Country</th>
-                        <th>Client</th>
+                        <th>Job Title<br/>Client<br>Type Of Employment<br/>City, Country<br/>Added At</th>
                         <th>Added By</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                    	@forelse($jobPost as $jobPosts)
+                    	@foreach($jobPost as $jobPosts)
 		                      <tr>
-                              <td>{{$jobPosts->id}}</td>
-              		            <td>{{$jobPosts->title}}</td>
-              								<td>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
-              								<td>{{($jobPosts->created_at != "" && $jobPosts->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($jobPosts->created_at)):"-"}}</td> 
-                              <td>{{$jobPosts->city->name}}, {{$jobPosts->country->country}}</td>
-                              <td>@if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif</td>
+                              <td>APT-0{{$jobPosts->id}}</td>
+              		            <td><b>{{$jobPosts->title}}</b><br/>
+                              @if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif
+                              <hr>
+                              <b>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</b><br/>
+                              {{$jobPosts->city->name}}, {{$jobPosts->country->country}}<br/>
+                              <span class="text-label">Posted at : </span>{{($jobPosts->created_at != "" && $jobPosts->created_at != "0000-00-00 00:00:00")?date("d M, Y H:i", strtotime($jobPosts->created_at)):"-"}}<br/>
+                              </td>
               								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>
-
               								<td>
                                 @if($jobPosts->status == 1)
-                                  Pending
+                                  <span class="text-pending">Pending</span>
                                 @elseif($jobPosts->status == 2)
-                                  Open
-                                @else
-                                  Closed
+                                  <span class="text-open">Open</span>
+                                @elseif($jobPosts->status == 3)
+                                  <span class="text-open">Closed</span>
                                 @endif
                               </td>
               		            <td>
-  		                        	<a href="{{ URL::route('view-requirement', array('id' => $jobPosts->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
+  		                        	<a class="btn btn-primary btn-white" href="{{ URL::route('view-requirement', array('id' => $jobPosts->id)) }}" title="View Job Post">View</a>
                                 @if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) && !empty($jobPosts) && Auth::user()->id == $jobPosts->created_by) 
-  		                        	  <a href="{{ URL::route('edit-requirement', array($jobPosts->id)) }}" title="Edit Job Post">
-                                    <i class="fa fa-fw fa-edit"></i>
+  		                        	  <a class="btn btn-primary btn-white" href="{{ URL::route('edit-requirement', array($jobPosts->id)) }}" title="Edit Job Post">
+                                    Edit
                                   </a>
                                 @endif
                                 @if($id == 0 && $jobPosts->jobsAssignedToMe()->count() == 0)
   		                        		<!--<a href="{{ URL::route('assign-requirement', array($jobPosts->id)) }}" title="Assign To me"><i class="fa fa-plus"></i></a>-->
                                 @else
-                                  <a href="{{ URL::route('advance-search', array($jobPosts->id)) }}" title="Search Candidate">
-                                    <i class="fa fa-search"></i>
+                                  <a class="btn btn-primary btn-white" href="{{ URL::route('advance-search', array($jobPosts->id)) }}" title="Search Candidate">
+                                    Search
                                   </a>
   		                        	@endif
   		                        	@if(Auth::user()->getRole() <= 2 || Auth::user()->hasRole(8))
-  		                        		<a href="{{ URL::route('delete-requirement', array($jobPosts->id)) }}" title="Delete Job Post">
-                                    <i class="fa fa-fw fa-ban text-danger"></i>
+  		                        		<a class="btn btn-secondary btn-white" href="{{ URL::route('delete-requirement', array($jobPosts->id)) }}" title="Delete Job Post">
+                                    Delete
                                   </a>
   		                        	@endif
-                                  <a href="{{ URL::route('add-comment-job-post-view', array($jobPosts->id)) }}" title="Add Comments">
-                                    <i class="fa fa-fw fa-edit"></i>
+                                  <a class="btn btn-primary btn-white" href="{{ URL::route('add-comment-job-post-view', array($jobPosts->id)) }}" title="Add Comments">
+                                    Add Comments
                                   </a>
                                 @if( $jobPosts->status == 2  && (Auth::user()->hasRole(3) || Auth::user()->hasRole(8) || Auth::user()->hasRole(1)) )
-                                  <a href="{{ URL::route('peers', array($jobPosts->id)) }}" title="Assign To Peers">
-                                    <i class="fa fa-plus"></i> Assign To Peers
+                                  <a class="btn btn-primary btn-white" href="{{ URL::route('peers', array($jobPosts->id)) }}" title="Assign To Peers">
+                                    Assign
                                   </a>
                                 @endif
                                 @if($jobPosts->status ==1  && ( Auth::user()->hasRole(3) || Auth::user()->hasRole(1) ) )
-                                  <a href="{{ URL::route('approve-requirement', array($jobPosts->id)) }}" title="Approve Job Post">
-                                    <i class="glyphicon glyphicon-ok"></i>
+                                  <a class="btn btn-primary btn-white" href="{{ URL::route('approve-requirement', array($jobPosts->id)) }}" title="Approve Job Post">
+                                    Approve
                                   </a>
                                 @endif
                                 @if($jobPosts->status !=3  && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
-                                  <a href="{{ URL::route('close-requirement', array($jobPosts->id)) }}" title="Close Job Post">
-                                    <i class="fa fa-fw fa-minus"></i>
+                                  <a  class="btn btn-primary btn-white" href="{{ URL::route('close-requirement', array($jobPosts->id)) }}" title="Close Job Post">
+                                    Close
                                   </a>
                                 @endif
                                 @if($jobPosts->status == 3 && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
-                                  <a href="{{ URL::route('reopen-requirement', array($jobPosts->id)) }}" title="Reopen Job Post">
-                                    <i class="fa fa-fw fa-plus"></i>
+                                  <a  class="btn btn-primary btn-white" href="{{ URL::route('reopen-requirement', array($jobPosts->id)) }}" title="Reopen Job Post">
+                                    Reopen
                                   </a>
                                 @endif
   		                        </td>
 		                      </tr>
-	                   	@empty
-	                   		<p>No Job Posts</p>
-						@endforelse
+						          @endforeach
 
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Job ID</th>
-                        <th>Job Title</th>
-                        <th>Type Of Employment</th>
-                        <th>Added At</th>
-                        <th>City, State, Country</th>
-                        <th>Client</th>
-                        <th>Added By</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </tfoot>
                   </table>
                   <div>
                         <p style="padding:1.9em 1.2em 0px 0px;">Total no of Jobs Posted :  <span class="text-bold">{{$jobPost->getTotal()}}</span></p>

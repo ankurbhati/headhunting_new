@@ -119,7 +119,7 @@
     </div>-->
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit('Update', array('class' => 'btn
-            btn-info pull-right', 'id' => 'update-button') ); }}</div>
+            btn-primary btn-white pull-right', 'id' => 'update-button') ); }}</div>
 
    </div>
 {{ Form::close() }}
