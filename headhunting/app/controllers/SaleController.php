@@ -574,6 +574,108 @@ class SaleController extends HelperController {
 		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'lead' => $lead, 'login_user' => $login_user));
 	}
 
+
+	/**
+	 *
+	 * listSubmittel() : listSubmittel
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function interviewScheduledListSubmittel($id=0) {
+
+		$status_search = false;
+		$q = CandidateApplication::query();	
+		$login_user = Auth::user();
+
+		$y = CandidateApplication::query();
+		$submittle_status = Config::get('app.job_post_submittle_status');
+
+		$addedByList = $y->leftJoin('users', function($join){
+			$join->on('submitted_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if(!empty(Input::get('submitted_by'))) {
+			$q->where('submitted_by', '=', Input::get('submitted_by'));	
+		}
+
+		$q->where('status', '=', array_search('Interview Scheduled', $submittle_status));
+
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
+        
+        if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+        	/*$q->with(['requirement' => function($v) use($login_user){
+        		$v->where('created_by', $login_user->id);
+    		}]);*/
+    		//$q->with('requirement')->where('created_by', $login_user->id);
+	    }
+
+		if($id == 0) {
+			$candidateApplications = $q->paginate(100);
+		} else {
+			$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
+		}
+		
+		$lead = $this->getTeamLeadForUser($login_user->id);
+		
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'lead' => $lead, 'login_user' => $login_user, 'status_search' => $status_search));
+	}
+
+
+	/**
+	 *
+	 * listSubmittel() : listSubmittel
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function selectedListSubmittel($id=0) {
+
+		$status_search = false;
+		$q = CandidateApplication::query();	
+		$login_user = Auth::user();
+
+		$y = CandidateApplication::query();
+		$submittle_status = Config::get('app.job_post_submittle_status');
+
+		$addedByList = $y->leftJoin('users', function($join){
+			$join->on('submitted_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if(!empty(Input::get('submitted_by'))) {
+			$q->where('submitted_by', '=', Input::get('submitted_by'));	
+		}
+
+		$q->where('status', '=', array_search('Selected By End Client', $submittle_status));
+
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
+        
+        if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
+        	/*$q->with(['requirement' => function($v) use($login_user){
+        		$v->where('created_by', $login_user->id);
+    		}]);*/
+    		//$q->with('requirement')->where('created_by', $login_user->id);
+	    }
+
+		if($id == 0) {
+			$candidateApplications = $q->paginate(100);
+		} else {
+			$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
+		}
+		
+		$lead = $this->getTeamLeadForUser($login_user->id);
+		
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'lead' => $lead, 'login_user' => $login_user, 'status_search' => $status_search));
+	}
+
 	/**
 	 *
 	 * addCommentView() : addCommentView
@@ -690,6 +792,9 @@ class SaleController extends HelperController {
 				if($authUser->id==$candidate_application->requirement->created_by) {
 
 					$candidate_application->status = $status;
+					if($status == 6){
+						$candidate_application->interview_scheduled_date = datetime::createfromformat('m/d/Y',Input::get('interview_scheduled_date'))->format('Y-m-d');
+					}
 					$candidate_application->save();
 
 					$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message);

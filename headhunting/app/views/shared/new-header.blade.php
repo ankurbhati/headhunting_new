@@ -90,6 +90,16 @@
                       <span>Job Submittals</span>
                     </a>
                   </li>
+                  <li class="dropdown padd-left-15">
+                    <a href="{{ URL::route('interview-scheduled-submittel') }}">
+                      <span>Interview Scheduled Submittals</span>
+                    </a>
+                  </li>
+                  <li class="dropdown padd-left-15">
+                    <a href="{{ URL::route('selected-submittel') }}">
+                      <span>End Client Selected Submittals</span>
+                    </a>
+                  </li>
                   <li class="dropdown">
                     <a href="{{ URL::route('candidate-list') }}">Candidate List</a>
                   </li>

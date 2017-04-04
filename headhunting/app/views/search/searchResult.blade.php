@@ -48,6 +48,11 @@
                               @endif
                               @if($jobId > 0)
                                | <a href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel"><i class="fa fa-fw fa-save"></i>Submittel</a>
+
+                              <a href="javascript:void(0);" data-url="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" class="updatejobsubmittle" title="Mark Submittel" title="Update Status">
+                                  <i class="fa fa-fw fa-save"></i>Submittel
+                              </a>
+
                               @endif
 		                        </td>
 		                      </tr>
@@ -64,6 +69,30 @@
                         <th>Action</th>
                     </tfoot>
                   </table>
+
+                  <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <div class="modal-header" style="margin-bottom: 5px">
+                        <span class="closemodal">&times;</span>
+                        <h4>Job Submittel</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form method="post" action="" name="model-form">
+                        <div id="modal-form-content"></div>
+                        <div>
+                          <label>Client Rate: </label><input type="number" min="0" value="" name="client_rate" />
+                        </div>
+                        <div>
+                          <label>Submission Rate: </label><input type="number" min="0" value="" name="submission_rate" />
+                        </div>
+                        <input id="login-button" style="margin: 0px 0px 15px 20px" class="btn btn-primary btn-white" type="submit" value="Submit">
+                        <button type="reset" value="Reset" style="float: right;" class="btn btn-primary btn-white">Reset</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
                         <p style="padding:1.9em 1.2em 0px 0px;">Total results found :  <span class="text-bold">{{$candidate_resumes->getTotal()}}</span></p>
                   </div>

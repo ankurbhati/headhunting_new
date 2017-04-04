@@ -262,6 +262,22 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'SaleController@listSubmittel'
 	));
 
+	/**
+	 * Routes for list-submittel
+	 */
+	Route::match(array('GET'), '/interview-scheduled-submittel/{id?}', array(
+			'as'    =>    'interview-scheduled-submittel',
+			'uses'    =>    'SaleController@interviewScheduledListSubmittel'
+	));
+
+	/**
+	 * Routes for list-submittel
+	 */
+	Route::match(array('GET'), '/selected-submittel/{id?}', array(
+			'as'    =>    'selected-submittel',
+			'uses'    =>    'SaleController@selectedListSubmittel'
+	));
+
 	Route::match(array('POST'), '/list-submittel/{id?}', array(
 			'as'    =>    'list-submittel',
 			'uses'    =>    'SaleController@listSubmittel'

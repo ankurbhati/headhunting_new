@@ -20,7 +20,8 @@
                         <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
-
+                
+                @if(!(isset($status_search)))
                 <div class="form-group">
                     {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
                     control-label')); }}
@@ -28,6 +29,7 @@
                         <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
+                @endif
 
                 <div class="form-group">
                     {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
@@ -58,6 +60,8 @@
                         <th>Type Of Employment</th>
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
+                        <th>Client Rate</th>
+                        <th>Submission Rate</th>
                         <th>Status</th>
                         <th>Message</th>
                         <th>Submitted At</th>
@@ -71,7 +75,14 @@
             								<td>{{($candidateApplication->requirement->type_of_employment == 1)?"Contractual": ($candidateApplication->requirement->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
             								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
             								<td>{{$candidateApplication->candidate->email}}</td>
-            								<td>{{$submittle_status[$candidateApplication->status]}}</td>
+                            <td>{{!empty($candidateApplication->client_rate)?$candidateApplication->client_rate:"-"}}</td>
+                            <td>{{!empty($candidateApplication->submission_rate)?$candidateApplication->submission_rate:"-"}}</td>
+            								<td>
+                              {{$submittle_status[$candidateApplication->status]}}
+                              @if($candidateApplication->status == array_search('Interview Scheduled', $submittle_status) && !empty($candidateApplication->interview_scheduled_date))
+                                {{'('.(date("Y-m-d", strtotime($candidateApplication->interview_scheduled_date))).')'}}
+                              @endif
+                            </td>
                             <?php $submittle_status_rec = JobPostSubmittleStatus::where('job_post_submittle_id', '=',$candidateApplication->id)->orderBy('created_at', 'desc')->first()?>
                             <td>{{(!empty($submittle_status_rec->message))?$submittle_status_rec->message:'-'}}</td>
                             <td>{{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
@@ -102,6 +113,8 @@
                         <th>Type Of Employment</th>
                         <th>Candidate Name</th>
                         <th>Candidate Email</th>
+                        <th>Client Rate</th>
+                        <th>Submission Rate</th>
                         <th>Status</th>
                         <th>Message</th>
                         <th>Submitted At</th>
@@ -121,6 +134,9 @@
                         <form method="post" action="{{ URL::route('update-submittle-status')}}" name="model-form">
                         <div id="modal-form-content"></div>
                         <input type="hidden" value="" name="cand_app">
+                        <div id='interview_scheduled_date'>
+                          <label>Interview Date: </label><input type="text" id="from_date" value="" name="interview_scheduled_date" class="from_date form-control" placeholder="Enter Interview Date" style="margin: 5px 0px; width: 26%;">
+                        </div>
                         <div>
                           <label>Reason: </label><textarea value="" name="cand_app_msg"></textarea>
                         </div>

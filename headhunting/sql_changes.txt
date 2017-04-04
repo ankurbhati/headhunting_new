@@ -466,3 +466,9 @@ ALTER TABLE `user_reports`
 
 ALTER TABLE `settings` CHANGE `type` `guidence` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
 ALTER TABLE `settings` CHANGE `value` `disclaimer` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+ALTER TABLE `candidate_applications` CHANGE `rate` `client_rate` INT( 11 ) NOT NULL ;
+ALTER TABLE `candidate_applications` ADD `submission_rate` INT( 11 ) NOT NULL AFTER `client_rate`;
+ALTER TABLE `candidate_applications` CHANGE `client_rate` `client_rate` INT( 11 ) NULL DEFAULT NULL ;
+ALTER TABLE `candidate_applications` CHANGE `submission_rate` `submission_rate` INT( 11 ) NULL DEFAULT NULL ;
+ALTER TABLE `candidate_applications` ADD `interview_scheduled_date` DATE NULL AFTER `submission_rate` ;

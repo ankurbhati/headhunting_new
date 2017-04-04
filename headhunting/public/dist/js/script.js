@@ -342,7 +342,8 @@ if($('#msa-group').length > 0) {
 	// Get the modal
 	var modal = document.getElementById('myModal');
 	// Get the button that opens the modal
-	$('a.updatejobstatus').on('click', function(event){
+	$('a.updatejobstatus').on('click', function(event) {
+		$('#interview_scheduled_date').hide();
 		var job_post_submittle_status = [
 			'Pending',
 			'Open',
@@ -370,6 +371,7 @@ if($('#msa-group').length > 0) {
 			for(i=6; i<7;i++){
 				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
 			}
+			$('#interview_scheduled_date').show();
 		} else if(status == 6) {
 			for(i=7; i<10;i++){
 				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
@@ -377,6 +379,16 @@ if($('#msa-group').length > 0) {
 		}
 		$('#modal-form-content').html(text);
 		$('input[name="cand_app"]').val(cand_app);
+		modal.style.display = "block";
+	});
+
+	// Get the modal
+
+	// Get the button that opens the modal
+	$('a.updatejobsubmittle').on('click', function(event){
+		
+		var url = $(this).data('url');
+		$('form[name="model-form"]').attr('action', url);
 		modal.style.display = "block";
 	});
 	//var btn = document.getElementsByClassName("updatejobstatus");
@@ -389,11 +401,13 @@ if($('#msa-group').length > 0) {
 	// When the user clicks on <span> (x), close the modal
 	$('.closemodal').on('click', function(event){
 		modal.style.display = "none";
+		$('#interview_scheduled_date').hide();
 	});
 	// When the user clicks anywhere outside of the modal, close it
 	window.onclick = function(event) {
 	    if (event.target == modal) {
 	        modal.style.display = "none";
+	        $('#interview_scheduled_date').hide();
 	    }
 	}
 }(jQuery));

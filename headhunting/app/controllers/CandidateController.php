@@ -641,6 +641,7 @@ class CandidateController extends HelperController {
 	 * @return Response
 	 */
 	public function jobSubmittel($jobId, $userId) {
+
 		if(JobPostAssignment::where('job_post_id', '=', $jobId)
 		                    ->where('assigned_to_id', '=', Auth::user()->id)
 												->exists() &&
@@ -652,6 +653,8 @@ class CandidateController extends HelperController {
 			$candidateApplication->candidate_id = $userId;
 			$candidateApplication->job_post_id = $jobId;
 			$candidateApplication->submitted_by = Auth::user()->id;
+			$candidateApplication->client_rate = Input::get('client_rate');
+			$candidateApplication->submission_rate = Input::get('submission_rate');
 			$candidateApplication->status = 0;
 			$candidateApplication->created_at = date('Y-m-d H:i:s');
 			if($candidateApplication->save()) {
