@@ -47,4 +47,20 @@ class CandidateApplication extends Eloquent {
 
         	return $this->belongsTo('JobPost','job_post_id','id');
         }
+
+    /**
+     *
+     * submittedBy : Relation between submittel and User.
+     *
+     * @return Object belongs to Relation.
+     */
+      public function submittedBy() {
+
+        return $this->belongsTo('User','submitted_by','id');
+      }
+
+      public function applicationStatus() {
+        return $this->hasMany('JobPostSubmittleStatus','job_post_submittle_id','id')
+          ->orderBy('created_at', 'desc');
+      }
 }

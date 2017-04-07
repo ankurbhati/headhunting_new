@@ -294,7 +294,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
-	Route::match(array('POST'), '/add-comment-job-post/{jobId}', array(
+	Route::match(array('POST'), '/add-comment-job-post/{jobId}/{view?}', array(
 			'as'    =>    'add-comment-job-post',
 			'uses'    =>    'SaleController@addComment'
 	));
