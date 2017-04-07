@@ -359,6 +359,15 @@ class HelperController extends BaseController {
         return False;
     }
 
+    public function sendNotificationMail($body_content, $user, $subject='Notification Mail') {
+        Mail::send([], [], function($message) use(&$body_content, &$user, &$subject)
+        {
+            $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+                    ->subject($subject)
+                    ->setBody($body_content, 'text/html');
+        });
+    }
+
     public function saveNotification($description=None, $user_ids=array(), $action_url=None, $bussiness_head=False) {
         if($bussiness_head) {
             $user = $this->getBussinessHead();
@@ -373,6 +382,14 @@ class HelperController extends BaseController {
             $notification->action_url = $action_url;
             $notification->status = 0;
             $notification->save();
+            // send mail
+            try{
+                $user = User::find($user_id);
+                $body_content = 'Hi, <br/>'.$description.'<br/>';
+                sendNotificationMail($description, $user);    
+            } catch(Exception $e) {
+                print $e->getMessage();
+            }
         }
         return True;
     }

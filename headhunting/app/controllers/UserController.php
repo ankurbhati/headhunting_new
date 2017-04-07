@@ -1365,4 +1365,33 @@ class UserController extends HelperController {
 		return array($msg, $target_file);
 	}
 
+	public function crobJobForUserReports() {
+		date_default_timezone_set('Asia/Kolkata');
+		$current_date = date('Y-m-d', time());
+		//$yesterday_date = date("Y-m-d", time() - 60 * 60 * 24);
+		$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
+		if($total_report_sent) {
+			$business_head = $this->getBussinessHead();
+			$users = UserReport::where('for_date', '=', $current_date)->lists('user_id');
+			array_push($users, $business_head->id);
+            $defaulters = User::whereNotIn('id', $users)->select('first_name', 'last_name', 'email')->lists('email');
+    
+            $body_content = 'hi, <br/><br/>';
+            $body_content .= '<table><tbody><th style="border: 1px solid grey;">Defaulter Emails For '.$current_date.'</th>';
+            foreach($defaulters as $defaulter) {
+            	$body_content .= '<tr><td style="border: 1px solid grey;">'.$defaulter.'</td></tr>';
+            }
+            $body_content .= '</tbody></table>';
+            print $body_content;
+            try{
+            	$this->sendNotificationMail($body_content, $business_head, $subject='Employee Reports For'.$current_date);
+            }catch(Exception $e){
+            	print $e->getMessage();
+            }
+			print 'In crobJobForUserReports';exit();
+		}else{
+			// do nothing as its a holiday
+		}
+	}
+
 }

@@ -835,4 +835,8 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'SaleController@updateSubmittleStatus'
 	));
 
+	Route::match(array('GET'), '/crob-job-for-user-reports', array(
+			'as'    =>    'crob-job-for-user-reports',
+			'uses'    =>    'UserController@crobJobForUserReports'
+	));
 });
