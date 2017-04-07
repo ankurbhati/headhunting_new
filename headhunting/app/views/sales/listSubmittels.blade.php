@@ -20,7 +20,7 @@
                         <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
-                
+
                 @if(!(isset($status_search)))
                 <div class="form-group">
                     {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
@@ -53,53 +53,70 @@
 
 
                 <div class="box-body">
+                  <div>
+                        <p class="result-total"><span class="text-bold">{{$candidateApplications->getTotal()}} results</span></p>
+                  </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Job Title</th>
-                        <th>Type Of Employment</th>
-                        <th>Candidate Name</th>
-                        <th>Candidate Email</th>
-                        <th>Client Rate</th>
-                        <th>Submission Rate</th>
+                        <th>Job Title / <br>Type Of Employment</th>
+                        <th>Candidate Name / <br/>
+                            Candidate Email
+                        </th>
                         <th>Status</th>
+                        <th>Client Rate/<br>
+                            Submission Rate
+                        </th>
+                        <th>Submitted At /
+                            <br/>
+                            Submitted By
+                        </th>
                         <th>Message</th>
-                        <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                     	@forelse($candidateApplications as $candidateApplication)
 		                      <tr>
-		                        <td>{{$candidateApplication->requirement->title}}</td>
-            								<td>{{($candidateApplication->requirement->type_of_employment == 1)?"Contractual": ($candidateApplication->requirement->type_of_employment == 2)?"Permanent": "Contract to hire";}}</td>
-            								<td>{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</td>
-            								<td>{{$candidateApplication->candidate->email}}</td>
-                            <td>{{!empty($candidateApplication->client_rate)?$candidateApplication->client_rate:"-"}}</td>
-                            <td>{{!empty($candidateApplication->submission_rate)?$candidateApplication->submission_rate:"-"}}</td>
+		                        <td>
+                              {{$candidateApplication->requirement->title}}
+                              <br/>
+                              {{($candidateApplication->requirement->type_of_employment == 1)?"Contractual": ($candidateApplication->requirement->type_of_employment == 2)?"Permanent": "Contract to hire";}}
+                            </td>
             								<td>
+                              <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" target="_blank">
+                                {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}<br/>{{$candidateApplication->candidate->email}}
+                              </a>
+                            </td>
+                            <td>
                               {{$submittle_status[$candidateApplication->status]}}
                               @if($candidateApplication->status == array_search('Interview Scheduled', $submittle_status) && !empty($candidateApplication->interview_scheduled_date))
                                 {{'('.(date("Y-m-d", strtotime($candidateApplication->interview_scheduled_date))).')'}}
                               @endif
                             </td>
-                            <?php $submittle_status_rec = JobPostSubmittleStatus::where('job_post_submittle_id', '=',$candidateApplication->id)->orderBy('created_at', 'desc')->first()?>
-                            <td>{{(!empty($submittle_status_rec->message))?$submittle_status_rec->message:'-'}}</td>
-                            <td>{{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
+                            <td>{{!empty($candidateApplication->client_rate)?$candidateApplication->client_rate:"-"}}<br>
+                            {{!empty($candidateApplication->submission_rate)?$candidateApplication->submission_rate:"-"}}
+                            </td>
+                            <td>
+                            {{$candidateApplication->submittedBy->first_name." ".$candidateApplication->submittedBy->last_name}}
+                            <br/>
+                            {{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
+                            <td>
+                            {{(!empty($candidateApplication->applicationStatus->first()->message))?$candidateApplication->applicationStatus->first()->message:'-'}}</td>
 		                        <td>
-		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post"><i class="fa fa-fw fa-eye"></i></a>
-                              <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
-                              <a href="{{ URL::route('add-comment-job-post-view', array($candidateApplication->requirement->id)) }}" title="Add Comments"><i class="fa fa-fw fa-edit"></i></a>
                               @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (!empty($lead) && $login_user->id == $lead->id) ) )
-                                <a href="{{ URL::route('approve-submittle', array($candidateApplication->id)) }}" title="Approve Candidate Recomendation">
-                                  <i class="glyphicon glyphicon-ok"></i>
+                                <a href="{{ URL::route('approve-submittle', array($candidateApplication->id)) }}" title="Approve Candidate Recomendation"  class="btn btn-secondary btn-white">
+                                  Approve Submittels
                                 </a>
                               @endif
                               @if ( ($candidateApplication->status == 1 || $candidateApplication->status == 3 || $candidateApplication->status == 5 || $candidateApplication->status == 6) && ($login_user->id == $candidateApplication->requirement->created_by))
-                                <a href="javascript:void(0);" class="updatejobstatus" data-status="{{$candidateApplication->status}}" data-candapp="{{$candidateApplication->id}}" title="Update Status">
-                                  <i class="glyphicon glyphicon-ok"></i>
+                                <a href="javascript:void(0);" class="updatejobstatus" data-status="{{$candidateApplication->status}}" data-candapp="{{$candidateApplication->id}}"  class="btn btn-secondary btn-white" title="Update Status">
+                                  Update Status
                                 </a>                              
                               @endif
+		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post" class="btn btn-primary btn-white">Job Post</a>
+                              <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" title="View Profile"  class="btn btn-primary btn-white">Candidate</a>
+                              <a href="{{ URL::route('add-comment-job-post-view', array($candidateApplication->requirement->id)) }}" title="Add Comments"  class="btn btn-secondary btn-white"> Add Comments</a>
 		                        </td>
 		                      </tr>
 	                   	@empty
@@ -109,15 +126,19 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Job Title</th>
-                        <th>Type Of Employment</th>
-                        <th>Candidate Name</th>
-                        <th>Candidate Email</th>
-                        <th>Client Rate</th>
-                        <th>Submission Rate</th>
+                        <th>Job Title / <br>Type Of Employment</th>
+                        <th>Candidate Name / <br/>
+                            Candidate Email
+                        </th>
                         <th>Status</th>
+                        <th>Client Rate/<br>
+                            Submission Rate
+                        </th>
+                        <th>Submitted At /
+                            <br/>
+                            Submitted By
+                        </th>
                         <th>Message</th>
-                        <th>Submitted At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

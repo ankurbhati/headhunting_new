@@ -75,77 +75,68 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Email</th>
-                        <th>Point Of Contact</th>
-                        <th>Phone</th>
+                        <th>Email<br>Point Of Contact<br>Phone</th>
                         <th>NCA Document</th>
                         <th>MSA Document</th>
-                        <th>Added At</th>
                         <th>Status</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-	                    @forelse($thirdparties as $thirdparty)
+	                   @foreach($thirdparties as $thirdparty)
 		                    <tr>
-								<td>{{$thirdparty->email}}</td>
-									<td>{{$thirdparty->poc}}</td>
-									<td>{{$thirdparty->phone}}</td>
-                @if($thirdparty->organisation->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document)))
+  								<td>{{$thirdparty->email}}<br>{{$thirdparty->poc}}<br>{{$thirdparty->phone}}</td>
                   <td>
-                    <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
-                  </td>
-                @else
-                  <td>-</td>
-                @endif
-								@if($thirdparty->organisation->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document)))
-                  <td>
-                    <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
-                  </td>
-                @else
-                  <td>-</td>
-                @endif
-                <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
-                <td>
-                  @if($thirdparty->status == 1)
-                  Blacklisted
-                  @else
-                  Active
-                  @endif
-                </td>
+                    @if($thirdparty->organisation->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document)))
 
+                      <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
+                    @else
+                      -
+                    @endif
+                  </td>
+                  <td>
+  								@if($thirdparty->organisation->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document)))
+                  
+                      <a href="{{'/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
+                  @else
+                    -
+                  @endif
+                  </td>
+                  <td>
+                    @if($thirdparty->status == 1)
+                    Blacklisted
+                    @else
+                    Active
+                    @endif
+                  </td>
+                  <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
 									<td>
-										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
+										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile" class="btn btn-primary btn-white">View</a>
 								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
-										  <a href="{{ URL::route('edit-third-party', array($thirdparty->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
+										  <a href="{{ URL::route('edit-third-party', array($thirdparty->id)) }}" title="Edit Profile"  class="btn btn-primary btn-white">Edit</a>
 								  @endif
                   @if($thirdparty->status == 1)
-                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->id)) }}" title="Unblock Third Party">
-                    <i class="fa fa-fw fa-ban text-danger"></i>
+                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->id)) }}" title="Unblock Third Party"  class="btn btn-primary btn-white">
+                    Unblock
                     </a>
                   @else
-                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Block Third Party"><i class="fa fa-fw fa-ban text-danger"></i></a>
-                    <i class="fa fa-fw fa-check text-success"></i>
-                    </a>
+                    <a href="{{ URL::route('block-third-party', array($thirdparty->id)) }}" title="Block Third Party"  class="btn btn-primary btn-white">Block</a>
                   @endif
 									@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
-										<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
+										<a href="{{ URL::route('delete-third-party', array($thirdparty->id)) }}" title="Delete Profile"  class="btn btn-secondary btn-white">Delete</a>
 									@endif
 								</td>
 	              </tr>
-	                   	@empty
-	                   		<p>No Third Party</p>
-						@endforelse
+						@endforeach
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Email</th>
-                        <th>Point Of Contact</th>
-                        <th>Phone</th>
+                        <th>Email<br>Point Of Contact<br>Phone</th>
                         <th>NCA Document</th>
                         <th>MSA Document</th>
-                        <th>Added At</th>
                         <th>Status</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>

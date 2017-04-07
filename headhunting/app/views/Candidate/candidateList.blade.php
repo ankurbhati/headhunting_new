@@ -82,61 +82,54 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Full Name</th>
-                        <th>Email</th>
+                        <th>Email<br/>Full Name</br>Phone</th>
+                        <th>Work State<br>Visa Id</th>
                         <th>Added By</th>
-                        <th>Phone</th>
                         <th>Added At</th>
-                        <th>Work State</th>
-                        <th>Visa Id</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-	                    @forelse($candidates as $candidate)
+	                    @foreach($candidates as $candidate)
 		                      <tr>
-                            <td>{{$candidate->first_name. " ".$candidate->last_name }}</td>
-                            <td>{{$candidate->email}}</td>
+                            <td>
+                              <b>{{$candidate->email}}</b><br/>
+                              {{$candidate->first_name. " ".$candidate->last_name }}<br/>
+                              {{$candidate->phone}}
+                            </td>
+                            <td>
+                              {{($candidate->workstate->id == 3)?$candidate->workstate->title:$candidate->workstate->title }}{{($candidate->source_id != "" && $candidate->workstate->id == 3)?"(<a href='".URL::route('view-third-party', array('id' => $candidate->thirdparty->id))."'>".$candidate->thirdparty->email."</a>)":""}}<br>
+                              {{$candidate->visa->title}}
+                            </td>
                             <td>{{$candidate->added_by_name}}</td>
-		                        <td>{{$candidate->phone}}</td>
                             <td>
                               {{($candidate->created_at != "" && $candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->created_at)):"-"}}
                             </td>
-                            <td>{{($candidate->workstate->id == 3)?$candidate->workstate->title:$candidate->workstate->title }}{{($candidate->source_id != "" && $candidate->workstate->id == 3)?"(<a href='".URL::route('view-third-party', array('id' => $candidate->thirdparty->id))."'>".$candidate->thirdparty->email."</a>)":""}}</td>
-		                        <td>{{$candidate->visa->title}}</td>
 		                        <td>
-		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
+		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->id)) }}" title="View Profile" class="btn btn-primary btn-white">View</a>
                               @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8))
-		                        	  <a href="{{ URL::route('edit-candidate', array($candidate->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
+		                        	  <a href="{{ URL::route('edit-candidate', array($candidate->id)) }}" title="Edit Profile" class="btn btn-primary btn-white">Edit</a>
                               @endif
 		                        	@if(Auth::user()->hasRole(1) || Auth::user()->hasRole(3) || Auth::user()->hasRole(5) || Auth::user()->hasRole(7) || Auth::user()->hasRole(8))
-		                        		<a href="{{ URL::route('delete-candidate', array($candidate->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
+		                        		<a href="{{ URL::route('delete-candidate', array($candidate->id)) }}" title="Delete Profile" class="btn btn-primary btn-white">Delete</a>
 		                        	@endif
                               @if((Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path)))
-                              <a href="{{'/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path}}" title="Download Resume" target="_blank"><i class="glyphicon glyphicon-download"></i></a>
+                              <a href="{{'/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path}}" title="Download Resume" target="_blank" class="btn btn-secondary btn-white">Download Resume</a>
                               @endif
 		                        </td>
 		                      </tr>
-	                   	@empty
-	                   		<p>No Candidate</p>
-						@endforelse
+        						  @endforeach
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Full Name</th>
-                        <th>Email</th>
+                        <th>Email<br/>Full Name</br>Phone</th>
+                        <th>Work State<br>Visa Id</th>
                         <th>Added By</th>
-                        <th>Phone</th>
                         <th>Added At</th>
-                        <th>Work State</th>
-                        <th>Visa Id</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>
                   </table>
-                  <div>
-                    <p style="padding:1.9em 1.2em 0px 0px;">Total no of candidates :  <span class="text-bold">{{$candidates->getTotal()}}</span></p>
-                  </div>
                   @if (count($candidates) > 0)
                     <div>
                       <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Pages</span>
@@ -148,5 +141,4 @@
             </div><!-- /.col -->
           </div><!-- /.row -->
         </section><!-- /.content -->
-
 @stop

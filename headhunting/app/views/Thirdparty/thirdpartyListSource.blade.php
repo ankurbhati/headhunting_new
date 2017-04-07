@@ -84,25 +84,26 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Email</th>
+                        <th>Email<br>Company Name</th>
                         @if($id != 1)
                           <th>NCA Document</th>
-                          <th>NCA Company Name</th>
                           <th>NCA Activation Date</th>
                         @else
                           <th>MSA Document</th>
-                          <th>MSA Company Name</th>
                           <th>MSA Activation Date</th>
                         @endif
-                        <th>Added At</th>
                         <th>Status</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-	                    @forelse($thirdparties as $thirdparty)
+	                    @foreach($thirdparties as $thirdparty)
 		                    <tr>
-								<td>{{$thirdparty->email}}</td>
+								<td>{{$thirdparty->email}}
+                  <br>
+                  <b>{{$thirdparty->organisation->name}}</b>
+                </td>
                 @if($id != 1)
                    @if($thirdparty->organisation->nca_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->nca_document)))
                   <td>
@@ -111,8 +112,7 @@
                   @else
                     <td>-</td>
                   @endif
-                  <td>{{$thirdparty->organisation->name}}</td>
-                  <td>{{($thirdparty->organisation->nca_activation_date != "" && $thirdparty->organisation->nca_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->organisation->nca_activation_date)):""}}</td>
+                  <td>{{($thirdparty->organisation->nca_activation_date != "" && $thirdparty->organisation->nca_activation_date != "0000-00-00 00:00:00" && $thirdparty->organisation->nca_activation_date != "1970-01-01 00:00:00")?date("d/m/Y", strtotime($thirdparty->organisation->nca_activation_date)):date("Y-m-d", strtotime($thirdparty->created_at))}}</td>
                 @else
                   @if($thirdparty->organisation->msa_document && file_exists(public_path('/uploads/documents/'.$thirdparty->organisation->id.'/'.$thirdparty->organisation->msa_document)))
                   <td>
@@ -121,64 +121,55 @@
                   @else
                     <td>-</td>
                   @endif
-                  <td>{{$thirdparty->organisation->name}}</td>
-                  <td>{{($thirdparty->organisation->msa_activation_date != "" && $thirdparty->organisation->msa_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($thirdparty->organisation->msa_activation_date)):""}}</td>
+                  <td>{{($thirdparty->organisation->msa_activation_date != "" && $thirdparty->organisation->msa_activation_date != "0000-00-00 00:00:00" && $thirdparty->organisation->msa_activation_date != "1970-01-01 00:00:00")?date("d/m/Y", strtotime($thirdparty->organisation->msa_activation_date)):date("Y-m-d", strtotime($thirdparty->created_at))}}</td>
                 @endif
-                <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
                 <td>
                   @if($thirdparty->status == 1)
-                  Blacklisted
-                  @elseif($thirdparty->status == 2)
-                  MSA/NCA Incomplete
-                  @else
-                  Active
-                  @endif
+                      Blacklisted
+                    @elseif($thirdparty->status == 2)
+                      MSA/NCA Incomplete
+                    @else
+                      Active
+                    @endif
                 </td>
+                <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty->created_at)):"-"}}</td>
 									<td>
-										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->ID)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
+										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->ID)) }}" title="View Profile" class="btn btn-primary btn-white">View</a>
 								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
-										  <a href="{{ URL::route('edit-third-party', array($thirdparty->ID)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
+										  <a href="{{ URL::route('edit-third-party', array($thirdparty->ID)) }}" title="Edit Profile"  class="btn btn-primary btn-white">Edit</a>
 								  @endif
                   @if($thirdparty->status == 1)
-                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->ID)) }}" title="Unblock Third Party">
-                    <i class="fa fa-fw fa-check text-success"></i>
+                    <a href="{{ URL::route('unblock-third-party', array($thirdparty->ID)) }}" title="Unblock Third Party"  class="btn btn-primary btn-white">
+                      Unblock
                     </a>
                   @else
-                    <a href="{{ URL::route('block-third-party', array($thirdparty->ID)) }}" title="Blacklist Third Party"><i class="fa fa-fw fa-exclamation-triangle text-danger"></i></a>
+                    <a href="{{ URL::route('block-third-party', array($thirdparty->ID)) }}" title="Blacklist Third Party"  class="btn btn-primary btn-white">Blacklist</a>
                   @endif
-										@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
-											<a href="{{ URL::route('delete-third-party', array($thirdparty->ID)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
+										@if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8))
+											<a href="{{ URL::route('delete-third-party', array($thirdparty->ID)) }}" title="Delete Profile"  class="btn btn-secondary btn-white">Delete</a>
 										@endif
 								</td>
 	              </tr>
-	                   	@empty
-	                   		<p>No Third Party</p>
-						@endforelse
+						  @endforeach
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Email</th>
+                        <th>Email<br>Company Name</th>
                         @if($id != 1)
                           <th>NCA Document</th>
-                          <th>NCA Company Name</th>
                           <th>NCA Activation Date</th>
                         @else
                           <th>MSA Document</th>
-                          <th>MSA Company Name</th>
                           <th>MSA Activation Date</th>
                         @endif
-                        <th>Added At</th>
                         <th>Status</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>
                   </table>
-                  <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Third Parties Sources :  <span class="text-bold">{{$thirdparties->getTotal()}}</span></p>
-                  </div>
                   @if (count($thirdparties) > 0)
                     <div>
-                       
                       {{ $thirdparties->links() }}
                     </div>
                   @endif

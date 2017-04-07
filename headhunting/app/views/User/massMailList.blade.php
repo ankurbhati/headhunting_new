@@ -89,10 +89,10 @@
                             <td>{{($mass_mail->status == 1)?"Pending":($mass_mail->status == 2?"In Progress":($mass_mail->status == 5?"Canceled":"Completed"))}}</td>
                             <td>{{($mass_mail->created_at != "" && $mass_mail->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($mass_mail->created_at)):"-"}}</td>
 		                        <td>
-		                        	<a href="{{ URL::route('view-mass-mail', array('id' => $mass_mail->id)) }}" title="View Mass Mail"><i class="fa fa-fw fa-eye"></i></a>
+		                        	<a href="{{ URL::route('view-mass-mail', array('id' => $mass_mail->id)) }}" title="View Mass Mail" class="btn btn-white btn-primary">View</a>
 
                               @if($mass_mail->status == 1 && (Auth::user()->hasRole(1) || Auth::user()->hasRole(8)))
-                                <a href="{{ URL::route('cancel-mass-mail', array('id' => $mass_mail->id)) }}" title="Cancel Mass Mail"><i class="fa fa-close"></i></a>
+                                <a href="{{ URL::route('cancel-mass-mail', array('id' => $mass_mail->id)) }}" title="Cancel Mass Mail" class="btn btn-secondary btn-white">Cancel Mass Mail</a>
                               @endif
 		                        </td>
 		                      </tr>

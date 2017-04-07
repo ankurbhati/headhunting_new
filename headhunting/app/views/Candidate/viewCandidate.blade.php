@@ -1,7 +1,7 @@
 @extends('layouts.adminLayout')
 @section('content')
 
-	<div class="row detail-view user-view">
+	<div class="row detail-view search-view-user">
 	@if($jobId > 0)
 			<div class="col-sm-2">
 				<a class="btn btn-primary btn-white" href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->id)) }}">

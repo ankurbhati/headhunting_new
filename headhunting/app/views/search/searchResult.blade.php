@@ -3,69 +3,58 @@
 <section class="content">
           <div class="row">
             <div class="col-xs-12">
+            <a class="btn btn-secondary btn-white" href="{{ URL::route('advance-search', array($jobId)) }}">
+                          Back To Search Candidate
+                        </a>
             <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title col-sm-9">Search Results for <strong style="background-color:#d8d8d8; padding:0 15px;">{{$searching_text}}</strong></h3>
-                  <div class="col-sm-3">
-                				<a class="btn btn-primary pull-right" href="{{ URL::route('advance-search', array($jobId)) }}">
-                					<i class="fa fa-search"></i> <span>Back To Search Candidate</span>
-                				</a>
-                	</div>
-                </div><!-- /.box-header -->
                 <div class="box-body">
                 <div>
-                        <p class="result-total"><span class="text-bold">{{$candidate_resumes->getTotal()}} results:</span></p>
+                        <p class="result-total"><span class="text-bold">{{$candidate_resumes->getTotal()}} results for <strong>{{$searching_text}}</strong></span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th><input type="checkbox" name="checkall" value="">Check All</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Added At</th>
+                        <th>Name<br>Email</th>
                         <th>Resume</th>
+                        <th>Added At</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-	                    @forelse($candidate_resumes as $candidate)
+	                    @foreach($candidate_resumes as $candidate)
 		                      <tr>
                             <td><input type="checkbox" class="checkcandidate" value="{{$candidate->candidate->id}}"></td>
                             <td>
                                 {{$candidate->candidate->first_name." ".$candidate->candidate->last_name}}
-                            </td>
-                            <td>
+                                <br>
                                 {{$candidate->candidate->email}}
                             </td>
-                            <td>{{($candidate->candidate->created_at != "" && $candidate->candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->candidate->created_at)):"-"}}</td>
                             <td>
                                 <p>{{$candidate->resume?'"'.str_replace("<br />", "", substr($candidate->resume, 0, 80)).'..."':""}}</p>
                             </td>
+                            <td>{{($candidate->candidate->created_at != "" && $candidate->candidate->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidate->candidate->created_at)):"-"}}</td>
 		                        <td>
-		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId, 'searchingText' => $searching_text_to_send)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i>View </a>
+		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId, 'searchingText' => $searching_text_to_send)) }}" title="View Profile" class="btn btn-primary btn-white">View </a>
                               @if(Auth::user()->getRole() <= 3 && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path)))
-                              | <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"><i class="glyphicon glyphicon-download"></i>Download</a>
+                              | <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"  class="btn btn-secondary btn-white">Download</a>
                               @endif
                               @if($jobId > 0)
-                               | <a href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel"><i class="fa fa-fw fa-save"></i>Submittel</a>
+                               | <a href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel" class="btn btn-primary btn-white">Submittel</a>
 
-                              <a href="javascript:void(0);" data-url="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" class="updatejobsubmittle" title="Mark Submittel" title="Update Status">
-                                  <i class="fa fa-fw fa-save"></i>Submittel
+                              <a href="javascript:void(0);" data-url="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" class="updatejobsubmittle" title="Mark Submittel" title="Update Status"  class="btn btn-primary btn-white">
+                                  Submittel
                               </a>
-
                               @endif
 		                        </td>
 		                      </tr>
-	                   	@empty
-	                   		<p>No Candidate</p>
-						@endforelse
+						      @endforeach
                     </tbody>
                     <tfoot>
                         <th><input type="checkbox" name="checkall" value="">Check All</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Added At</th>
+                        <th>Name<br>Email</th>
                         <th>Resume</th>
+                        <th>Added At</th>
                         <th>Action</th>
                     </tfoot>
                   </table>
@@ -93,9 +82,6 @@
                     </div>
                   </div>
 
-                  <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total results found :  <span class="text-bold">{{$candidate_resumes->getTotal()}}</span></p>
-                  </div>
                   @if (count($candidate_resumes) > 0)
                     <div>
                        
@@ -117,5 +103,4 @@
               </div>
          </div>
         </section><!-- /.content -->
-
 @stop

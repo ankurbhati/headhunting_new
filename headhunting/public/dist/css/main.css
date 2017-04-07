@@ -7124,7 +7124,7 @@ footer {
   color: #337ab7; }
   .box .box-body a:hover, .box .box-body a:focus {
     color: #000;
-    font-weight: 700; }
+    font-weight: 400; }
 
 .search-form .form-horizontal .searchForm {
   margin-bottom: 15px; }
@@ -7145,6 +7145,18 @@ footer {
     font-weight: 400; }
 .box .box-body table tr .text-label {
   color: #a0a0a0; }
+
+.margin-top-20 {
+  margin-top: 20px; }
+
+span.highlight {
+  background-color: #133d8d;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 15px; }
+
+.datepicker {
+  z-index: 9999; }
 
 /*! jQuery UI - v1.11.4 - 2015-03-11
 * http://jqueryui.com
@@ -9156,11 +9168,21 @@ header .navbar {
                 float: left;
                 padding-right: 70px;
                 padding-left: 0px;
-                min-height: 125px;
+                min-height: 50px;
                 padding-top: 15px; }
                 @media (max-width: 1200px) {
                   header .navbar .navbar-nav > .dropdown.open .dropdown-menu > .dropdown .dropdown-menu-child ul {
                     padding-right: 32px; } }
+                @media (min-width: 1024px) {
+                  header .navbar .navbar-nav > .dropdown.open .dropdown-menu > .dropdown .dropdown-menu-child ul.inline-items li {
+                    padding: 0 25px;
+                    padding-bottom: 0 !important;
+                    display: inline-block;
+                    border-right: 1px solid #d8d8d8; }
+                    header .navbar .navbar-nav > .dropdown.open .dropdown-menu > .dropdown .dropdown-menu-child ul.inline-items li:last-child {
+                      border: none; }
+                    header .navbar .navbar-nav > .dropdown.open .dropdown-menu > .dropdown .dropdown-menu-child ul.inline-items li:nth-child(1) {
+                      padding-left: 15px; } }
                 header .navbar .navbar-nav > .dropdown.open .dropdown-menu > .dropdown .dropdown-menu-child ul.list-inline {
                   padding-right: 0px;
                   min-height: 20px;
@@ -9565,98 +9587,3 @@ header .navbar {
   color: #ee0000 !important; }
 
 /*# sourceMappingURL=main.css.map */
-
-
-
-
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 0;
-    border: 1px solid #888;
-    width: 50%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s
-}
-
-/* Add Animation */
-@-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0} 
-    to {top:0; opacity:1}
-}
-
-@keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
-}
-
-/* The Close Button */
-.closemodal {
-    color: white;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.closemodal:hover,
-.closemodal:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-header {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
-}
-
-.modal-body {padding: 2px 16px;}
-
-.modal-footer {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
-}
-
-.modal textarea {
-  resize: none;
-}
-
-.modal label {
-  width: 30%;
-  float: left;
-}
-
-.modal-body div{
-  clear: both;
-}
-
-.center-input {
-float: none !important;
-display: block;
-margin: auto;
-}
-
-.errorlogin {
-  color: red;
-}
