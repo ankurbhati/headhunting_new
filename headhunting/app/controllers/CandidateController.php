@@ -688,9 +688,11 @@ class CandidateController extends HelperController {
 				Session::flash('flashmessagetxt', 'Submitted Successfully!!');
 				return Redirect::route('list-submittel', array('id' => $jobId));
 			} else {
+				Session::flash('flashmessagetxt', 'Failed To Submit!!');
 				return Redirect::route('dashboard-view');
 			}
 		} else {
+			Session::flash('flashmessagetxt', 'Failed To Submit!!');
 			return Redirect::route('dashboard-view');
 		}
 	}

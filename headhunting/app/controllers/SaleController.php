@@ -758,7 +758,7 @@ class SaleController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
-	public function addComment($jobId) {
+	public function addComment($jobId, $view) {
 		$jobPost = JobPost::where('id', '=', $jobId)->get();
 		if(!$jobPost->isEmpty()) {
 
@@ -782,9 +782,13 @@ class SaleController extends HelperController {
 				$jobPostComment->added_by = Auth::user()->id;
 				$jobPostComment->created_at = date('Y-m-d H:i:s');
 				if($jobPostComment->save()) {
-					$jobPost = JobPost::with(array('comments', 'comments.user'))->select(array('id', 'title'))->where('id', '=', $jobId)->get()->first();
-					Session::flash('flashmessagetxt', 'Comment Added Successfully!!'); 
-					return View::make('sales.postCommentRequirement')->with(array('title' => 'Job Post Comments - Headhunting', 'jobPost' => $jobPost));
+					if(!empty($view) && $view == 1) {
+						return Redirect::route('view-requirement', array('id' => $jobPostComment->job_post_id));
+					} else {
+						$jobPost = JobPost::with(array('comments', 'comments.user'))->select(array('id', 'title'))->where('id', '=', $jobId)->get()->first();
+						Session::flash('flashmessagetxt', 'Comment Added Successfully!!'); 
+						return View::make('sales.postCommentRequirement')->with(array('title' => 'Job Post Comments - Headhunting', 'jobPost' => $jobPost));
+					}
 				}
 			}
 		}

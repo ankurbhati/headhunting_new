@@ -2,13 +2,13 @@
 @section('content')
 
 	<div class="row detail-view search-view-user">
-	@if($jobId > 0)
+	<!-- @if($jobId > 0)
 			<div class="col-sm-2">
 				<a class="btn btn-primary btn-white" href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->id)) }}">
 					<span>Mark Submittel</span>
 				</a>
 			</div>
-		@endif
+		@endif -->
 	<div class="box col-sm-6">
 		<div class="box-heading">Candidate Details</div>
 		<div class="box-view">

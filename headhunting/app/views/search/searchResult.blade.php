@@ -15,7 +15,7 @@
                     <thead>
                       <tr>
                         <th><input type="checkbox" name="checkall" value="">Check All</th>
-                        <th>Name<br>Email</th>
+                        <th>Name<br>Email<br/>Designation<br/>Visa</th>
                         <th>Resume</th>
                         <th>Added At</th>
                         <th>Action</th>
@@ -26,9 +26,13 @@
 		                      <tr>
                             <td><input type="checkbox" class="checkcandidate" value="{{$candidate->candidate->id}}"></td>
                             <td>
+                                <a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId, 'searchingText' => $searching_text_to_send)) }}" target="_blank">
                                 {{$candidate->candidate->first_name." ".$candidate->candidate->last_name}}
+                                <br>{{$candidate->candidate->email}}</a>
                                 <br>
-                                {{$candidate->candidate->email}}
+                                <strong><span class="text-label">Designation : </span>{{$candidate->candidate->designation}}<br>
+                                @if($candidate->candidate->visa)<span class="text-label">Visa : </span>{{$candidate->candidate->visa->title}}@else{{"-"}}@endif</strong>
+
                             </td>
                             <td>
                                 <p>{{$candidate->resume?'"'.str_replace("<br />", "", substr($candidate->resume, 0, 80)).'..."':""}}</p>
@@ -37,14 +41,12 @@
 		                        <td>
 		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->candidate_id, 'jobId' => $jobId, 'searchingText' => $searching_text_to_send)) }}" title="View Profile" class="btn btn-primary btn-white">View </a>
                               @if(Auth::user()->getRole() <= 3 && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path)))
-                              | <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"  class="btn btn-secondary btn-white">Download</a>
+                              <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"  class="btn btn-secondary btn-white">Download</a>
                               @endif
                               @if($jobId > 0)
-                               | <a href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel" class="btn btn-primary btn-white">Submittel</a>
-
-                              <a href="javascript:void(0);" data-url="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" class="updatejobsubmittle" title="Mark Submittel" title="Update Status"  class="btn btn-primary btn-white">
+                                <a href="javascript:void(0);" data-url="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel" title="Update Status"  class="btn btn-primary btn-white updatejobsubmittle">
                                   Submittel
-                              </a>
+                                </a>
                               @endif
 		                        </td>
 		                      </tr>
@@ -52,31 +54,37 @@
                     </tbody>
                     <tfoot>
                         <th><input type="checkbox" name="checkall" value="">Check All</th>
-                        <th>Name<br>Email</th>
+                        <th>Name<br>Email<br>Designation</th>
                         <th>Resume</th>
                         <th>Added At</th>
                         <th>Action</th>
                     </tfoot>
                   </table>
 
-                  <div id="myModal" class="modal">
+                  <div id="myModal" class="modal container">
                     <!-- Modal content -->
-                    <div class="modal-content">
-                      <div class="modal-header" style="margin-bottom: 5px">
-                        <span class="closemodal">&times;</span>
-                        <h4>Job Submittel</h4>
+
+                    <div class="modal-content box">
+                      <div class="modal-header box-header" style="margin-bottom: 5px">
+                        <span class="closemodal pull-right" style="padding:7px 15px; font-size:24px;">&times;</span>
+                        <h3 class="box-title">Job Submittel</h3>
                       </div>
                       <div class="modal-body">
                         <form method="post" action="" name="model-form">
                         <div id="modal-form-content"></div>
-                        <div>
-                          <label>Client Rate: </label><input type="number" min="0" value="" name="client_rate" />
+                        <div class="form-group row">
+                          <div>
+                          <label for="crate">Client Rate: </label>
+                          </div>
+                          <input id="crate" class="form-control" type="number" min="0" value="" name="client_rate" />
                         </div>
-                        <div>
-                          <label>Submission Rate: </label><input type="number" min="0" value="" name="submission_rate" />
+                        <div class="form-group row">
+                          <div style="margin-bottom:15px;">
+                          <label for="srate">Submission Rate: </label>
+                          <input id="srate"  class="form-control" type="number" min="0" value="" name="submission_rate" />
                         </div>
-                        <input id="login-button" style="margin: 0px 0px 15px 20px" class="btn btn-primary btn-white" type="submit" value="Submit">
-                        <button type="reset" value="Reset" style="float: right;" class="btn btn-primary btn-white">Reset</button>
+                        <input id="login-button" style="margin: 0px 0px 15px 20px;" class="btn btn-primary btn-white" type="submit" value="Submit">
+                        <button type="reset" value="Reset" style="margin-right:20px;" class="btn btn-secondary btn-white pull-right">Reset</button>
                         </form>
                       </div>
                     </div>

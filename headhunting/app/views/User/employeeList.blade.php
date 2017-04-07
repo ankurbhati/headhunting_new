@@ -79,8 +79,7 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Full Name</th>
-                        <th>Email</th>
+                        <th>Email<br>Full Name</th>
                         <th>Designation</th>
                         <th>Roles</th>
                         <th>Added At</th>
@@ -88,32 +87,29 @@
                       </tr>
                     </thead>
                     <tbody>
-	                    @forelse($users as $user)
+	                    @foreach($users as $user)
 		                      <tr>
-		                        <td>{{$user->first_name. " ".$user->last_name }}</td>
-		                        <td>{{$user->email}}</td>
+		                        <td>
+                              <strong>{{$user->email}}</strong><br>{{$user->first_name. " ".$user->last_name }}</td>
 		                        <td>{{$user->designation}}</td>
 		                        <td>{{$user->userRoles[0]->roles->role}}</td>
                             <td>{{($user->created_at != "" && $user->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($user->created_at)):"-"}}</td>
 		                        <td>
-		                        	<a href="{{ URL::route('view-member', array('id' => $user->id)) }}" title="View Profile"><i class="fa fa-fw fa-eye"></i></a>
-		                        	<a href="{{ URL::route('edit-member', array($user->id)) }}" title="Edit Profile"><i class="fa fa-fw fa-edit"></i></a>
+		                        	<a href="{{ URL::route('view-member', array('id' => $user->id)) }}" title="View Profile" class="btn btn-primary btn-white">View Profile</a>
+		                        	<a href="{{ URL::route('edit-member', array($user->id)) }}" title="Edit Profile" class="btn btn-primary btn-white" >Edit</a>
 		                        	@if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
-		                        		<a href="{{ URL::route('delete-member', array($user->id)) }}" title="Delete Profile"><i class="fa fa-fw fa-ban text-danger"></i></a>
+		                        		<a href="{{ URL::route('delete-member', array($user->id)) }}" title="Delete Profile" class="btn btn-secondary btn-white">Delete</a>
 		                        	@endif
 		                        	@if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
-		                        		<a href="{{ URL::route('change-password', array('id' => $user->id)) }}" title="Change Password"><i class="fa fa-fw fa-unlock-alt"></i></a>
+		                        		<a href="{{ URL::route('change-password', array('id' => $user->id)) }}" title="Change Password" class="btn btn-primary btn-white">Change Password</a>
 		                        	@endif
 		                        </td>
 		                      </tr>
-	                   	@empty
-	                   		<p>No users</p>
-						@endforelse
+      						@endforeach
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Full Name</th>
-                        <th>Email</th>
+                        <th>Email<br>Full Name</th>
                         <th>Designation</th>
                         <th>Roles</th>
                         <th>Added At</th>

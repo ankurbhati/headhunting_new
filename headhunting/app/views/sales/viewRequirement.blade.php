@@ -19,7 +19,7 @@
 			<div class="row"><div class="col-sm-4 view-label">
 					Client:
 					</div><div class="col-sm-8 view-value ">
-						{{$jobPost->client->first_name."-".$jobPost->client->email}}
+						@if($jobPost->client && ($jobPost->created_by == Auth::user()->id || Auth::user()->hasRole(1))){{$jobPost->client->first_name." ".$jobPost->client->last_name."-".$jobPost->client->email}}@else {{"*****"}} @endif
 					</div>
 			</div>
 			<div class="row"><div class="col-sm-4 view-label">
@@ -109,7 +109,23 @@
            		</div>
 			@endforelse
 	   	</div>
+	   		{{ Form::open(array('route' => array('add-comment-job-post', $jobPost->id, 1), 'class' =>
+	'form-horizontal','id' => 'comment-form',  'method' => 'POST')) }}
+		<div class="form-group">
+				{{ Form::label('title', 'Add More Comment: ', array('class' => 'col-sm-12')); }}
+				<div class="col-sm-12">
+					{{ Form::textarea('comment', '', array('class' =>	'form-control', 'placeholder' => 'Enter Comment', 'required')); }}
+					{{ Form::hidden('job_post_id', $jobPost->id); }}
+					<span class='errorlogin email-login'>{{$errors->first('comment');}}@if(!empty($message)){{$message}}@endIf</span>
+				</div>
+		</div>
+    <div class="form-group row ">
+        <div class="col-sm-12">{{ Form::submit('Add Comment', array('class' => 'btn
+            btn-primary btn-white pull-right', 'id' => 'requirement-button') ); }}</div>
+   </div>
+	 {{ Form::close() }}
 	</div>
+
 	<div class="box col-xs-12">
 	<div class="box-action">
 				<a class="btn btn-primary btn-white" href="{{ URL::route('advance-search', array($jobPost->id)) }}">

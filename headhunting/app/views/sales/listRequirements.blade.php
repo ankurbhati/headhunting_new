@@ -65,7 +65,7 @@
 		                      <tr>
                               <td>APT-0{{$jobPosts->id}}</td>
               		            <td><b>{{$jobPosts->title}}</b><br/>
-                              @if($jobPosts->client){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"-"}} @endif
+                              @if($jobPosts->client && ($jobPosts->created_by == Auth::user()->id || Auth::user()->hasRole(1))){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"*****"}} @endif
                               <hr>
                               <b>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</b><br/>
                               {{$jobPosts->city->name}}, {{$jobPosts->country->country}}<br/>
