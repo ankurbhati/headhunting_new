@@ -519,7 +519,7 @@ class CandidateController extends HelperController {
 			$candidate = Candidate::find($id);
 			$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
 			//if($resume && $resume->removeFromIndex() && $resume->delete() ){
-			if( $resume->delete() ){
+			if( $resume && $resume->delete() ){
 
 			}  
 			if($candidate->delete()) {
