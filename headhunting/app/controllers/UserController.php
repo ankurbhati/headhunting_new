@@ -1477,5 +1477,28 @@ class UserController extends HelperController {
 		return View::make('User.userReportList')->with(array('title' => 'User Reports', 'user_reports' => $user_reports));
 	}
 
+	public function selfTest(){
+		print 'In self test';
+		$user = Auth::user();
+		Mail::send([], [], function($message) use( &$user) {
+			$message->to(trim('ankurbhati03@gmail.com'), 'Ankur Bhati')
+			    	->subject('TEST')
+			    	->setBody('Hi ankur', 'text/html')
+			    	->attach(
+						\Swift_Attachment::fromPath(public_path("/uploads/reports/5/58dc1ab009cfb.pdf"), 'application/pdf')
+					->setFilename("myfilename.pdf"));
+		});
+		print 'In first mail';
+		/*Mail::send([], [], function($message) use( &$user) {
+			$message->to(trim('ankurbhati03@gmail.com'), 'Ankur Bhati')
+			    	->subject('TEST')
+			    	->attach(
+						\Swift_Attachment::fromPath(public_path("/uploads/reports/5/58dc1ab009cfb.pdf"), 'application/pdf')->setFilename("myfilename.pdf")
+					)
+				    ->setBody('Hi ankur', 'text/html');
+		});*/
+		print 'After mail';
+	}
+
 
 }

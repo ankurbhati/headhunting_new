@@ -856,4 +856,11 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'UserController@showReports'
 	));
 
+	/**
+	 * Routes For REST API for New Payment Form.
+	 */
+	Route::match(array('GET'), 'self-test', array(
+			'as'    =>    'self-test',
+			'uses'    =>    'UserController@selfTest'
+	));
 });
