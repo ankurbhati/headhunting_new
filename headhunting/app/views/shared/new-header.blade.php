@@ -213,11 +213,18 @@
                       </a>
                     </li>
                   @endif
+                  @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4) || Auth::user()->hasRole(5))
                     <li class="dropdown padd-left-15">
                       <a href="{{ URL::route('work-report') }}">
                         <span>Upload Report</span>
                       </a>
                     </li>
+                  @endif
+                  @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
+                    <li class="dropdown">
+                      <a href="{{ URL::route('user-reports') }}">User Reports</a>
+                    </li>
+                  @endif
                     @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
                       <li class="dropdown">
                         <a href="{{ URL::route('delete-user-third-party') }}">Delete Third Party</a>

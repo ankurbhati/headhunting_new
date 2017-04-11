@@ -839,4 +839,21 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'crob-job-for-user-reports',
 			'uses'    =>    'UserController@crobJobForUserReports'
 	));
+
+	/**
+	 * Routes For REST API for New Payment Form.
+	 */
+	Route::match(array('GET', 'POST'), 'notifications', array(
+			'as'    =>    'notifications',
+			'uses'    =>    'UserController@showNotifications'
+	));
+
+	/**
+	 * Routes For REST API for New Payment Form.
+	 */
+	Route::match(array('GET', 'POST'), 'user-reports', array(
+			'as'    =>    'user-reports',
+			'uses'    =>    'UserController@showReports'
+	));
+
 });

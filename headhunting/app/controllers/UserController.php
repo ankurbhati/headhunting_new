@@ -1367,14 +1367,16 @@ class UserController extends HelperController {
 
 	public function crobJobForUserReports() {
 		date_default_timezone_set('Asia/Kolkata');
-		$current_date = date('Y-m-d', time());
+		//$current_date = date('Y-m-d', time());
+		$current_date = date("Y-m-d", time() - 60 * 60 * 24);
 		//$yesterday_date = date("Y-m-d", time() - 60 * 60 * 24);
 		$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
 		if($total_report_sent) {
 			$business_head = $this->getBussinessHead();
 			$users = UserReport::where('for_date', '=', $current_date)->lists('user_id');
-			array_push($users, $business_head->id);
-            $defaulters = User::whereNotIn('id', $users)->select('first_name', 'last_name', 'email')->lists('email');
+            $defaulters = User::whereNotIn('id', $users)->whereHas('userRoles', function($q) {
+    			$q->whereNotIn('role_id', array(1,2,7,8));
+			})->select('first_name', 'last_name', 'email')->lists('email');
     
             $body_content = 'hi, <br/><br/>';
             $body_content .= '<table><tbody><th style="border: 1px solid grey;">Defaulter Emails For '.$current_date.'</th>';
@@ -1382,9 +1384,9 @@ class UserController extends HelperController {
             	$body_content .= '<tr><td style="border: 1px solid grey;">'.$defaulter.'</td></tr>';
             }
             $body_content .= '</tbody></table>';
-            print $body_content;
+            //print $body_content;
             try{
-            	$this->sendNotificationMail($body_content, $business_head, $subject='Employee Reports For'.$current_date);
+            	//$this->sendNotificationMail($body_content, $business_head, $subject='Employee Reports For'.$current_date);
             }catch(Exception $e){
             	print $e->getMessage();
             }
@@ -1392,6 +1394,103 @@ class UserController extends HelperController {
 		}else{
 			// do nothing as its a holiday
 		}
+	}
+
+	
+	public function showNotifications() {
+
+		$status_array = array('0'=>'Unseen', '1'=>'Seen');
+		$auth_user = Auth::user();
+		$q = Notification::query();
+		$q->where('user_id', '=', $auth_user->id);
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+			if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+				$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+				$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+				$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+			}
+
+			if(!empty(Input::get('csv_download_input'))) {
+				$arrSelectFields = array('message', 'created_at');
+
+		        $q->select($arrSelectFields);
+		        $data = $q->get();
+
+		        // passing the columns which I want from the result set. Useful when we have not selected required fields
+		        $arrColumns = array('message', 'created_at');
+		         
+		        // define the first row which will come as the first row in the csv
+		        $arrFirstRow = array('Message', 'Created At');
+		         
+		        // building the options array
+		        $options = array(
+		          'columns' => $arrColumns,
+		          'firstRow' => $arrFirstRow,
+		        );
+
+		        return $this->convertToCSV($data, $options);
+			}
+
+		}
+		if(Request::ajax()){
+            $q->limit(10)->update(['status' => '1']);
+            $notifications = $q->limit(10)->get();
+            return ['count' => $q->count(), 'data' => json_encode($notifications)];
+        }
+		$q->update(['status' => '1']);
+		$notifications = $q->paginate(200);
+
+		return View::make('User.notificationList')->with(array('title' => 'Notification List', 'notifications' => $notifications));
+	}
+
+	public function showReports(){
+
+		date_default_timezone_set('Asia/Kolkata');
+		$auth_user = Auth::user();
+		if(!$auth_user->hasRole(1)) {
+			return Redirect::route('dashboard-view');
+		}
+		$count = 1;
+		$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
+		$q = UserReport::query();
+		$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
+		while(empty($total_report_sent)) {
+			$count++;
+			$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
+			$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
+        }
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+			if(!empty(Input::get('for_date'))) {
+				$forDateTime = datetime::createfromformat('m/d/Y',Input::get('for_date'))->format('Y-m-d');
+				$q->where('for_date', '=', $forDateTime);
+			} else {
+				$q->where('for_date', '=', $current_date);
+			}
+
+		} else {
+			$q->where('for_date', '=', $current_date);
+		}
+
+		$user_reports = $q->paginate(100);
+		//print_r($user_reports);exit();
+
+		return View::make('User.userReportList')->with(array('title' => 'User Reports', 'user_reports' => $user_reports));
+
+        
+        /*$business_head = $this->getBussinessHead();
+			$users = UserReport::where('for_date', '=', $current_date)->lists('user_id');
+            $defaulters = User::whereNotIn('id', $users)->whereHas('userRoles', function($q) {
+    			$q->whereNotIn('role_id', array(1,2,7,8));
+			})->select('first_name', 'last_name', 'email')->lists('email');
+
+		$status_array = array('0'=>'Unseen', '1'=>'Seen');
+		$auth_user = Auth::user();
+		$q = Notification::query();
+		$q->where('user_id', '=', $auth_user->id);*/
 	}
 
 }
