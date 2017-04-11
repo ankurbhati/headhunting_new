@@ -177,7 +177,7 @@ class CandidateController extends HelperController {
 						if(!$candidate_resume->save()){
 							//error, delete candidate or set flash message
 						};
-						$candidate_resume->addToIndex();
+						//$candidate_resume->addToIndex();
 						return Redirect::route('candidate-list');
 					} else {
 
@@ -489,7 +489,7 @@ class CandidateController extends HelperController {
 						if(!$candidate_resume->save()){
 							//error, delete candidate or set flash message
 						};
-						($resume_obj == "new") ? $candidate_resume->addToIndex() : $candidate_resume->reindex();
+						//($resume_obj == "new") ? $candidate_resume->addToIndex() : $candidate_resume->reindex();
 
 						return Redirect::route('candidate-list');
 					} else {
@@ -518,7 +518,8 @@ class CandidateController extends HelperController {
 		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)|| Auth::user()->hasRole(4)|| Auth::user()->hasRole(5) || Auth::user()->hasRole(8)) {
 			$candidate = Candidate::find($id);
 			$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
-			if($resume && $resume->removeFromIndex() && $resume->delete() ){
+			//if($resume && $resume->removeFromIndex() && $resume->delete() ){
+			if( $resume->delete() ){
 
 			}  
 			if($candidate->delete()) {

@@ -1470,27 +1470,12 @@ class UserController extends HelperController {
 			} else {
 				$q->where('for_date', '=', $current_date);
 			}
-
 		} else {
 			$q->where('for_date', '=', $current_date);
 		}
-
 		$user_reports = $q->paginate(100);
-		//print_r($user_reports);exit();
-
 		return View::make('User.userReportList')->with(array('title' => 'User Reports', 'user_reports' => $user_reports));
-
-        
-        /*$business_head = $this->getBussinessHead();
-			$users = UserReport::where('for_date', '=', $current_date)->lists('user_id');
-            $defaulters = User::whereNotIn('id', $users)->whereHas('userRoles', function($q) {
-    			$q->whereNotIn('role_id', array(1,2,7,8));
-			})->select('first_name', 'last_name', 'email')->lists('email');
-
-		$status_array = array('0'=>'Unseen', '1'=>'Seen');
-		$auth_user = Auth::user();
-		$q = Notification::query();
-		$q->where('user_id', '=', $auth_user->id);*/
 	}
+
 
 }
