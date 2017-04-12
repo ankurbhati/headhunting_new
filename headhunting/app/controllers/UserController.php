@@ -1434,6 +1434,7 @@ class UserController extends HelperController {
 			}
 
 		}
+
 		if(Request::ajax()){
             $q->limit(10)->update(['status' => '1']);
             $notifications = $q->limit(10)->get();

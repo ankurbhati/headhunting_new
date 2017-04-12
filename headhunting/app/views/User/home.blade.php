@@ -61,17 +61,10 @@
     <div class="box-body">
       <ul class="todo-list">
         @forelse($jobPosts as $jobPost)
-          <li>
-            <span class="text">{{$jobPost->title}}</span>
-           
-            <div class="tools">
-                <a href="{{ URL::route('edit-requirement', array($jobPost->id)) }}" class="text-info" title="Edit Job Post"><i class="fa fa-edit"></i> &nbsp; Edit Requirement</a> &nbsp;&nbsp; &nbsp; &nbsp;
-                @if($jobPost->jobsAssignedToMe()->count() == 0)
-                  <a href="{{ URL::route('assign-requirement', array($jobPost->id)) }}" class="text-success" title="Assign To me"><i class="fa fa-plus"></i>&nbsp; Assign To Me</a>&nbsp;&nbsp; &nbsp; &nbsp;
-                @endif
-                @if(Auth::user()->getRole() <= 2 || Auth::user()->hasRole(8))
-                  <a href="{{ URL::route('delete-requirement', array($jobPost->id)) }}" class="text-danger" title="Delete Job Post"><i class="fa fa-trash-o text-danger"></i>&nbsp; Delete Requirement</a>
-                @endif
+          <li style="line-height:48px; border-top:1px solid #d8d8d8; border-bottom:1px solid #d8d8d8; list-style-type:none;">
+            <span class="text"><strong>{{$jobPost->title}}</strong></span>
+            <div class="tools pull-right">
+              <a style="line-height:1.427;" class="btn btn-primary btn-white" href="{{ URL::route('view-requirement', array('id' => $jobPost->id)) }}" title="View Job Post">View</a>
             </div>
           </li>
         @empty

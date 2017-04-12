@@ -6,6 +6,15 @@
             </a>
             <ul class="header-items">
               @if(Auth::check())
+                <li class="logout-container notification-container dropdown theme-caret">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <i class="fa fa-bell-o" aria-hidden="true"></i>
+                    <span class="hidden-moblet">Notifications</span>
+                  </a>
+                  <ul class="dropdown-menu hidden-moblet">
+                    <li class="text-center"> <a href="{{ URL::route('notifications') }}" target="_blank">See All</a></li>
+                  </ul>
+                </li>
                 <li class="logout-container dropdown theme-caret">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <img src="/assets/images/header_default.png" alt="user"/>
@@ -18,13 +27,13 @@
                     <li><a href="{{ URL::route('logout-member') }}">Logout</a></li>
                   </ul>
                 </li>
-                <li class="navbar-hamburg">
+              @endif
+              <li class="navbar-hamburg">
                   <span class="hamburg"></span>
                   <span class="hamburg"></span>
                   <span class="hamburg"></span>
                   <span class="close icon-sm_navClose"></span>
                 </li>
-              @endif
             </ul>
           </div>
         </div>
@@ -74,7 +83,7 @@
 
                       Add Client</a>
                     </li>
-                    
+
                     <li class="dropdown">
                       <a href="{{ URL::route('client-list') }}">Client List</a>
                     </li>

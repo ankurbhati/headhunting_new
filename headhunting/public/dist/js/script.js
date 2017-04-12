@@ -8,13 +8,26 @@
 $(function () {
   "use strict";
 
+  $.ajax('')
+
   if($("#candidate-form").length > 0) {
   	$("#candidate-form").on('change', '#email', validateCandidate);
   }
   if($("#client-email").length > 0) {
   	$("#client-email").change(validateClient);
   }
-
+	$.ajax({url: "/notifications", method:'post', success: function(result){
+		var $notificationList = $('.notification-container ul');
+		var notifications = '';
+		if(result.count > 0) {
+			var dataJson = JSON.parse(result.data);
+			console.log(dataJson);
+			for(var d in dataJson) {
+				notifications += "<li>"+dataJson[d].message+"<span class='pull-right'>"+dataJson[d].created_at+"</span></li>";
+			}
+			$notificationList.prepend(notifications);
+		}
+	}});
 	if($('#nca-group').length > 0) {
 
 	  $('#nca_signed').change(function() {
@@ -502,8 +515,6 @@ function getStateForSearch(country){
 	return true;
 }
 
-
-
 function validateCandidate(e) {
 	if($('#email').val() != "") {
   		$.ajax({
@@ -521,7 +532,7 @@ function validateCandidate(e) {
 	        }
 	    });
 	}
-  }
+}
 
 function validateClient(e) {
 	if($('#client-email').val() != "") {
@@ -541,3 +552,4 @@ function validateClient(e) {
 	    });
 	}
   }
+

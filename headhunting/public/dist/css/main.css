@@ -7161,6 +7161,66 @@ span.highlight {
 .copyright {
   color: #fff; }
 
+.text-open {
+  color: #133d8d;
+  font-weight: 700; }
+
+.text-pending, .text-status-0 {
+  color: #E60489;
+  font-weight: 700; }
+
+.text-closed {
+  color: #333;
+  font-weight: 700; }
+
+.text-under-process {
+  color: blue;
+  font-weight: 700; }
+
+.text-selected, .text-status-9 {
+  color: green;
+  font-weight: 700; }
+
+.text-status-3, .text-status-5, .text-status-6, .text-status-7 {
+  color: #133d8d;
+  font-weight: 700; }
+
+.text-status-2, .text-status-4, .text-status-8 {
+  color: red;
+  font-weight: 700; }
+
+.notification-container {
+  margin-top: 6px !important; }
+  .notification-container.open .dropdown-menu {
+    box-shadow: none !important;
+    background: none !important;
+    background-color: #fff !important;
+    margin: 0 !important;
+    top: 28px !important;
+    width: 400px;
+    max-height: 500px;
+    overflow-y: scroll;
+    margin-left: -50px; }
+    .notification-container.open .dropdown-menu li {
+      padding-top: 10px !important;
+      padding-left: 10px !important;
+      background-color: #fff;
+      color: #333;
+      border-bottom: 1px solid #d8d8d8;
+      box-shadow: none;
+      padding-bottom: 25px !important; }
+      .notification-container.open .dropdown-menu li a {
+        color: blue !important;
+        display: inline; }
+        .notification-container.open .dropdown-menu li a:hover {
+          color: #333 !important;
+          text-decoration: underline; }
+      .notification-container.open .dropdown-menu li span {
+        display: block; }
+      .notification-container.open .dropdown-menu li:last-child {
+        border: none;
+        padding-bottom: 10px !important; }
+
 /*! jQuery UI - v1.11.4 - 2015-03-11
 * http://jqueryui.com
 * Includes: core.css, accordion.css, autocomplete.css, button.css, datepicker.css, dialog.css, draggable.css, menu.css, progressbar.css, resizable.css, selectable.css, selectmenu.css, slider.css, sortable.css, spinner.css, tabs.css, tooltip.css, theme.css
