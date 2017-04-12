@@ -980,8 +980,8 @@ class UserController extends HelperController {
 					$user_list = array();
 					$user_list = Candidate::whereIn('id', explode(",",$mass_mail->candidates))->get();
 				}
-				$setting = Setting::where('type', '=', 'disclaimer');
-				$disclaimer = ($setting->exists())?$setting->first()->value:'';
+				$setting = Setting::find(1);
+				$disclaimer = ($setting->exists())?$setting->disclaimer:'';
 				$signature = ($authUser->signature)?$authUser->signature:"";
 				Log::info("Limit Count : ".count($user_list));
 				$emails = array();
