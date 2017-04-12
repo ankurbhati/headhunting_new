@@ -5,13 +5,6 @@
               <img src="/assets/images/logo.png" alt="logo"/>
             </a>
             <ul class="header-items">
-              @if(!Auth::check())
-                <li class="login-container">
-                  <a class="icon-member_signout member-login" href="">
-                    <span class="hidden-moblet">MEMBER LOGIN</span>
-                  </a>
-                </li>
-              @endif
               @if(Auth::check())
                 <li class="logout-container dropdown theme-caret">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -75,12 +68,15 @@
                     <a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}">
                       Assigned Requirement</a>
                   </li>
-                  <li class="dropdown">
-                    <a href="{{ URL::route('client-list') }}">Client List</a>
-                  </li>
                   @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))
+                    
                     <li class="dropdown"><a href="{{ URL::route('add-client') }}">
+
                       Add Client</a>
+                    </li>
+                    
+                    <li class="dropdown">
+                      <a href="{{ URL::route('client-list') }}">Client List</a>
                     </li>
                     <li class="dropdown">
                       <a href="{{ URL::route('client-upload') }}">

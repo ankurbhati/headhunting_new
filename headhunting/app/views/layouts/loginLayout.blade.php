@@ -24,13 +24,6 @@
             <a class="logo" href="/home.html">
               <img src="/assets/images/logo.png" alt="logo"/>
             </a>
-            <ul class="header-items">
-              <li class="login-container">
-                <a class="icon-member_signout member-login" href="">
-                  <span class="hidden-moblet">MEMBER LOGIN</span>
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
       </header>

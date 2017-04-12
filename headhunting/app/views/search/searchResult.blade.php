@@ -44,7 +44,7 @@
                               <a href="{{'/uploads/resumes/'.$candidate->candidate_id.'/'.$candidate->resume_path}}" title="Download Resume"  class="btn btn-secondary btn-white">Download</a>
                               @endif
                               @if($jobId > 0)
-                                <a href="javascript:void(0);" data-url="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel" title="Update Status"  class="btn btn-primary btn-white updatejobsubmittle">
+                                <a href="{{ URL::route('job-submittel', array('jobId' => $jobId, 'userId' => $candidate->candidate_id)) }}" title="Mark Submittel" class="btn btn-primary btn-white">
                                   Submittel
                                 </a>
                               @endif
@@ -60,35 +60,6 @@
                         <th>Action</th>
                     </tfoot>
                   </table>
-
-                  <div id="myModal" class="modal container">
-                    <!-- Modal content -->
-
-                    <div class="modal-content box">
-                      <div class="modal-header box-header" style="margin-bottom: 5px">
-                        <span class="closemodal pull-right" style="padding:7px 15px; font-size:24px;">&times;</span>
-                        <h3 class="box-title">Job Submittel</h3>
-                      </div>
-                      <div class="modal-body">
-                        <form method="post" action="" name="model-form">
-                        <div id="modal-form-content"></div>
-                        <div class="form-group row">
-                          <div>
-                          <label for="crate">Client Rate: </label>
-                          </div>
-                          <input id="crate" class="form-control" type="number" min="0" value="" name="client_rate" />
-                        </div>
-                        <div class="form-group row">
-                          <div style="margin-bottom:15px;">
-                          <label for="srate">Submission Rate: </label>
-                          <input id="srate"  class="form-control" type="number" min="0" value="" name="submission_rate" />
-                        </div>
-                        <input id="login-button" style="margin: 0px 0px 15px 20px;" class="btn btn-primary btn-white" type="submit" value="Submit">
-                        <button type="reset" value="Reset" style="margin-right:20px;" class="btn btn-secondary btn-white pull-right">Reset</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
 
                   @if (count($candidate_resumes) > 0)
                     <div>

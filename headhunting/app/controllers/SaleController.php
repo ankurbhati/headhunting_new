@@ -285,7 +285,8 @@ class SaleController extends HelperController {
 		$q = JobPost::query();
 		
 		if($id == 0) {
-			$q->with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc');
+			$q->with(array('country', 'state', 'client', 'user'))
+			  ->orderBy('updated_at', 'desc');
 		} else {
 			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
@@ -629,8 +630,7 @@ class SaleController extends HelperController {
 			$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
 		}
 		//print_r($candidateApplications[0]);die();
-		$lead = $this->getTeamLeadForUser($login_user->id);
-		
+		$lead = $this->getTeamUsers(Auth::user()->id);
 		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'lead' => $lead, 'login_user' => $login_user));
 	}
 
@@ -848,12 +848,22 @@ class SaleController extends HelperController {
 				$cand_app = Input::get('cand_app');
 				$status = Input::get('job_status');
 				$message = Input::get('cand_app_msg');
+
+
 				$submittle_status = Config::get('app.job_post_submittle_status');
 				$candidate_application = CandidateApplication::find($cand_app);
+				if(Input::has('client_rate') && Input::get('client_rate') != '' &&
+					Input::has('submission_rate') && Input::get('submission_rate') != '' ) {
+
+					$candidate_application->client_rate = Input::get('client_rate');
+					$candidate_application->submission_rate = Input::get('submission_rate');
+
+				}
+
 				$candidate = Candidate::find($candidate_application->candidate_id);
 				$lead = $this->getTeamLeadForUser($candidate_application->requirement->created_by);
 				$authUser = Auth::user();
-				if($authUser->id==$candidate_application->requirement->created_by) {
+				if($authUser->id == $candidate_application->requirement->created_by) {
 
 					$candidate_application->status = $status;
 					if($status == 6){

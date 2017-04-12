@@ -386,7 +386,7 @@ class HelperController extends BaseController {
             try{
                 $user = User::find($user_id);
                 $body_content = 'Hi, <br/>'.$description.'<br/>';
-                sendNotificationMail($description, $user);    
+                $this->sendNotificationMail($description, $user);    
             } catch(Exception $e) {
                 print $e->getMessage();
             }
@@ -445,4 +445,24 @@ class HelperController extends BaseController {
         return Response::make($output, 200, $headers);
     }
 
+    public function getTeamUsers($id) {
+
+        $userPeers = array();
+        if(Auth::user()->hasRole(1)) {
+            $users = User::where('id', '!=', $id)->select(array('id'))->get();
+        } else {
+            $users = UserPeer::where("peer_id", "=", $id)->select(array('user_id'))->get();
+        }
+
+        foreach($users as $user) {
+
+            if(Auth::user()->hasRole(1)) {
+                array_push($userPeers, $user->id);
+            } else {
+
+                array_push($userPeers, $user->user_id);
+            }
+        }
+        return $userPeers;
+    }
 }

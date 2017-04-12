@@ -1455,12 +1455,12 @@ class UserController extends HelperController {
 		$count = 1;
 		$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
 		$q = UserReport::query();
-		$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
-		while(empty($total_report_sent)) {
-			$count++;
-			$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
-			$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
-        }
+		// $total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
+		// while(empty($total_report_sent)) {
+		// 	$count++;
+		// 	$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
+		// 	$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
+  //       }
 
 		if($_SERVER['REQUEST_METHOD'] == 'POST') {
 

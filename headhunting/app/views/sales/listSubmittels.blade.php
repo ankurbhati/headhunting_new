@@ -94,8 +94,8 @@
                                 {{'('.(date("Y-m-d", strtotime($candidateApplication->interview_scheduled_date))).')'}}
                               @endif
                             </td>
-                            <td>{{!empty($candidateApplication->client_rate)?$candidateApplication->client_rate:"-"}}<br>
-                            {{!empty($candidateApplication->submission_rate)?$candidateApplication->submission_rate:"-"}}
+                            <td>{{!empty($candidateApplication->client_rate)?"$".$candidateApplication->client_rate:"-"}}<br>
+                            {{!empty($candidateApplication->submission_rate)?"$".$candidateApplication->submission_rate:"-"}}
                             </td>
                             <td>
                             {{$candidateApplication->submittedBy->first_name." ".$candidateApplication->submittedBy->last_name}}
@@ -104,13 +104,13 @@
                             <td>
                             {{(!empty($candidateApplication->applicationStatus->first()->message))?$candidateApplication->applicationStatus->first()->message:'-'}}</td>
 		                        <td>
-                              @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (!empty($lead) && $login_user->id == $lead->id) ) )
+                              @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (in_array($candidateApplication->submitted_by, $lead)) ) )
                                 <a href="{{ URL::route('approve-submittle', array($candidateApplication->id)) }}" title="Approve Candidate Recomendation"  class="btn btn-secondary btn-white">
                                   Approve Submittels
                                 </a>
                               @endif
                               @if ( ($candidateApplication->status == 1 || $candidateApplication->status == 3 || $candidateApplication->status == 5 || $candidateApplication->status == 6) && ($login_user->id == $candidateApplication->requirement->created_by))
-                                <a href="javascript:void(0);" class="updatejobstatus" data-status="{{$candidateApplication->status}}" data-candapp="{{$candidateApplication->id}}"  class="btn btn-secondary btn-white" title="Update Status">
+                                <a href="javascript:void(0);" class="updatejobstatus btn btn-primary btn-white" data-status="{{$candidateApplication->status}}" data-candapp="{{$candidateApplication->id}}"  class="btn btn-secondary btn-white" title="Update Status">
                                   Update Status
                                 </a>                              
                               @endif
@@ -144,30 +144,44 @@
                     </tfoot>
                   </table>
                   
-                  <div id="myModal" class="modal">
+                  <div id="myModal" class="modal container">
                     <!-- Modal content -->
-                    <div class="modal-content">
-                      <div class="modal-header" style="margin-bottom: 5px">
-                        <span class="closemodal">&times;</span>
-                        <h4>Update Status</h4>
+                    <div class="modal-content box">
+                      <div class="modal-header box-header" style="margin-bottom: 5px">
+                        <span class="closemodal pull-right" style="padding:7px 15px; font-size:24px;">&times;</span>
+                        <h3 class="box-title">Job Submittel Update Status</h3>
                       </div>
                       <div class="modal-body">
                         <form method="post" action="{{ URL::route('update-submittle-status')}}" name="model-form">
-                        <div id="modal-form-content"></div>
-                        <input type="hidden" value="" name="cand_app">
-                        <div id='interview_scheduled_date'>
-                          <label>Interview Date: </label><input type="text" id="from_date" value="" name="interview_scheduled_date" class="from_date form-control" placeholder="Enter Interview Date" style="margin: 5px 0px; width: 26%;">
-                        </div>
-                        <div>
-                          <label>Reason: </label><textarea value="" name="cand_app_msg"></textarea>
-                        </div>
-                        <input id="login-button" style="margin: 0px 0px 15px 20px" class="btn btn-primary btn-white" type="submit" value="Submit">
-                        <button type="reset" value="Reset" style="float: right;" class="btn btn-primary btn-white">Reset</button>
+                          <div id="modal-form-content"></div>
+                          <input type="hidden" value="" name="cand_app">
+                          <div class="client-form-rate col-xs-12">
+                            <div class="form-group row">
+                              <div>
+                                <label for="crate">Client Rate: </label>
+                              </div>
+                              <input id="crate" class="form-control" type="number" min="0" value="" name="client_rate" />
+                            </div>
+                            <div class="form-group row">
+                              <div style="margin-bottom:15px;">
+                                <label for="srate">Submission Rate: </label>
+                                <input id="srate"  class="form-control" type="number" min="0" value="" name="submission_rate" />
+                              </div>
+                            </div>
+                          </div>
+                          <div id='interview_scheduled_date' class="form-group">
+                            <label for="interview_date">Interview Date: </label><input type="text" id="interview_date" value="" name="interview_scheduled_date" class="interview_date form-control" placeholder="Enter Interview Date" style="margin: 5px 0px; width: 26%;">
+                          </div>
+                          <div>
+                            <label for="reason">Reason: </label><textarea id="reason" class="form-control" value="" name="cand_app_msg"></textarea>
+                          </div>
+                          <input id="login-button" style="margin: 10px 0px;" class="btn btn-primary btn-white" type="submit" value="Submit">
+                          <button type="reset" value="Reset" style="float: right; margin: 10px 0px;" class="btn btn-primary btn-white">Reset</button>
                         </form>
                       </div>
                     </div>
                   </div>
-                  
+
                   @if (count($candidateApplications) > 100)
                     <div>
                        

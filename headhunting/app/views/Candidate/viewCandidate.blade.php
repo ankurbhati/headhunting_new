@@ -48,7 +48,7 @@
 		    <div class="row"><div class="col-sm-4 view-label">
 		        Rate:
 		        </div><div class="col-sm-8 view-value">
-		        	@if($candidate->candidaterate){{$candidate->candidaterate->value}}@else{{"-"}}@endif
+		        	@if($candidate->candidaterate){{"$".$candidate->candidaterate->value}}@else{{"-"}}@endif
 		        </div>
 		    </div>
 		    <div class="row"><div class="col-sm-4 view-label">

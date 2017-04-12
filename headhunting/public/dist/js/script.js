@@ -218,6 +218,11 @@ if($('#msa-group').length > 0) {
 
  	$('#datepicker').datepicker();
  	$('.from_date').datepicker();
+
+ 	$('.interview_date').datepicker({ 
+	    defaultDate: new Date(),
+        minDate: new Date()
+	});
  	$('.to_date').datepicker();
   
 	// Create two variable with the names of the months and days in an array
@@ -359,27 +364,36 @@ if($('#msa-group').length > 0) {
 		var status = $(this).data('status');
 		var cand_app = $(this).data('candapp');
 		var text = '';
+		$('.client-form-rate').hide();
 		if(status == 1) {
 			for(i=2; i<4;i++){
-				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
+				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
 			}
 		} else if(status == 3) {
 			for(i=4; i<6;i++){
-				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
+				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
 			}
 		} else if(status == 5) {
 			for(i=6; i<7;i++){
-				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
+				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
 			}
 			$('#interview_scheduled_date').show();
 		} else if(status == 6) {
 			for(i=7; i<10;i++){
-				text += '<div><input type="radio" name="job_status" value="'+i+'" required/><label>'+job_post_submittle_status[i]+'</label></div>';
+				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
 			}
 		}
 		$('#modal-form-content').html(text);
 		$('input[name="cand_app"]').val(cand_app);
 		modal.style.display = "block";
+
+		$("#modal-form-content").on('change', 'input', function(e) {
+			if($(this).val() == 3) {
+				$('.client-form-rate').show();
+			} else {
+				$('.client-form-rate').hide();
+			}
+		})
 	});
 
 	// Get the modal
