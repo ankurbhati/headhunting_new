@@ -472,3 +472,6 @@ ALTER TABLE `candidate_applications` ADD `submission_rate` INT( 11 ) NOT NULL AF
 ALTER TABLE `candidate_applications` CHANGE `client_rate` `client_rate` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE `candidate_applications` CHANGE `submission_rate` `submission_rate` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE `candidate_applications` ADD `interview_scheduled_date` DATE NULL AFTER `submission_rate` ;
+
+
+ALTER TABLE `job_posts` ADD `end_client` VARCHAR( 247 ) NULL AFTER `vendor_id` ;

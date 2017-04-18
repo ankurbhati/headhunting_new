@@ -65,6 +65,14 @@
     </div>
 
     <div class="form-group">
+        {{ Form::label('end_client', 'End Client:', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::text('end_client', ($jobPost->end_client)?$jobPost->end_client:"",
+                    array('class' => 'form-control', 'placeholder' => 'Enter End Client')) }}
+        </div>
+    </div>
+
+    <div class="form-group">
         {{ Form::label('client_id', 'Client: ', array('class' => 'col-sm-3
         control-label')); }}
         <div class="col-sm-8">{{ Form::select('client_id', $client, $jobPost->client_id, array('class' => 'form-control', 'id' => 'client_id')) }}
