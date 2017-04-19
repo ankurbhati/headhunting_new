@@ -794,12 +794,13 @@ class SaleController extends HelperController {
 		}
 	}
 
-	private function JobPostSubmittleStatus($candidateApplication, $status, $message=''){
+	private function JobPostSubmittleStatus($candidateApplication, $status, $message='', $mail_content=''){
 		$jpsStatus_obj = new JobPostSubmittleStatus();
 		$jpsStatus_obj->job_post_submittle_id = $candidateApplication;
 		$jpsStatus_obj->message = $message;
 		$jpsStatus_obj->status = $status;
 		$jpsStatus_obj->added_by = Auth::user()->id;
+		$jpsStatus_obj->mail_content = $mail_content;
 		$jpsStatus_obj->save();
 		return $jpsStatus_obj;
 	}
@@ -870,8 +871,15 @@ class SaleController extends HelperController {
 						$candidate_application->interview_scheduled_date = datetime::createfromformat('m/d/Y',Input::get('interview_scheduled_date'))->format('Y-m-d');
 					}
 					$candidate_application->save();
-
-					$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message);
+					if($status == 5){
+						$mail_content = json_encode(array('content'=>Input::get('mail_cont'), 'subject'=> Input::get('mail_sub')));
+						$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message, $mail_content);
+						//print_r(json_decode($mail_content, true));exit();
+						# send mail here
+						
+					} else {
+						$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message);
+					}
 
 					/* Save Notification */
 					$to_notify_user = array();

@@ -366,7 +366,10 @@ if($('#msa-group').length > 0) {
 	$('a.updatejobstatus').on('click', function(event) {
 		$('#interview_scheduled_date').hide();
 		$('.client-form-rate').hide();
-		//$('.submit_endclient-form-rate').hide();
+		$('.submit_endclient-form-rate').hide();
+		$('#mail_sub').val("");
+		$('#mail_cont').val("");
+		$('#reason').val("");
 		var job_post_submittle_status = [
 			'Pending',
 			'Open',

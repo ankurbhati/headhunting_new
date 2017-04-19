@@ -175,13 +175,14 @@
                               <div>
                                 <label for="mail_sub">Mail Subject: </label>
                               </div>
-                              <input id="mail_sub" class="form-control" type="text" value="" name="mail_subject" />
+                              <input id="mail_sub" class="form-control" type="text" value="" name="mail_sub" />
                             </div>
                             <div class="form-group" style="margin-bottom:15px;">
                                 <label for="mail_cont">Mail Content: </label>
-                                <div class="col-xs-6">
+                                <div>
                                     <textarea id="mail_cont" class="form-control" value="" name="mail_cont"></textarea>
                                 </div>
+                                <span class="text-info">Resume will be sent as an attachment</span>
                               </div>
                             </div>
                           </div>

@@ -475,3 +475,4 @@ ALTER TABLE `candidate_applications` ADD `interview_scheduled_date` DATE NULL AF
 
 
 ALTER TABLE `job_posts` ADD `end_client` VARCHAR( 247 ) NULL AFTER `vendor_id` ;
+ALTER TABLE `job_post_submittle_status` ADD `mail_content` TEXT NULL AFTER `added_by` ;
