@@ -794,12 +794,13 @@ class SaleController extends HelperController {
 		}
 	}
 
-	private function JobPostSubmittleStatus($candidateApplication, $status, $message=''){
+	private function JobPostSubmittleStatus($candidateApplication, $status, $message='', $mail_content=''){
 		$jpsStatus_obj = new JobPostSubmittleStatus();
 		$jpsStatus_obj->job_post_submittle_id = $candidateApplication;
 		$jpsStatus_obj->message = $message;
 		$jpsStatus_obj->status = $status;
 		$jpsStatus_obj->added_by = Auth::user()->id;
+		$jpsStatus_obj->mail_content = $mail_content;
 		$jpsStatus_obj->save();
 		return $jpsStatus_obj;
 	}
@@ -859,8 +860,11 @@ class SaleController extends HelperController {
 					$candidate_application->submission_rate = Input::get('submission_rate');
 
 				}
+				$body_content = Input::get('mail_cont');
+				$mail_subject = Input::get('mail_sub');
 
 				$candidate = Candidate::find($candidate_application->candidate_id);
+				$client = Client::find($candidate_application->requirement->client_id);
 				$lead = $this->getTeamLeadForUser($candidate_application->requirement->created_by);
 				$authUser = Auth::user();
 				if($authUser->id == $candidate_application->requirement->created_by) {
@@ -870,12 +874,35 @@ class SaleController extends HelperController {
 						$candidate_application->interview_scheduled_date = datetime::createfromformat('m/d/Y',Input::get('interview_scheduled_date'))->format('Y-m-d');
 					}
 					$candidate_application->save();
+					if($status == 5){
+						$mail_content = json_encode(array('content'=>$body_content, 'subject'=> $mail_subject));
+						$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message, $mail_content);
+						//print_r(json_decode($mail_content, true));exit();
 
-					$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message);
+						# send mail
+						if(file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path))) {
+							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client) {
+							$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
+							    	->subject($mail_subject)
+							    	->setBody($body_content, 'text/html')
+							    	->attach(
+										\Swift_Attachment::fromPath(public_path("/uploads/resumes/".$candidate->id."/".$candidate->resume_path), 'application/pdf')
+									->setFilename("resume.docx"));
+							});	
+						} else {
+							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$client) {
+							$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
+							    	->subject($mail_subject)
+							    	->setBody($body_content, 'text/html');
+							});
+						}
+						
+					} else {
+						$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message);
+					}
 
 					/* Save Notification */
 					$to_notify_user = array();
-					//'job_post_submittle_updation' => '%s has updated %s requirement to %s', //type 2
 					$description = Config::get('notification.job_post_submittle_updation');
 					if(Auth::user()->id != $candidate_application->submitted_by) {
 						array_push($to_notify_user, $candidate_application->submitted_by);

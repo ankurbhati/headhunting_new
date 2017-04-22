@@ -16,6 +16,12 @@
 	        		{{$jobPost->title}}
 	        </div>
 	    </div>
+	    	<div class="row"><div class="col-sm-4 view-label">
+					End Client:
+					</div><div class="col-sm-8 view-value ">
+						{{$jobPost->end_client!=''?$jobPost->end_client:"-"}}
+					</div>
+			</div>
 			<div class="row"><div class="col-sm-4 view-label">
 					Client:
 					</div><div class="col-sm-8 view-value ">

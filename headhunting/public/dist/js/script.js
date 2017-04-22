@@ -355,6 +355,9 @@ if($('#msa-group').length > 0) {
 			if($('#signature').length>0){
 				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
 			}
+			if($('#mail_cont').length>0){
+				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('mail_cont');
+			}
 	});
 
 	// Get the modal
@@ -362,6 +365,11 @@ if($('#msa-group').length > 0) {
 	// Get the button that opens the modal
 	$('a.updatejobstatus').on('click', function(event) {
 		$('#interview_scheduled_date').hide();
+		$('.client-form-rate').hide();
+		$('.submit_endclient-form-rate').hide();
+		$('#mail_sub').val("");
+		$('#mail_cont').val("");
+		$('#reason').val("");
 		var job_post_submittle_status = [
 			'Pending',
 			'Open',
@@ -377,7 +385,7 @@ if($('#msa-group').length > 0) {
 		var status = $(this).data('status');
 		var cand_app = $(this).data('candapp');
 		var text = '';
-		$('.client-form-rate').hide();
+		
 		if(status == 1) {
 			for(i=2; i<4;i++){
 				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
@@ -405,6 +413,11 @@ if($('#msa-group').length > 0) {
 				$('.client-form-rate').show();
 			} else {
 				$('.client-form-rate').hide();
+			}
+			if($(this).val() == 5) {
+				$('.submit_endclient-form-rate').show();
+			} else {
+				$('.submit_endclient-form-rate').hide();
 			}
 		})
 	});

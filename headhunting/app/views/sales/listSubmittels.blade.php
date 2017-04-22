@@ -65,7 +65,7 @@
                         </th>
                         <th>Status</th>
                         <th>Client Rate/<br>
-                            Submission Rate
+                            Recruter's Rate
                         </th>
                         <th>Submitted At /
                             <br/>
@@ -132,7 +132,7 @@
                         </th>
                         <th>Status</th>
                         <th>Client Rate/<br>
-                            Submission Rate
+                            Recruter's Rate
                         </th>
                         <th>Submitted At /
                             <br/>
@@ -164,11 +164,29 @@
                             </div>
                             <div class="form-group row">
                               <div style="margin-bottom:15px;">
-                                <label for="srate">Submission Rate: </label>
+                                <label for="srate">Recruter's Rate: </label>
                                 <input id="srate"  class="form-control" type="number" min="0" value="" name="submission_rate" />
                               </div>
                             </div>
                           </div>
+
+                          <div class="submit_endclient-form-rate col-xs-12">
+                            <div class="form-group row">
+                              <div>
+                                <label for="mail_sub">Mail Subject: </label>
+                              </div>
+                              <input id="mail_sub" class="form-control" type="text" value="" name="mail_sub" />
+                            </div>
+                            <div class="form-group" style="margin-bottom:15px;">
+                                <label for="mail_cont">Mail Content: </label>
+                                <div>
+                                    <textarea id="mail_cont" class="form-control" value="" name="mail_cont"></textarea>
+                                </div>
+                                <span class="text-info">Resume will be sent as an attachment</span>
+                              </div>
+                            </div>
+                          </div>
+
                           <div id='interview_scheduled_date' class="form-group">
                             <label for="interview_date">Interview Date: </label><input type="text" id="interview_date" value="" name="interview_scheduled_date" class="interview_date form-control" placeholder="Enter Interview Date" style="margin: 5px 0px; width: 26%;">
                           </div>

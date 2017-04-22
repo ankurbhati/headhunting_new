@@ -1,7 +1,5 @@
 <?php
-
 return array(
-
 	/*
 	|--------------------------------------------------------------------------
 	| Mail Driver
@@ -14,9 +12,7 @@ return array(
 	| Supported: "smtp", "mail", "sendmail", "mailgun", "mandrill", "log"
 	|
 	*/
-
 	'driver' => 'smtp',
-
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Host Address
@@ -27,9 +23,7 @@ return array(
 	| the Mailgun mail service which will provide reliable deliveries.
 	|
 	*/
-
 	'host' => '192.168.123.3',
-
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Host Port
@@ -40,9 +34,7 @@ return array(
 	| stay compatible with the Mailgun e-mail application by default.
 	|
 	*/
-
 	'port' => 25,
-
 	/*
 	|--------------------------------------------------------------------------
 	| Global "From" Address
@@ -53,9 +45,7 @@ return array(
 	| used globally for all e-mails that are sent by your application.
 	|
 	*/
-
 	'from' => array('address' => null, 'name' => null),
-
 	/*
 	|--------------------------------------------------------------------------
 	| E-Mail Encryption Protocol
@@ -66,9 +56,7 @@ return array(
 	| transport layer security protocol should provide great security.
 	|
 	*/
-
 	'encryption' => '',
-
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Server Username
@@ -79,9 +67,7 @@ return array(
 	| connection. You may also set the "password" value below this one.
 	|
 	*/
-
 	'username' => 'mdarshad@apetan.com',
-
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Server Password
@@ -92,9 +78,7 @@ return array(
 	| connection so that the application will be able to send messages.
 	|
 	*/
-
 	'password' => '',
-
 	/*
 	|--------------------------------------------------------------------------
 	| Sendmail System Path
@@ -105,9 +89,7 @@ return array(
 	| been provided here, which will work well on most of your systems.
 	|
 	*/
-
 	'sendmail' => '/usr/sbin/sendmail -bs',
-
 	/*
 	|--------------------------------------------------------------------------
 	| Mail "Pretend"
@@ -118,7 +100,5 @@ return array(
 	| you may inspect the message. This is great for local development.
 	|
 	*/
-
 	'pretend' => false,
-
 );

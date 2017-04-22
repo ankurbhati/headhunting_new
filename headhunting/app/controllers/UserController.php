@@ -171,10 +171,17 @@ class UserController extends HelperController {
 		}
 		if($id > 0) {
 			$jobPost = JobPost::find($id);
-			if($currentUserRole == 2 || $currentUserRole == 3 || $currentUserRole == 5) {
+			if($currentUserRole == 2 || $currentUserRole == 3) {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 5)
 				      ->where('role_id', '>=', 4);
+				})->paginate(100);
+			} else if($currentUserRole == 5) {
+				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('id', '!=', Auth::user()->id)->whereHas('userRoles', function($q){
+				    $q->where('role_id', '<=', 5)
+				      ->where('role_id', '>=', 4);
+				})->whereHas('userPeers', function($q){
+				    $q->where('peer_id', '=', Auth::user()->id);
 				})->paginate(100);
 			}
 		}

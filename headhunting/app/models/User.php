@@ -49,6 +49,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     
     	return $this->hasMany('UserRole','user_id','id');
     }
+
+    public function userPeers() {
+    
+        return $this->hasMany('UserPeer','peer_id','id');
+    }
     
     
     /**

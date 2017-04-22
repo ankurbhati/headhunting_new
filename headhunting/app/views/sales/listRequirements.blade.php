@@ -103,7 +103,7 @@
                                   <a class="btn btn-primary btn-white" href="{{ URL::route('add-comment-job-post-view', array($jobPosts->id)) }}" title="Add Comments">
                                     Add Comments
                                   </a>
-                                @if( $jobPosts->status == 2  && (Auth::user()->hasRole(3) || Auth::user()->hasRole(8) || Auth::user()->hasRole(1)) )
+                                @if( $jobPosts->status == 2  && (Auth::user()->hasRole(3) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) || Auth::user()->hasRole(1)) )
                                   <a class="btn btn-primary btn-white" href="{{ URL::route('peers', array($jobPosts->id)) }}" title="Assign To Peers">
                                     Assign
                                   </a>
