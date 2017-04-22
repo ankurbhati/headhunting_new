@@ -88,7 +88,7 @@
                                 {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}<br/>{{$candidateApplication->candidate->email}}
                               </a>
                             </td>
-                            <td>
+                            <td class="text-status-{{$candidateApplication->status}}">
                               {{$submittle_status[$candidateApplication->status]}}
                               @if($candidateApplication->status == array_search('Interview Scheduled', $submittle_status) && !empty($candidateApplication->interview_scheduled_date))
                                 {{'('.(date("Y-m-d", strtotime($candidateApplication->interview_scheduled_date))).')'}}
