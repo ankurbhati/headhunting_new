@@ -96,7 +96,7 @@
                                 {{$candidateApplication->candidate->phone}}">
                               </div>
                             </td>
-                            <td>
+                            <td class="text-status-{{$candidateApplication->status}}">
                               {{$submittle_status[$candidateApplication->status]}}
                               @if($candidateApplication->status == array_search('Interview Scheduled', $submittle_status) && !empty($candidateApplication->interview_scheduled_date))
                                 {{'('.(date("Y-m-d", strtotime($candidateApplication->interview_scheduled_date))).')'}}
