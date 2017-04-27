@@ -79,6 +79,14 @@
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" target="_blank">
                                 {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}<br/>{{$candidateApplication->candidate->email}}
                               </a>
+                              <div>
+                                <input type="hidden" name="requirement_id_{{$candidateApplication->id}}" value="{{$candidateApplication->requirement->id}}">
+                                <input type="hidden" name="requirement_title_{{$candidateApplication->id}}" value="{{$candidateApplication->requirement->title}}">
+                                <input type="hidden" name="candidate_name_{{$candidateApplication->id}}" value="{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}">
+                                <input type="hidden" name="candidate_email_{{$candidateApplication->id}}" value="{{$candidateApplication->candidate->email}}">
+                                <input type="hidden" name="candidate_phone_{{$candidateApplication->id}}" value="
+                                {{$candidateApplication->candidate->phone}}">
+                              </div>
                             </td>
                             <td class="text-status-{{$candidateApplication->status}}">
                               {{$submittle_status[$candidateApplication->status]}}
