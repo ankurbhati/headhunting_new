@@ -7,11 +7,7 @@
                 <div class="box-header">
                   <h3 class="box-title">Job Submittels</h3>
                 </div><!-- /.box-header -->
-
-
-
-                {{ Form::open(array('class' =>
-'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
+                {{ Form::open(array('class' => 'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
 
                 <div class="form-group">
                     {{ Form::label('submitted_by', 'Submitted By: ', array('class' => 'col-sm-3
@@ -48,10 +44,6 @@
 
                </div>
             {{ Form::close() }}
-
-
-
-
                 <div class="box-body">
                   <div>
                         <p class="result-total"><span class="text-bold">{{$candidateApplications->getTotal()}} results</span></p>
@@ -121,7 +113,7 @@
 		                      </tr>
 	                   	@empty
 	                   		<p>No Job Posts</p>
-						@endforelse
+						      @endforelse
 
                     </tbody>
                     <tfoot>
@@ -190,11 +182,12 @@
                           <div id='interview_scheduled_date' class="form-group">
                             <label for="interview_date">Interview Date: </label><input type="text" id="interview_date" value="" name="interview_scheduled_date" class="interview_date form-control" placeholder="Enter Interview Date" style="margin: 5px 0px; width: 26%;">
                           </div>
-                          <div>
-                            <label for="reason">Reason: </label><textarea id="reason" class="form-control" value="" name="cand_app_msg"></textarea>
+                          <div class="form-group col-xs-12">
+                            <label for="reason">Reason: </label>
+                            <textarea id="reason" class="form-control" value="" name="cand_app_msg"></textarea>
                           </div>
-                          <input id="login-button" style="margin: 10px 0px;" class="btn btn-primary btn-white" type="submit" value="Submit">
-                          <button type="reset" value="Reset" style="float: right; margin: 10px 0px;" class="btn btn-primary btn-white">Reset</button>
+                          <input id="login-button" style="margin: 10px 0px; margin-left:12px;" class="btn btn-primary btn-white" type="submit" value="Submit">
+                          <button type="reset" value="Reset" style="float: right; margin: 10px 0px;  margin-right:12px;" class="btn btn-primary btn-white">Reset</button>
                         </form>
                       </div>
                     </div>

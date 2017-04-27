@@ -7054,15 +7054,15 @@ footer {
       background-image: url("/dist/img/chicago.jpeg"); }
 
 #status-area .flash_message {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
   font-weight: 700;
   padding: 25px;
   min-width: 400px;
   transition: fadein 10s;
-  right: 106px;
-  top: 400px;
+  right: 20px;
+  bottom: 20px;
   border-radius: 5px;
   z-index: 9999; }
 

@@ -655,7 +655,7 @@ class CandidateController extends HelperController {
 			$candidateApplication->job_post_id = $jobId;
 			$candidateApplication->submitted_by = Auth::user()->id;
 			// $candidateApplication->client_rate = Input::get('client_rate');
-			// $candidateApplication->submission_rate = Input::get('submission_rate');
+			$candidateApplication->submission_rate = Input::get('submission_rate');
 			$candidateApplication->status = 0;
 			$candidateApplication->created_at = date('Y-m-d H:i:s');
 			if($candidateApplication->save()) {
