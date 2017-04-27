@@ -162,12 +162,6 @@
                               </div>
                               <input id="crate" class="form-control" type="number" min="0" value="" name="client_rate" />
                             </div>
-                            <div class="form-group row">
-                              <div style="margin-bottom:15px;">
-                                <label for="srate">Recruter's Rate: </label>
-                                <input id="srate"  class="form-control" type="number" min="0" value="" name="submission_rate" />
-                              </div>
-                            </div>
                           </div>
 
                           <div class="submit_endclient-form-rate col-xs-12">
@@ -187,7 +181,7 @@
                             </div>
                           </div>
 
-                          <div id='interview_scheduled_date' class="form-group">
+                          <div id='interview_scheduled_date' class="form-group" style="margin: 10px 0px; margin-left:12px;">
                             <label for="interview_date">Interview Date: </label><input type="text" id="interview_date" value="" name="interview_scheduled_date" class="interview_date form-control" placeholder="Enter Interview Date" style="margin: 5px 0px; width: 26%;">
                           </div>
                           <div class="form-group col-xs-12">

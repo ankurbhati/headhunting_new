@@ -878,18 +878,40 @@ class SaleController extends HelperController {
 						$mail_content = json_encode(array('content'=>$body_content, 'subject'=> $mail_subject));
 						$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message, $mail_content);
 						//print_r(json_decode($mail_content, true));exit();
-
+						$resume = CandidateResume::where('candidate_id', $candidate->id)->first();
 						# send mail
-						if(file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path))) {
-							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client) {
+						$setting = Setting::find(1);
+						$disclaimer = ($setting->exists())?$setting->disclaimer:'';
+						$signature = ($authUser->signature)?$authUser->signature:"";
+						$body_content .= "<br />".$signature."<br />".$disclaimer;
+
+						if(file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$resume->resume_path))) {
+							//$thirdPartyBccList = array();
+							Log::info('/uploads/resumes/'.$candidate->id.'/'.$resume->resume_path);
+							$fileExtension = File::extension('/uploads/resumes/'.$candidate->id.'/'.$resume->resume_path);
+							$file = new Symfony\Component\HttpFoundation\File\File(public_path('/uploads/resumes/'.$candidate->id.'/'.$resume->resume_path));
+							$mime = $file->getMimeType();
+
+							Log::info($fileExtension." <<<, >>>> ".$mime);
+							Config::set('mail.username', $authUser->email);
+							Config::set('mail.from.address', $authUser->email);
+							Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
+			       			Config::set('mail.password', $authUser->email_password);
+							//Log::info("Client Email: ".$client->email);
+							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension) {
 							$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
 							    	->subject($mail_subject)
 							    	->setBody($body_content, 'text/html')
 							    	->attach(
-										\Swift_Attachment::fromPath(public_path("/uploads/resumes/".$candidate->id."/".$candidate->resume_path), 'application/pdf')
-									->setFilename("resume.docx"));
+										\Swift_Attachment::fromPath(public_path("/uploads/resumes/".$candidate->id."/".$resume->resume_path), $mime)
+									->setFilename("resume.".$fileExtension));
 							});	
 						} else {
+							//$thirdPartyBccList = array();
+							Config::set('mail.username', $authUser->email);
+							Config::set('mail.from.address', $authUser->email);
+							Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
+			       			Config::set('mail.password', $authUser->email_password);
 							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$client) {
 							$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
 							    	->subject($mail_subject)

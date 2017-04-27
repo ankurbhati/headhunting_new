@@ -355,9 +355,6 @@ if($('#msa-group').length > 0) {
 			if($('#signature').length>0){
 				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
 			}
-			if($('#mail_cont').length>0){
-				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('mail_cont');
-			}
 	});
 
 	// Get the modal
@@ -399,6 +396,7 @@ if($('#msa-group').length > 0) {
 				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
 			}
 			$('#interview_scheduled_date').show();
+
 		} else if(status == 6) {
 			for(i=7; i<10;i++){
 				text += '<div><input id="jpstatus-'+i+'" type="radio" name="job_status" value="'+i+'" required/><label for="jpstatus-'+i+'">'+job_post_submittle_status[i]+'</label></div>';
@@ -425,6 +423,7 @@ if($('#msa-group').length > 0) {
 
 				$('#mail_sub').val(sub);
 				$('#mail_cont').val(mail_cont);
+				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif', maxHeight : 200}).panelInstance('mail_cont');
 			} else {
 				$('.submit_endclient-form-rate').hide();
 			}
