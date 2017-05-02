@@ -104,7 +104,7 @@
                             <td>
                             {{(!empty($candidateApplication->applicationStatus->first()->message))?$candidateApplication->applicationStatus->first()->message:'-'}}</td>
 		                        <td>
-                              @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (in_array($candidateApplication->submitted_by, $lead)) ) )
+                              @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (in_array($candidateApplication->submitted_by, $team)) ) )
                                 <a href="{{ URL::route('approve-submittle', array($candidateApplication->id)) }}" title="Approve Candidate Recomendation"  class="btn btn-secondary btn-white">
                                   Approve Submittels
                                 </a>

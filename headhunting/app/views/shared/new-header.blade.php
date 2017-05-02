@@ -97,33 +97,35 @@
               <li class="dropdown">
                 <a href="#">Recruitment</a>
                 <ul class="dropdown-menu">
-                  <li class="dropdown dropdown-child">
-                    <a href="javascript:void(0);">
-                      <span>Job Submittals</span>
-                    </a>
-                    <div class="dropdown-menu-child">
-                      <ul class="inline-items">
-                        <li class="visible-moblet close-me">
-                          <a href="#"><i class="fa fa-caret-left"></i><span class="sr-only">Back</span></a>
-                        </li>
-                        <li class="dropdown-item">
-                          <a href="{{ URL::route('list-submittel') }}">
-                            <span>All Job Submittals</span>
-                          </a>
-                        </li>
-                        <li class="dropdown-item">
-                          <a href="{{ URL::route('interview-scheduled-submittel') }}">
-                            <span>Interview Scheduled Submittals</span>
-                          </a>
-                        </li>
-                        <li class="dropdown-item">
-                          <a href="{{ URL::route('selected-submittel') }}">
-                            <span>End Client Selected Submittals</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
+                  @if(Auth::user()->getRole() <= 5)
+                    <li class="dropdown dropdown-child">
+                      <a href="javascript:void(0);">
+                        <span>Job Submittals</span>
+                      </a>
+                      <div class="dropdown-menu-child">
+                        <ul class="inline-items">
+                          <li class="visible-moblet close-me">
+                            <a href="#"><i class="fa fa-caret-left"></i><span class="sr-only">Back</span></a>
+                          </li>
+                          <li class="dropdown-item">
+                            <a href="{{ URL::route('list-submittel') }}">
+                              <span>All Job Submittals</span>
+                            </a>
+                          </li>
+                          <li class="dropdown-item">
+                            <a href="{{ URL::route('interview-scheduled-submittel') }}">
+                              <span>Interview Scheduled Submittals</span>
+                            </a>
+                          </li>
+                          <li class="dropdown-item">
+                            <a href="{{ URL::route('selected-submittel') }}">
+                              <span>End Client Selected Submittals</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
+                  @endif
                   <li class="dropdown">
                     <a href="{{ URL::route('candidate-list') }}">Candidate List</a>
                   </li>
