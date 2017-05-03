@@ -14,7 +14,12 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 <div>
+                      @if(count($managerUsers)>0)
                         <p class="result-total"><span class="text-bold">{{(count($managerUsers)>0)?$managerUsers->getTotal():0}} results:</span></p>
+                      @endif
+                      @if(count($users)>0)
+                        <p class="result-total"><span class="text-bold">{{(count($users)>0)?$users->getTotal():0}} results:</span></p>
+                      @endif
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -50,7 +55,7 @@
                       @endforeach
 	                    @foreach($users as $user)
 		                      <tr>
-		                        <td>{{$user->user->first_name. " ".$user->peer->last_name }}</td>
+		                        <td>{{$user->user->first_name. " ".$user->user->last_name }}</td>
 		                        <td>{{$user->user->email}}</td>
 		                        <td>{{$user->user->designation}}</td>
 		                        <td>{{$user->user->userRoles[0]->roles->role}}</td>
