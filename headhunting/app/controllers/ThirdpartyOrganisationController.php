@@ -355,8 +355,8 @@ class ThirdpartyOrganisationController extends HelperController {
 		}
 
 		// Allow certain file formats
-		if($fileType != "pdf") {
-		    $msg = "Sorry, only pdf files are allowed.";
+		if(! in_array(strtolower($fileType), ["pdf", "jpg", "jpeg"]) ) {
+		    $msg = "Sorry, only pdf, jpg and jpeg files are allowed.";
 		}
 
 		return array($msg, $fileType);

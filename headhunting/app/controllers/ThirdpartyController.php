@@ -415,6 +415,11 @@ class ThirdpartyController extends HelperController {
 		}
 
 		$q->join('source_organizations', 'sources.source_organisation_id', '=', 'source_organizations.id')->select('sources.id as ID','sources.*', 'source_organizations.*');
+
+		if(!empty(Input::get('company_name'))) {
+			$q->where('source_organizations.name', 'like', "%".Input::get('company_name')."%");
+		}
+
 		if($id == 1) {
             $q->where('source_organizations.msa_document', '!=', '');
 			/*$q->whereHas('organisation', function($a) use ($id)

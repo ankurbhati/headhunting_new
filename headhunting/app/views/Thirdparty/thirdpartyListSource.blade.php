@@ -5,7 +5,13 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Third Party List MSA</h3>
+                  <h3 class="box-title">
+                      @if($id != 1)
+                        Third Party List NCA
+                      @else
+                        Third Party List MSA
+                      @endif
+                  </h3>
                 </div><!-- /.box-header -->
 
                 {{ Form::open(array('class' =>
@@ -19,6 +25,19 @@
             <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf
                 @if(Session::has('email_error'))
                     {{ Session::get('email_error') }}
+                @endif
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('company_name', 'Company Name: ', array('class' => 'col-sm-3
+        control-label')); }}
+        <div class="col-sm-8">{{ Form::text('company_name', "", array('class' =>
+            'form-control', 'placeholder' => 'Enter Company Name')); }} 
+            <span class='errorlogin email-login'>{{$errors->first('company_name');}}@if(!empty($message)){{$message}}@endIf
+                @if(Session::has('company_name_error'))
+                    {{ Session::get('company_name_error') }}
                 @endif
             </span>
         </div>
