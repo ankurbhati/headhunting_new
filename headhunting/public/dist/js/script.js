@@ -371,7 +371,7 @@ if($('#msa-group').length > 0) {
 			'Pending',
 			'Open',
 			'Reject',
-			'Forwarded To Client',
+			'Forwarded To Prime Vendor',
 			'Rejected By Prime Vendor',
 			'Submitted To End Client',
 			'Interview Scheduled',
@@ -412,7 +412,7 @@ if($('#msa-group').length > 0) {
 			} else {
 				$('.client-form-rate').hide();
 			}
-			if($(this).val() == 5) {
+			if($(this).val() == 3) {
 				$('.submit_endclient-form-rate').show();
 				var sub = $('input[name="requirement_id_'+cand_app+'"]').val()+"-"+$('input[name="requirement_title_'+cand_app+'"]').val();
 				var mail_cont = "Requirement ID: "+$('input[name="requirement_id_'+cand_app+'"]').val()+"<br/>" +
