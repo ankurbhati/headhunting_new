@@ -61,6 +61,15 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'validateClient',
 			'uses'    =>    'ClientController@validateClient'
 	));
+
+	/**
+	 * Routes for post-requirement
+	 */
+	Route::match(array('POST'), '/get-mentor', array(
+			'as'    =>    'getmentor',
+			'uses'    =>    'UserController@getMentor'
+	));
+
 	/**
 	 * Routes for post-requirement
 	 */

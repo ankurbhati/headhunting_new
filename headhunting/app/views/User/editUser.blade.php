@@ -83,7 +83,7 @@
             <div class="form-group" id="mentor_id_view" style="display:none;">
                 {{ Form::label('mentor_id', 'Mentor: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('mentor_id', array("", 'Select Your Mentor'), '', array('class' => 'form-control')) }} 
+                <div class="col-sm-8">{{ Form::select('mentor_id', array("", 'Select Your Mentor'), '', array('class' => 'form-control', 'data-type' => 'edit')) }} 
                     <span class='errorlogin email-login'>{{$errors->first('mentor_id');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>

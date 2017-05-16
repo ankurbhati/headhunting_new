@@ -76,6 +76,7 @@ class UserController extends HelperController {
 
 
 		$q = User::query();
+		$q->where('status', 'like', 1);
 		$q->with(array('userRoles'))->where('id', '!=', Auth::user()->id);
 
 		if(!empty(Input::get('email'))) {
@@ -144,8 +145,26 @@ class UserController extends HelperController {
 	 */
 	public function getPeers($id) {
 		$peerRole = Role::find($id)->pear_role_id;
-		$users = UserRole::with(array('user'))->where("role_id", "=", $peerRole)->get();
+		#$users = UserRole::with(array('user'))->where("role_id", "=", $peerRole)->get();
+		$users = UserRole::with(array('user'))->whereIn("role_id", [1, $peerRole])->get();
 		return $this->sendJsonResponseOnly($users);
+	}
+
+	public function getMentor()
+	{
+
+		$response = array();
+		// Server Side Validation.
+		$user_id = Input::get('user_id');
+		$lead_id = $this->getTeamLeadForUser($user_id);
+		if($lead_id) {
+			$response['error'] = false;
+			$response['lead'] = $lead_id;
+		} else {
+			$response['error'] = true;
+		}
+
+		return $this->sendJsonResponseOnly($response);
 	}
 
 	/**
@@ -258,7 +277,9 @@ class UserController extends HelperController {
 	 */
 	public function deleteEmp($id) {
 		if(Auth::user()->getRole() == 1) {
-			if(User::find($id)->delete()) {
+			if($user = User::find($id)) {
+				$user->status = 0;
+				$user->save();
 				Session::flash('flashmessagetxt', 'Employee Deleted Successfully!!');
 				return Redirect::route('employee-list');
 			}

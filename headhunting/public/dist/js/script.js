@@ -98,6 +98,10 @@ if($('#msa-group').length > 0) {
 	    if(role > 1 && role%2 == 0) {
 	    	$('#mentor_id_view').show();
 	    	getPeer(role);
+	    	if($('select#mentor_id').data('type') == 'edit') {
+	    		var user_id = window.location.pathname.split('/')[2];
+	    		getMentor(user_id);
+	    	}
 	    } else {
 	    	$('select#mentor_id').val('');
 	    	$('#mentor_id_view').hide();
@@ -180,6 +184,20 @@ if($('#msa-group').length > 0) {
 	        $('select#mentor_id').html(subcategoryItems);
 	        $('select#mentor_id').val(subcategories[0].user_id);
 	    });
+  }
+
+  function getMentor(user_id) {
+	  $.ajax({
+	        url: '/get-mentor',
+	        data: {'user_id':user_id},
+	        method:'post'
+	    }).done(function(response) {
+	        if(response.error){
+	        } else {
+	        	$('select#mentor_id').val(response.lead.id);
+	        }
+	    });
+	        
   }
 
   var optionsText = {
