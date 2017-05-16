@@ -14,7 +14,12 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 <div>
+                      @if(count($managerUsers)>0)
                         <p class="result-total"><span class="text-bold">{{(count($managerUsers)>0)?$managerUsers->getTotal():0}} results:</span></p>
+                      @endif
+                      @if(count($users)>0)
+                        <p class="result-total"><span class="text-bold">{{(count($users)>0)?$users->getTotal():0}} results:</span></p>
+                      @endif
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -35,34 +40,34 @@
                             <td>{{$managerUser->userRoles[0]->roles->role}}</td>
                             <td>
                             @if($jobPostId > 0 && $jobPost->jobsAssignedToId($managerUser->id)->count() == 0)
-                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $managerUser->id )) }}" title="Assign To {{$managerUser->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a>
+                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $managerUser->id )) }}" title="Assign To {{$managerUser->first_name}}" class="btn btn-primary btn-white" ></i>Assign Job Post</a>
                             @else
                               @if($jobPostId > 0)
                                 Already Assigned
                               @endif
                             @endif
-                            <a href="{{ URL::route('my-activity', array('id' => $managerUser->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            <a href="{{ URL::route('my-activity', array('id' => $managerUser->id)) }}" class="btn btn-primary btn-white" title="View Activity">View Activity</a>
                             @if(Auth::user()->hasRole(1))
-                            <a href="{{ URL::route('user-report', array('id' => $managerUser->id)) }}" title="View Reports"><i class="fa fa-fw fa-eye"></i></a>
+                            <a href="{{ URL::route('user-report', array('id' => $managerUser->id)) }}" class="btn btn-primary btn-white"  title="View Reports">View Report</a>
                             @endif
                             </td>
                           </tr> 
                       @endforeach
 	                    @foreach($users as $user)
 		                      <tr>
-		                        <td>{{$user->user->first_name. " ".$user->peer->last_name }}</td>
+		                        <td>{{$user->user->first_name. " ".$user->user->last_name }}</td>
 		                        <td>{{$user->user->email}}</td>
 		                        <td>{{$user->user->designation}}</td>
 		                        <td>{{$user->user->userRoles[0]->roles->role}}</td>
                             <td>
                             @if($jobPostId > 0 && $jobPost->jobsAssignedToId($user->user->id)->count() == 0)
-                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $user->user->id )) }}" title="Assign To {{$user->user->first_name}}"><i class="fa fa-plus"></i>Assign Job Post</a>
+                              <a href="{{ URL::route('assign-requirement', array('id' => $jobPostId, 'assignedTo' => $user->user->id )) }}" class="btn btn-primary btn-white" title="Assign To {{$user->user->first_name}}">Assign To {{$user->user->first_name}}</a>
                             @else
                               @if($jobPostId > 0)
                                 Already Assigned
                               @endif
                             @endif
-                            <a href="{{ URL::route('my-activity', array('id' => $user->user->id)) }}" title="View Activity"><i class="fa fa-fw fa-eye"></i></a>
+                            <a href="{{ URL::route('my-activity', array('id' => $user->user->id)) }}"  class="btn btn-primary btn-white" title="View Activity">View Activity</a>
                             </td>
 		                      </tr> 
 						          @endforeach

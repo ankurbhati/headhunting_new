@@ -116,10 +116,10 @@
                 <td>{{($org->created_at != "" && $org->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($org->created_at)):"-"}}</td>
 
 									<td>
-										<a href="{{ URL::route('view-third-party-organisation', array('id' => $org->id)) }}" title="View Organisation"><i class="fa fa-fw fa-eye"></i></a>
-										  <a href="{{ URL::route('edit-third-party-organisation', array($org->id)) }}" title="Edit Organisation"><i class="fa fa-fw fa-edit"></i></a>
+										<a href="{{ URL::route('view-third-party-organisation', array('id' => $org->id)) }}" class="btn btn-primary btn-white" title="View Organisation">View</a>
+										  <a href="{{ URL::route('edit-third-party-organisation', array($org->id)) }}"  class="btn btn-primary btn-white" title="Edit Organisation">Edit</a>
 									@if(Auth::user()->getRole() <= 1 || Auth::user()->hasRole(8) )
-										<a href="{{ URL::route('delete-third-party-organisation', array($org->id)) }}" title="Delete Organisation"><i class="fa fa-fw fa-ban text-danger"></i></a>
+										<a href="{{ URL::route('delete-third-party-organisation', array($org->id)) }}" class="btn btn-secondary btn-white"  title="Delete Organisation">Delete</a>
 									@endif
 								</td>
 	              </tr>

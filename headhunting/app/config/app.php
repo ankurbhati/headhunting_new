@@ -194,7 +194,7 @@ return array(
 		'0'=>'Pending',
 		'1'=>'Open',
 		'2'=>'Reject',
-		'3'=>'Forwarded To Client',
+		'3'=>'Forwarded To Prime Vendor',
 		'4'=>'Rejected By Prime Vendor',
 		'5'=>'Submitted To End Client',
 		'6'=>'Interview Scheduled',
