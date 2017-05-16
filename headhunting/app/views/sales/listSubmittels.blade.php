@@ -68,7 +68,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                    	@forelse($candidateApplications as $candidateApplication)
+                    	@foreach($candidateApplications as $candidateApplication)
 		                      <tr>
 		                        <td>
                               {{$candidateApplication->requirement->title}}
@@ -119,9 +119,7 @@
                               <a href="{{ URL::route('add-comment-job-post-view', array($candidateApplication->requirement->id)) }}" title="Add Comments"  class="btn btn-secondary btn-white"> Add Comments</a>
 		                        </td>
 		                      </tr>
-	                   	@empty
-	                   		<p>No Job Posts</p>
-						      @endforelse
+						      @endforeach
 
                     </tbody>
                     <tfoot>

@@ -998,6 +998,7 @@ class SaleController extends HelperController {
 							Config::set('mail.from.address', $authUser->email);
 							Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
 			       			Config::set('mail.password', $authUser->email_password);
+			       			Config::set('mail.host', "192.168.123.2");
 							//Log::info("Client Email: ".$client->email);
 							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension) {
 							//$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
