@@ -135,11 +135,11 @@
                   @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8))
                     <li class="dropdown">
                       <a href="{{ URL::route('third-party-organisation-list') }}">
-                      Organisations List</a>
+                      NCA/MSA List</a>
                     </li>
                     <li class="dropdown">
                       <a href="{{ URL::route('add-third-party-organisation') }}">
-                      Add Organisation</a>
+                      Add NCA/MSA</a>
                     </li>
                   @endif
                 </ul>
