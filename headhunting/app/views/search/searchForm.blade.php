@@ -8,17 +8,18 @@
         <div>
             <div class="form-group col-sm-6">
               <div class="col-xs-12">
-              <label for="jobTitle" control-label">Job Title</label>
-              <div>
-                <input type="text" class="form-control" id="jobTitle" name="designation"/>
-              </div>
-              </div>
+                  <label for="region" control-label">Location</label>
+                  <div >
+                    {{ Form::select('region[]', [], null, array('class' => 'form-control', 'id'=>'region', "multiple" => "multiple")) }}
+                    <!--<input type="text" class="form-control" name="region" />-->
+                  </div>
+                </div>
             </div>
             <div class="form-group col-sm-6">
               <div class="col-xs-12">
               <label for="visa"   control-label">Visa</label>
               <div >
-                {{ Form::select('visa', $visa, "", array('class' => 'form-control', 'id' => 'visa')) }}
+                {{ Form::select('visa[]', $visa, null, array('class' => 'form-control', 'id' => 'visa', "multiple" => "multiple")) }}
                 <!--<input type="text" class="form-control" name="visa" />-->
               </div>
               </div>
@@ -28,10 +29,9 @@
             <div class="col-sm-6" style="padding-right:25px;">
               <div class="form-group">
                 <div class="col-xs-12">
-                  <label for="region" control-label">Location</label>
-                  <div >
-                    {{ Form::select('region', [], null, array('class' => 'form-control', 'id'=>'region')) }}
-                    <!--<input type="text" class="form-control" name="region" />-->
+                  <label for="jobTitle" control-label">Job Title</label>
+                  <div>
+                    <input type="text" class="form-control" id="jobTitle" name="designation"/>
                   </div>
                 </div>
               </div>

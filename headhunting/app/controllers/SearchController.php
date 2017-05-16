@@ -28,9 +28,7 @@ class SearchController extends HelperController {
 	 *
 	 */
 	public function advanceSearch($jobId = 0) {
-
 		$visa = Visa::all()->lists('title', 'title');
-		$visa[""] = "Select visa";
 		return View::make('search.searchForm')->with(array('title' => 'Search - Headhunting', 'jobId' => $jobId, 'visa' => $visa));
 	}
 
@@ -49,27 +47,29 @@ class SearchController extends HelperController {
 		$searchQuery = explode(',', $searchQuery);
 		$searcType = Input::get('searchType');
     	$designation = Input::get('designation', '');
-    	$visa = Input::get('visa', '');
-    	$region = Input::get('region', '');
+    	$visa = Input::get('visa', []);
+    	$region = Input::get('region', []);
+
     	$searching_text = '';
-		if($query || $designation || $visa || $region || (!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) ) {
+		if($query || $designation || count($visa) > 0 || count($region) > 0 || (!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) ) {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try {
-		    	$searching_text_to_send = $designation."---".$visa."---".$region."---".$query;
-		    	$searching_text = $designation." ".$visa." ".$region." ".$query;
-
+		    	$searching_text_to_send = $designation."---".join("---",$visa)."---".join("---",$region)."---".$query;
+		    	$searching_text = $designation." ".join(" ",$visa)." ".join(" ",$region)." ".$query;
 
 		    	$q = CandidateResume::query();
 
-		    	if( isset($visa) && !empty($visa) ) {
+		    	if( isset($visa) && count($visa) > 0 ) {
 		    		 //print "IN visa".$visa;exit;
 		    		 //$q->where('visa','like', "'%".$visa."%'");
-		    		 $q->where('visa','like', $visa);
+		    		 $q->whereIn('visa', $visa);
 		    	}
 
-		    	if( isset($region) && !empty($region) ) {
-		    		 $q->where('region','like', $region);
+		    	if( isset($region) && count($region) > 0 ) {
+
+		    		 $q->whereIn('region', $region);
 		    	}
+
 
 		    	if( isset($designation) && !empty($designation) ) {
 					$q->where('designation','like', $designation."%");
