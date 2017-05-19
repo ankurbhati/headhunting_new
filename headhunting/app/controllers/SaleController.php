@@ -954,12 +954,10 @@ class SaleController extends HelperController {
 
 				$submittle_status = Config::get('app.job_post_submittle_status');
 				$candidate_application = CandidateApplication::find($cand_app);
-				if(Input::has('client_rate') && Input::get('client_rate') != '' &&
-					Input::has('submission_rate') && Input::get('submission_rate') != '' ) {
+				if(Input::has('client_rate') && Input::get('client_rate') != '') {
 
 					$candidate_application->client_rate = Input::get('client_rate');
-					$candidate_application->submission_rate = Input::get('submission_rate');
-
+					//$candidate_application->submission_rate = Input::get('submission_rate');
 				}
 				$body_content = Input::get('mail_cont');
 				$mail_subject = Input::get('mail_sub');
@@ -975,7 +973,7 @@ class SaleController extends HelperController {
 						$candidate_application->interview_scheduled_date = datetime::createfromformat('m/d/Y',Input::get('interview_scheduled_date'))->format('Y-m-d');
 					}
 					$candidate_application->save();
-					if($status == 5){
+					if($status == 3){
 						$mail_content = json_encode(array('content'=>$body_content, 'subject'=> $mail_subject));
 						$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, $status, $message, $mail_content);
 						//print_r(json_decode($mail_content, true));exit();
@@ -994,11 +992,14 @@ class SaleController extends HelperController {
 							$mime = $file->getMimeType();
 
 							Log::info($fileExtension." <<<, >>>> ".$mime);
-							Config::set('mail.username', $authUser->email);
-							Config::set('mail.from.address', $authUser->email);
-							Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
-			       			Config::set('mail.password', $authUser->email_password);
+							Config::set('mail.username', "crm@apetan.com");
+							Config::set('mail.password', "!017@server");
+							Config::set('mail.from.address', "crm@apetan.com");
+							Config::set('mail.from.name', "crm" );
 			       			Config::set('mail.host', "192.168.123.2");
+
+
+			       			Log::info("Mail Sent for Submittels.");
 							//Log::info("Client Email: ".$client->email);
 							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension) {
 							//$message->to(trim($client->email), $client->first_name.' '.$client->last_name)

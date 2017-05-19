@@ -361,9 +361,10 @@ class HelperController extends BaseController {
 
     public function sendNotificationMail($body_content, $user, $subject='Notification Mail') {
 
-        Config::set('mail.username', "Admin CRM");
+        Config::set('mail.username', "crm@apetan.com");
+        Config::set('mail.password', "!017@server");
         Config::set('mail.from.address', "crm@apetan.com");
-        Config::set('mail.from.name', "ADMIN" .' '."CRM" );
+        Config::set('mail.from.name', "crm" );
         Config::set('mail.host', "192.168.123.2");
         Mail::send([], [], function($message) use(&$body_content, &$user, &$subject)
         {
