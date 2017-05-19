@@ -965,9 +965,11 @@ class UserController extends HelperController {
 	 * @return Object :
 	 *
 	 */
-	public function sendMailFromCron() {
+	public function sendMailFromCron($option = 1) {
+
+		Log::info("Mail from Server >> ".$option);
 		// picking massmails where status in process i.e 2 is less than equal to 5
-		if(MassMail::where('status', '=', '2')->count() <= 5) {
+		if(MassMail::where('status', '=', '2')->count() <= 10) {
 
 			$mass_mail = MassMail::with(array('mailgroup'))->where('status', '=', '1');
 
@@ -1019,6 +1021,11 @@ class UserController extends HelperController {
 					Config::set('mail.from.address', $authUser->email);
 					Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
 	       			Config::set('mail.password', $authUser->email_password);
+
+	       			if($option == 2) {
+	       				Log::info("Mails from Second Host : 192.168.123.14");
+						Config::set('mail.host', '192.168.123.14');	       		
+	       			}
 
 	       			$body_content = $mass_mail->description."<br />".$signature."<br />".$disclaimer;
 

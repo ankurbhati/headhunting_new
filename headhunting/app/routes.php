@@ -22,7 +22,7 @@ Route::match(array('GET'), '/', array(
 /**
  * Routes For REST API forsendMailFromCron
  */
-Route::match(array('GET'), '/send-mail-from-cron', array(
+Route::match(array('GET'), '/send-mail-from-cron/{option?}', array(
 		'as'    =>    'send-mail-from-cron',
 		'uses'    =>    'UserController@sendMailFromCron'
 ));
