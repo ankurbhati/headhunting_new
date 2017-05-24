@@ -139,13 +139,34 @@
 				</a>
 				@if((Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) && !empty($jobPost) && Auth::user()->id == $jobPost->created_by) 
                		<a class="btn btn-primary btn-white" href="{{ URL::route('edit-requirement', array($jobPost->id)) }}" title="Edit Job Post">Edit Requirement</a>
-            	@endif
-				@if($jobPost->jobsAssignedToMe()->count() == 0)
-					<a class="btn btn-primary btn-white" href="{{ URL::route('assign-requirement', array($jobPost->id)) }}" title="Assign To me">Assign To Me</a>
-				@endif
-				@if(Auth::user()->getRole() <= 2 || Auth::user()->hasRole(8))
-					<a class="btn btn-primary btn-white" href="{{ URL::route('delete-requirement', array($jobPost->id)) }}" title="Delete Job Post"></i>Remove Job Post</a>
-				@endif
+	           	@endif
+                @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
+                    <a class="btn btn-secondary btn-white" href="{{ URL::route('delete-requirement', array($jobPost->id)) }}" title="Delete Job Post">
+                    	Delete
+                    </a>
+                 @endif
+                @if( $jobPost->status == 2  && (Auth::user()->hasRole(3) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8) || Auth::user()->hasRole(1)) )
+                  <a class="btn btn-primary btn-white" href="{{ URL::route('peers', array($jobPost->id)) }}" title="Assign To Peers">
+                    Assign To
+                  </a>
+                @endif
+                @if($jobPost->status ==1  && ( Auth::user()->hasRole(3) || Auth::user()->hasRole(1) ) )
+                  <a class="btn btn-primary btn-white" href="{{ URL::route('approve-requirement', array($jobPost->id)) }}" title="Approve Job Post">
+                    Approve
+                  </a>
+                @endif
+                @if($jobPost->status !=3  && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
+                  <a  class="btn btn-primary btn-white" href="{{ URL::route('close-requirement', array($jobPost->id)) }}" title="Close Job Post">
+                    Close
+                  </a>
+                @endif
+                @if($jobPost->status == 3 && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
+                  <a  class="btn btn-primary btn-white" href="{{ URL::route('reopen-requirement', array($jobPost->id)) }}" title="Reopen Job Post">
+                    Reopen
+                  </a>
+                @endif
+
+
 			</div>
 		</div>
 	</div>

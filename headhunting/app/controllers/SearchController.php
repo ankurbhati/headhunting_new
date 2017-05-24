@@ -49,13 +49,14 @@ class SearchController extends HelperController {
     	$designation = Input::get('designation', '');
     	$visa = Input::get('visa', []);
     	$region = Input::get('region', []);
+    	$email = Input::get('email');
 
     	$searching_text = '';
-		if($query || $designation || count($visa) > 0 || count($region) > 0 || (!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) ) {
+		if($email != "" || $query || $designation || count($visa) > 0 || count($region) > 0 || (!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) ) {
 		    // Use the Elasticquent search method to search ElasticSearch
 		    try {
-		    	$searching_text_to_send = $designation."---".join("---",$visa)."---".join("---",$region)."---".$query;
-		    	$searching_text = $designation." ".join(" ",$visa)." ".join(" ",$region)." ".$query;
+		    	$searching_text_to_send = $email."---".$designation."---".join("---",$visa)."---".join("---",$region)."---".$query;
+		    	$searching_text = $email." ".$designation." ".join(" ",$visa)." ".join(" ",$region)." ".$query;
 
 		    	$q = CandidateResume::query();
 
@@ -73,6 +74,12 @@ class SearchController extends HelperController {
 
 		    	if( isset($designation) && !empty($designation) ) {
 					$q->where('designation','like', $designation."%");
+		    	}
+
+		    	if( isset($email) && !empty(trim($email)) ) {
+					$q->whereHas('candidate', function($j) use (&$email){
+				    	$j->where('email','like', trim($email)."%");
+					});
 		    	}
 
 		    	if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {

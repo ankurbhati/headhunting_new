@@ -28,10 +28,16 @@
           <div>
             <div class="col-sm-6" style="padding-right:25px;">
               <div class="form-group">
-                <div class="col-xs-12">
+                <div class="col-xs-6">
                   <label for="jobTitle" control-label">Job Title</label>
                   <div>
-                    <input type="text" class="form-control" id="jobTitle" name="designation"/>
+                    <input type="text" class="form-control" placeholder="Job Title" id="jobTitle" name="designation"/>
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <label for="email" control-label">Candidate Email</label>
+                  <div>
+                    <input placeholder="email" type="email" class="form-control" id="email" name="email"/>
                   </div>
                 </div>
               </div>
@@ -49,7 +55,7 @@
                 <div class="col-xs-12">
                   <label for="inputQuery" control-label">Query</label>
                   <div >
-                    <textarea class="form-control" style="resize: none;" rows="4" id="inputQuery" name="query"></textarea>
+                    <textarea class="form-control" style="resize: none;" rows="3" id="inputQuery" name="query"></textarea>
                   </div>
                 </div>
               </div>

@@ -55,7 +55,7 @@
             <li class="dropdown">
                 <a href="#">Sales</a>
                 <ul class="dropdown-menu">
-                @if(Auth::user()->getRole() != 4)
+                @if(Auth::user()->getRole() != 4 && Auth::user()->getRole() != 5)
                   <li class="dropdown">
                     <a href="{{ URL::route('list-requirement') }}">
                       Posted Requirements
@@ -73,10 +73,12 @@
                     </a>
                   </li>
                 @endif
+                @if(Auth::user()->hasRole(4)|| Auth::user()->hasRole(5))
                   <li class="dropdown">
                     <a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}">
                       Assigned Requirement</a>
                   </li>
+                @endif
                   @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))
                     
                     <li class="dropdown"><a href="{{ URL::route('add-client') }}">
@@ -86,10 +88,6 @@
 
                     <li class="dropdown">
                       <a href="{{ URL::route('client-list') }}">Client List</a>
-                    </li>
-                    <li class="dropdown">
-                      <a href="{{ URL::route('client-upload') }}">
-                      Upload Clients</a>
                     </li>
                   @endif
                 </ul>

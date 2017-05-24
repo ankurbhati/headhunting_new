@@ -54,25 +54,6 @@
           </div>
       </div>
   </div>
-  <div class="box box-primary">
-    <div class="box-header ui-sortable-handle" style="cursor: move;">
-      <h3 class="box-title"><i class="ion ion-clipboard"></i>  Today Requirements</h3>
-    </div>
-    <div class="box-body">
-      <ul class="todo-list">
-        @forelse($jobPosts as $jobPost)
-          <li style="line-height:48px; border-top:1px solid #d8d8d8; border-bottom:1px solid #d8d8d8; list-style-type:none;">
-            <span class="text"><strong>{{$jobPost->title}}</strong></span>
-            <div class="tools pull-right">
-              <a style="line-height:1.427;" class="btn btn-primary btn-white" href="{{ URL::route('view-requirement', array('id' => $jobPost->id)) }}" title="View Job Post">View</a>
-            </div>
-          </li>
-        @empty
-          <p>No Job Post Today</p>
-        @endforelse
-      </ul>
-    </div>
-  </div>
   <div id="myModal">
     <div class="modal">
       <div class="modal-dialog">

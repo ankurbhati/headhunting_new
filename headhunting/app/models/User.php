@@ -54,7 +54,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     
         return $this->hasMany('UserPeer','peer_id','id');
     }
+
+    public function userHasPeer() {
     
+        return $this->hasMany('UserPeer','user_id','id');
+    }
+    
+    public function isMyTeamById($id) {
+    
+        return $this->hasMany('UserPeer','peer_id','id')->where('user_id', '=', $id)->exists();
+    }
     
     /**
      *

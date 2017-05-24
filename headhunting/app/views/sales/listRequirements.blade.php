@@ -17,8 +17,15 @@
                       </div>
                   </div>
                   <div class="form-group">
+                      {{ Form::label('created_by', 'Added By: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                      <div class="col-sm-8">{{ Form::select('created_by', $users, Auth::user()->id, array('class' => 'form-control')) }}
+                          <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
+                      </div>
+                  </div>
+                  <div class="form-group">
                       {{ Form::label('type_of_employment', 'Type Of Employment: ', array('class' => 'col-sm-3
-                      control-label')); }}
+                    control-label')); }}
                       <div class="col-sm-8">{{ Form::select('type_of_employment', array(0=>"Select type of employment", 1=>"Contratual", 2=> "Permanent", 3=>"Contract to hire"),0, array('class' => 'form-control')) }}
                           <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
                       </div>
@@ -65,10 +72,10 @@
 		                      <tr>
                               <td>APT-0{{$jobPosts->id}}</td>
               		            <td><b>{{$jobPosts->title}}</b><br/>
-                              @if($jobPosts->client && ($jobPosts->created_by == Auth::user()->id || Auth::user()->hasRole(1))){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"*****"}} @endif
+                              @if($jobPosts->client && ($jobPosts->created_by == Auth::user()->id || Auth::user()->isMyTeamById($jobPosts->created_by) || Auth::user()->hasRole(1))){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"*****"}} @endif
                               <hr>
                               <b>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</b><br/>
-                              {{$jobPosts->city->name}}, {{$jobPosts->country->country}}<br/>
+                              {{($jobPosts->city)?$jobPosts->city->name:''}}, {{$jobPosts->country?$jobPosts->country->country:''}}<br/>
                               <span class="text-label">Posted at : </span>{{($jobPosts->created_at != "" && $jobPosts->created_at != "0000-00-00 00:00:00")?date("d M, Y H:i", strtotime($jobPosts->created_at)):"-"}}<br/>
                               </td>
               								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>

@@ -26,7 +26,7 @@ class HelperController extends BaseController {
      *
      * @return Object JSON
      */
-    public function sendJsonResponse($data) {
+    public function sendJsonResponse($datfva) {
 
         // Setting Access Control to *
         header('Access-Control-Allow-Origin: *');
@@ -391,8 +391,8 @@ class HelperController extends BaseController {
             // send mail
             try{
                 $user = User::find($user_id);
-                $body_content = 'Hi, <br/>'.$description.'<br/>';
-                $this->sendNotificationMail($description, $user);    
+                $body_content = 'Hi '.$user->first_name.',<br/>'.$description.'<br/>';
+                $this->sendNotificationMail($body_content, $user);
             } catch(Exception $e) {
                 print $e->getMessage();
             }

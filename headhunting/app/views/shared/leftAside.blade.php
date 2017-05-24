@@ -35,7 +35,7 @@
                 <li><a href="{{ URL::route('client-list') }}"><i class="fa fa-user"></i>Client List</a></li>
                 @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))
                   <li><a href="{{ URL::route('add-client') }}"><i class="fa fa-user-plus"></i>Add Client</a></li>
-                  <li><a href="{{ URL::route('client-upload') }}"><i class="fa fa-user"></i>Upload Clients</a></li>
+                  <!-- <li><a href="{{ URL::route('client-upload') }}"><i class="fa fa-user"></i>Upload Clients</a></li> -->
                 @endif
               </ul>
             </li>

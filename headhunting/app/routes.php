@@ -475,10 +475,10 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Client
 	 */
-	Route::match(array('GET'), '/client-upload', array(
-			'as'    =>    'client-upload',
-			'uses'    =>    'ClientController@clientUpload'
-	));
+	// Route::match(array('GET'), '/client-upload', array(
+	// 		'as'    =>    'client-upload',
+	// 		'uses'    =>    'ClientController@clientUpload'
+	// ));
 
 	/**
 	 * Routes For REST API for new Client

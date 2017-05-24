@@ -283,7 +283,13 @@ class SaleController extends HelperController {
 	public function listRequirement($id=0) {
 
 		$q = JobPost::query();
-		
+		$usersAddedBy = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('status', '=', 1)->whereHas('userRoles', function($q){
+				    $q->where('role_id', '<=', 3);
+				})->get();
+		$users = array();
+		foreach( $usersAddedBy as $key => $value) {
+			$users[$value->id] = $value->first_name." ".$value->last_name." (".$value->email.")";
+		}
 		if($id == 0) {
 			$q->with(array('country', 'state', 'client', 'user'))
 			  ->orderBy('updated_at', 'desc');
@@ -294,14 +300,30 @@ class SaleController extends HelperController {
 			})->orderBy('updated_at', 'desc');
 		}
 
+		Log::info(Auth::user()->hasRole(3));
 
+		if(Auth::user()->hasRole(2)) {
+			$q->where('created_by', '=', Auth::user()->id);
+		} elseif(Auth::user()->hasRole(3)) {
+			$team = $this->getTeamUsers(Auth::user()->id);
+			array_push($team, Auth::user()->id);
+			$q->whereIn('created_by', $team);
+		} elseif($id == 0 && !Auth::user()->hasRole(1) && !Auth::user()->hasRole(8)) {
+			$q->where('created_by', '=', Auth::user()->id);
+		}
 		
 		if(!empty(Input::get('title'))) {
 			$q->where('title', 'like', "%".Input::get('title')."%");
 		} 
+
 		if(!empty(Input::get('type_of_employment'))){
 			$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
 		}
+
+		if(!empty(Input::get('created_by'))){
+			$q->where('created_by', '=', Input::get('created_by'));	
+		}
+
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
 			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
@@ -330,7 +352,9 @@ class SaleController extends HelperController {
 		}
 
 		$jobPost = $q->paginate(100);
-		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
+
+
+		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id, 'users' => $users));
 	}
 
 
@@ -345,7 +369,14 @@ class SaleController extends HelperController {
 
 		$q = JobPost::query();
 		$q->where('status', '=', 1);
-		
+		$usersAddedBy = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('status', '=', 1)->whereHas('userRoles', function($q){
+				    $q->where('role_id', '<=', 3);
+				})->get();
+		$users = array();
+		foreach( $usersAddedBy as $key => $value) {
+			$users[$value->id] = $value->first_name." ".$value->last_name." (".$value->email.")";
+		}
+
 		if($id == 0) {
 			$q->with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc');
 		} else {
@@ -355,12 +386,27 @@ class SaleController extends HelperController {
 			})->orderBy('updated_at', 'desc');
 		}
 		
+
+		if(Auth::user()->hasRole(2)) {
+			$q->where('created_by', '=', Auth::user()->id);
+		} elseif(Auth::user()->hasRole(3)) {
+			$team = $this->getTeamUsers(Auth::user()->id);
+			array_push($team, Auth::user()->id);
+			$q->whereIn('created_by', $team);
+		} elseif($id == 0 && !Auth::user()->hasRole(1) && !Auth::user()->hasRole(8)) {
+			$q->where('created_by', '=', Auth::user()->id);
+		}
+
 		if(!empty(Input::get('title'))) {
 			$q->where('title', 'like', "%".Input::get('title')."%");
 		}
 
 		if(!empty(Input::get('type_of_employment'))){
 			$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
+		}
+
+		if(!empty(Input::get('created_by'))){
+			$q->where('created_by', '=', Input::get('created_by'));	
 		}
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
 			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
@@ -390,7 +436,7 @@ class SaleController extends HelperController {
 		}
 
 		$jobPost = $q->paginate(100);
-		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id));	
+		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id, 'users' => $users));	
 	}
 
 	/**
@@ -574,7 +620,11 @@ class SaleController extends HelperController {
 				$count[$value->id] = $value->country;
 			}
 
-			$clients = Client::all();
+			if(Auth::user()->hasRole(1)){
+				$clients = Client::all();
+			} else {
+				$clients = Client::where('created_by', '=', Auth::user()->id)->get();	
+			}
 			$client = array();
 			foreach( $clients as $key => $value) {
 				$client[$value->id] = $value->first_name."-".$value->email;
@@ -859,10 +909,10 @@ class SaleController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
-	public function addComment($jobId, $view) {
+	public function addComment($jobId, $view = 2) {
 		$jobPost = JobPost::where('id', '=', $jobId)->get();
 		if(!$jobPost->isEmpty()) {
-
+			$jobPost = $jobPost->first();
 			$validate=Validator::make (
 					Input::all(), array(
 							'comment' =>  'required',
@@ -883,6 +933,37 @@ class SaleController extends HelperController {
 				$jobPostComment->added_by = Auth::user()->id;
 				$jobPostComment->created_at = date('Y-m-d H:i:s');
 				if($jobPostComment->save()) {
+
+
+					/* Save Notification */
+					$description = Config::get('notification.job_post_comment');
+					$authUser = Auth::user();
+					$formatted_description = sprintf(
+						$description,
+						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+						'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+					);
+					$to_notify_user = array($jobPost->created_by);
+					$lead = $this->getTeamLeadForUser($jobPost->created_by);
+					if(!empty($lead) && Auth::user()->id != $lead->id) {
+						array_push($to_notify_user, $lead->id);
+					}
+
+					Log::info(json_encode($to_notify_user));
+					$jobsAssigned = $jobPost->jobsAssigned;
+
+					foreach ($jobsAssigned as $key => $value) {
+						array_push($to_notify_user, $value->assigned_to_id);
+					}
+
+					Log::info(json_encode($to_notify_user));
+
+		  			if(Auth::user()->hasRole(1) ) {
+						$this->saveNotification($formatted_description, $to_notify_user, '', False);
+					} else {
+						$this->saveNotification($formatted_description, $to_notify_user, '', True);
+					}
+
 					if(!empty($view) && $view == 1) {
 						return Redirect::route('view-requirement', array('id' => $jobPostComment->job_post_id));
 					} else {
@@ -1001,9 +1082,10 @@ class SaleController extends HelperController {
 
 			       			Log::info("Mail Sent for Submittels.");
 							//Log::info("Client Email: ".$client->email);
-							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension) {
+							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension, &$lead) {
 							//$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
 							$message->to(trim($authUser->email), $authUser->first_name.' '.$authUser->last_name)
+									->cc($lead->email, $lead->first_name.' '.$lead->last_name)
 							    	->subject($mail_subject)
 							    	->setBody($body_content, 'text/html')
 							    	->attach(
@@ -1016,8 +1098,8 @@ class SaleController extends HelperController {
 							Config::set('mail.from.address', $authUser->email);
 							Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
 			       			Config::set('mail.password', $authUser->email_password);
-							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$client) {
-							$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
+							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$client, &$authUser) {
+							$message->to(trim($authUser->email), $authUser->first_name.' '.$authUser->last_name)
 							    	->subject($mail_subject)
 							    	->setBody($body_content, 'text/html');
 							});

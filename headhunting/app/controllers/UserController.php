@@ -185,23 +185,25 @@ class UserController extends HelperController {
 				    $q->where('role_id', '<', 6)
 				      ->where('user_id', '!=', Auth::user()->id);
 			})->paginate(100);
-		} else {
+		} else if($id == 0) {
 			$users = UserPeer::with(array('user', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
 		}
 		if($id > 0) {
 			$jobPost = JobPost::find($id);
 			if($currentUserRole == 2 || $currentUserRole == 3) {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
-				    $q->where('role_id', '<=', 5)
-				      ->where('role_id', '>=', 4);
+				    $q->where('role_id', '=', 5);
 				})->paginate(100);
 			} else if($currentUserRole == 5) {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('id', '!=', Auth::user()->id)->whereHas('userRoles', function($q){
-				    $q->where('role_id', '<=', 5)
-				      ->where('role_id', '>=', 4);
-				})->whereHas('userPeers', function($q){
+				    $q->where('role_id', '=', 4);
+				})->whereHas('userHasPeer', function($q){
 				    $q->where('peer_id', '=', Auth::user()->id);
 				})->paginate(100);
+
+				$queries = DB::getQueryLog();
+		        $last_query = end($queries);
+		        Log::info("Last Query ".json_encode($last_query));
 			}
 		}
 
@@ -595,8 +597,8 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function home() {
-		$jobPosts = JobPost::where('status', '=', '2')->where('created_at', 'like', date('Y-m-d')."%")->get();
-		return View::make('User.home')->with(array('title' => 'Dashboard', 'jobPosts' => $jobPosts));
+		// $jobPosts = JobPost::where('status', '=', '2')->where('created_at', 'like', date('Y-m-d')."%")->get();
+		return View::make('User.home')->with(array('title' => 'Dashboard'));
 	}
 
 	/**

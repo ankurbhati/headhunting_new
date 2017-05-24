@@ -9,4 +9,5 @@ return array(
 	'job_post_submittle_open' => '%s wants to submit %s for %s requirement. Please Approve', //type 2
 	'job_post_submittle_approval' => '%s has approved %s for %s requirement', //type 2
 	'job_post_submittle_updation' => '%s has updated %s requirement to %s', //type 2
+	'job_post_comment' => '%s has added a new comment on %s.'
 );
