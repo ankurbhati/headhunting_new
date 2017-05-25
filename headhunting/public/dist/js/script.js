@@ -433,11 +433,7 @@ if($('#msa-group').length > 0) {
 			if($(this).val() == 3) {
 				$('.submit_endclient-form-rate').show();
 				var sub = $('input[name="requirement_id_'+cand_app+'"]').val()+"-"+$('input[name="requirement_title_'+cand_app+'"]').val();
-				var mail_cont = "Requirement ID: "+$('input[name="requirement_id_'+cand_app+'"]').val()+"<br/>" +
-								"Requirement Title: "+$('input[name="requirement_id_'+cand_app+'"]').val()+"<br/>" +
-								"Candidate Name: "+$('input[name="candidate_name_'+cand_app+'"]').val()+"<br/>" +
-								"Candidate Email: "+$('input[name="candidate_email_'+cand_app+'"]').val()+"<br/>" +
-								"Candidate Phone: "+$('input[name="candidate_phone_'+cand_app+'"]').val()+"<br/>";
+				var mail_cont = $(".toMail_" + cand_app).html();
 
 				$('#mail_sub').val(sub);
 				$('#mail_cont').val(mail_cont);
