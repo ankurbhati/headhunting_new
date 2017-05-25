@@ -31,7 +31,7 @@
 			<div class="row"><div class="col-sm-4 view-label">
 					Type Of Employment:
 					</div><div class="col-sm-8 view-value ">
-						{{($jobPost->type_of_employment == 1)?"Contractual": ($jobPost->type_of_employment == 2)?"Permanent": "Contract to hire";}}
+						{{($jobPost->type_of_employment == 1)?"Contractual": (($jobPost->type_of_employment == 2)?"Permanent": "Contract to hire");}}
 					</div>
 			</div>
 			@if($jobPost->type_of_employment != 2)

@@ -66,10 +66,22 @@ class JobPost extends Eloquent {
      *
      * @return Object hasMany Relation jobs Assigned.
      */
+    public function candidateApplications() {
+
+    	return $this->hasMany('CandidateApplication','job_post_id','id')->count();
+    }
+
+    /**
+     *
+     * jobsAssigned : Relation between jobs Assigned.
+     *
+     * @return Object hasMany Relation jobs Assigned.
+     */
     public function jobsAssigned() {
 
-    	return $this->hasMany('JobPostAssignment','job_post_id','id');
+        return $this->hasMany('JobPostAssignment','job_post_id','id');
     }
+
 
     /**
      *
@@ -124,5 +136,19 @@ class JobPost extends Eloquent {
     public function city() {
 
         return $this->belongsTo('City','city_id','id');
+    }
+
+    public function getAssignedNames() {
+
+        $jobsAssigned = $this->jobsAssigned;
+        $names = "";
+        foreach($jobsAssigned as $key => $value) {
+            if($key > 0) {
+                $names = $names.", ".$value->assignedTo->first_name. " ".$value->assignedTo->last_name;
+            } else {
+                $names = $value->assignedTo->first_name. " ".$value->assignedTo->last_name;
+            }
+        }
+        return $names;
     }
 }

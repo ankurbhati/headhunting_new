@@ -25,4 +25,15 @@ class JobPostAssignment extends Eloquent {
      * @var string
      */
     protected $table = 'job_post_assignments';
+
+    /**
+     *
+     * assignedTo : Relation between Job Posts & User.
+     *
+     * @return Object belongs to Relation User JP.
+     */
+    public function assignedTo() {
+
+        return $this->belongsTo('User','assigned_to_id','id')->select(array('id', 'first_name', 'last_name', 'email'));
+    }
 }

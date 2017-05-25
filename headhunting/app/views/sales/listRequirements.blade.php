@@ -74,12 +74,16 @@
               		            <td><b>{{$jobPosts->title}}</b><br/>
                               @if($jobPosts->client && ($jobPosts->created_by == Auth::user()->id || Auth::user()->isMyTeamById($jobPosts->created_by) || Auth::user()->hasRole(1))){{$jobPosts->client->first_name." ".$jobPosts->client->last_name."-".$jobPosts->client->email}}@else {{"*****"}} @endif
                               <hr>
-                              <b>{{($jobPosts->type_of_employment == 1)?"Contractual": ($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire";}}</b><br/>
+                              <b>{{($jobPosts->type_of_employment == 1)?"Contractual":(($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire");}}</b><br/>
                               {{($jobPosts->city)?$jobPosts->city->name:''}}, {{$jobPosts->country?$jobPosts->country->country:''}}<br/>
                               <span class="text-label">Posted at : </span>{{($jobPosts->created_at != "" && $jobPosts->created_at != "0000-00-00 00:00:00")?date("d M, Y H:i", strtotime($jobPosts->created_at)):"-"}}<br/>
                               </td>
-              								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif</td>
+              								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif <br/>
+                              <br/>
+                                {{"Assigned To Users: ".$jobPosts->getAssignedNames()}}
+                              </td>
               								<td>
+                                <span><strong>Submittels Count:</strong><span class="text-success"> <strong>{{$jobPosts->candidateApplications()}}</strong></span><br>
                                 @if($jobPosts->status == 1)
                                   <span class="text-pending">Pending</span>
                                 @elseif($jobPosts->status == 2)

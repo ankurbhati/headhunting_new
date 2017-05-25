@@ -103,6 +103,18 @@ class Candidate extends Eloquent {
         return $this->hasOne('CandidateResume','candidate_id','id');
     }
 
+
+    /**
+     *
+     * candidateRecentRate : Relation between candidate & its rate.
+     *
+     * @return Object belongs to Relation candidate & its resume..
+     */
+    public function candidateRecentRate() {
+    
+        return $this->hasOne('CandidateRate','candidate_id','id')->orderBy('id', 'desc')->first();
+    }
+
     /**
      *
      * countries : Relation between candidate & its resume.

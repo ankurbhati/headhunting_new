@@ -79,13 +79,28 @@
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" target="_blank">
                                 {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}<br/>{{$candidateApplication->candidate->email}}
                               </a>
-                              <div>
-                                <input type="hidden" name="requirement_id_{{$candidateApplication->id}}" value="{{$candidateApplication->requirement->id}}">
-                                <input type="hidden" name="requirement_title_{{$candidateApplication->id}}" value="{{$candidateApplication->requirement->title}}">
-                                <input type="hidden" name="candidate_name_{{$candidateApplication->id}}" value="{{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}">
-                                <input type="hidden" name="candidate_email_{{$candidateApplication->id}}" value="{{$candidateApplication->candidate->email}}">
-                                <input type="hidden" name="candidate_phone_{{$candidateApplication->id}}" value="
-                                {{$candidateApplication->candidate->phone}}">
+                              <input type="hidden" name="requirement_id_{{$candidateApplication->id}}" value = "APT-0{{$candidateApplication->requirement->id}}">
+                              <input type="hidden" name="requirement_title_{{$candidateApplication->id}}" value = "{{$candidateApplication->requirement->title}}">
+                              <span class="sr-only">Job Post: APT-0{{$candidateApplication->requirement->id}} - {{$candidateApplication->requirement->title}}</span><br>
+                              <div class="sr-only toMail_{{$candidateApplication->id}}">
+
+                                  <br>
+                                  <br>
+                                  <span>Name: {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</span><br>
+                                  <span>Contact number: {{$candidateApplication->candidate->phone}}</span><br>
+                                  <span>Location: 
+                                  @if($candidateApplication->candidate->city){{$candidateApplication->candidate->city->name}}@endif
+                                    {{($candidateApplication->candidate->state)?", ".$candidateApplication->candidate->state->state:'-'}}
+                                    {{($candidateApplication->candidate->country)?", ".$candidateApplication->candidate->country->country:'-'}}
+                                  </span><br>
+                                  <span>Email: {{$candidateApplication->candidate->email}}</span><br>
+                                  <span>Visa: {{($candidateApplication->candidate->visa)?$candidateApplication->candidate->visa->title:""}}</span><br>
+                                  <span>Year of birth: </span><br>
+                                  <span>Rate (Per Hour)/ Salary: ${{$candidateApplication->candidate->candidateRecentRate()->value}}</span><br>
+                                  <span>Availability to Join: </span><br>
+                                  <span>Skype id: </span><br>
+                                  <span>Currently on Project: </span><br>
+                                  @if($candidateApplication->candidate->thirdparty)<span>Employer name :{{$candidateApplication->candidate->thirdparty->email}}</span>@endif
                               </div>
                             </td>
                             <td class="text-status-{{$candidateApplication->status}}">
