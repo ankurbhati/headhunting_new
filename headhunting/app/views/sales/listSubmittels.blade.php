@@ -51,7 +51,7 @@
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Job Title / <br>Type Of Employment</th>
+                        <th>Job Id /<br> Job Title / <br>Type Of Employment</th>
                         <th>Candidate Name / <br/>
                             Candidate Email
                         </th>
@@ -63,6 +63,8 @@
                             <br/>
                             Submitted By
                         </th>
+                        <th>Added By
+                        </th>
                         <th>Feedback</th>
                         <th>Action</th>
                       </tr>
@@ -71,6 +73,7 @@
                     	@foreach($candidateApplications as $candidateApplication)
 		                      <tr>
 		                        <td>
+                              <strong>APT-0{{$candidateApplication->requirement->id}}</strong><br>
                               {{$candidateApplication->requirement->title}}
                               <br/>
                               {{($candidateApplication->requirement->type_of_employment == 1)?"Contractual": ($candidateApplication->requirement->type_of_employment == 2)?"Permanent": "Contract to hire";}}
@@ -114,6 +117,9 @@
                             <br/>
                             {{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
                             <td>
+                              @if($candidateApplication->requirement->user){{$candidateApplication->requirement->user->first_name." ".$candidateApplication->requirement->user->last_name."-".$candidateApplication->requirement->user->email}}@else {{"-"}} @endif 
+                            </td>
+                            <td>
                             {{(!empty($candidateApplication->applicationStatus->first()->message))?$candidateApplication->applicationStatus->first()->message:'-'}}</td>
 		                        <td>
                               @if ($candidateApplication->status == 0 && ($login_user->hasRole(1) || $login_user->id == $candidateApplication->submitted_by || (in_array($candidateApplication->submitted_by, $team)) ) )
@@ -128,7 +134,7 @@
                               @endif
 		                        	<a href="{{ URL::route('view-requirement', array('id' => $candidateApplication->requirement->id)) }}" title="View Job Post" class="btn btn-primary btn-white">Job Post</a>
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" title="View Profile"  class="btn btn-primary btn-white">Candidate</a>
-                              <a href="{{ URL::route('add-comment-job-post-view', array($candidateApplication->requirement->id)) }}" title="Add Comments"  class="btn btn-secondary btn-white"> Add Comments</a>
+                              <a href="{{ URL::route('add-comment-job-post-view', array($candidateApplication->requirement->id)) }}" title="Add Comments"  class="btn btn-secondary btn-white">Comments</a>
 		                        </td>
 		                      </tr>
 						      @endforeach
@@ -136,7 +142,7 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <th>Job Title / <br>Type Of Employment</th>
+                        <th>Job Id /<br> Job Title / <br>Type Of Employment</th>
                         <th>Candidate Name / <br/>
                             Candidate Email
                         </th>
@@ -148,6 +154,7 @@
                             <br/>
                             Submitted By
                         </th>
+                        <th>Added By</th>
                         <th>Feedback</th>
                         <th>Action</th>
                       </tr>
