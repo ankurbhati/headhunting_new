@@ -78,11 +78,6 @@
                     <a href="{{ URL::route('assigned-requirement', array(Auth::user()->id)) }}">
                       Assigned Requirement</a>
                   </li>
-                  <li class="dropdown">
-                    <a href="{{ URL::route('mass-mail') }}">
-                        <span>Mass Mail</span>
-                      </a>
-                  </li>
                 @endif
                   @if(Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1))
                     

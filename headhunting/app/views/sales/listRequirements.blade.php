@@ -139,6 +139,9 @@
                                     Reopen
                                   </a>
                                 @endif
+                                  <a  class="btn btn-primary btn-white" href="{{ URL::route('mass-mail') }}" title="Mass Mail">
+                                    Mass Mail
+                                  </a>
   		                        </td>
 		                      </tr>
 						          @endforeach
