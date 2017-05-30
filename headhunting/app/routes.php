@@ -368,10 +368,26 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
+	Route::match(array('GET'), '/reject-requirement/{id}', array(
+			'as'    =>    'reject-requirement',
+			'uses'    =>    'SaleController@rejectRequirement'
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
 	Route::match(array('GET'), '/approve-candidate-recomendation/{id}', array(
 			'as'    =>    'approve-submittle',
 			'uses'    =>    'SaleController@approveSubmittle'
-	));	
+	));
+
+	/**
+	 * Routes for list-requirement
+	 */
+	Route::match(array('GET'), '/reject-candidate-recomendation/{id}', array(
+			'as'    =>    'reject-submittle',
+			'uses'    =>    'SaleController@rejectSubmittle'
+	));
 
 	/**
 	 * Routes for list-requirement

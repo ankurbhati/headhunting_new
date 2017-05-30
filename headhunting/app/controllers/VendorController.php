@@ -149,7 +149,7 @@ class VendorController extends \BaseController {
 	 */
 	public function editVendor($id) {
 
-		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) || Auth::user()->hasRole(4)) {
 
 			$vendor = Vendor::with(array('createdby'))->where('id', '=', $id)->get();
 
@@ -177,7 +177,7 @@ class VendorController extends \BaseController {
 	 */
 	public function updateVendor($id)
 	{
-		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) {
+		if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) || Auth::user()->hasRole(4)) {
 			Validator::extend('has', function($attr, $value, $params) {
 
 				if(!count($params)) {

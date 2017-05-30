@@ -201,5 +201,6 @@ return array(
 		'7'=>'Selected By End Client',
 		'8'=>'Rejected By End Client',
 		'9'=>'On Hold By End Client',
+		'10' => 'Rejected By Recruiter Manager'
 	),
 );

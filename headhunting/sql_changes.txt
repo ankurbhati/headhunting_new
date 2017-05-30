@@ -479,3 +479,8 @@ ALTER TABLE `job_post_submittle_status` ADD `mail_content` TEXT NULL AFTER `adde
 
 
 DELETE FROM `headhunting`.`work_states` WHERE `work_states`.`id` = 1
+
+
+
+
+ALTER TABLE `job_posts` CHANGE `status` `status` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT '1=>Pending, 2=>open, 3=>close, 4=> rejected';

@@ -125,7 +125,7 @@
                   <td>{{($thirdparty->created_at != "" && $thirdparty->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($thirdparty-> created_at)):"-"}}</td>
   									<td>
   										<a href="{{ URL::route('view-third-party', array('id' => $thirdparty->id)) }}" title="View Profile" class="btn btn-primary btn-white">View</a>
-  								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) )
+  								  @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) || Auth::user()->hasRole(4) )
   										  <a href="{{ URL::route('edit-third-party', array($thirdparty->id)) }}" class="btn btn-primary btn-white" title="Edit Profile">Edit</a>
   								  @endif
                     @if($thirdparty->status == 1)

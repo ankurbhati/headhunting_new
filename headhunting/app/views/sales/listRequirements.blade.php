@@ -19,7 +19,7 @@
                   <div class="form-group">
                       {{ Form::label('created_by', 'Added By: ', array('class' => 'col-sm-3
                     control-label')); }}
-                      <div class="col-sm-8">{{ Form::select('created_by', $users, Auth::user()->id, array('class' => 'form-control')) }}
+                      <div class="col-sm-8">{{ Form::select('created_by', $users, $job_post_creation_filter, array('class' => 'form-control')) }}
                           <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
                       </div>
                   </div>
@@ -90,6 +90,8 @@
                                   <span class="text-open">Open</span>
                                 @elseif($jobPosts->status == 3)
                                   <span class="text-open">Closed</span>
+                                @elseif($jobPosts->status == 4)
+                                  <span class="text-open">Rejected</span>
                                 @endif
                               </td>
               		            <td>
@@ -123,13 +125,16 @@
                                   <a class="btn btn-primary btn-white" href="{{ URL::route('approve-requirement', array($jobPosts->id)) }}" title="Approve Job Post">
                                     Approve
                                   </a>
+                                  <a class="btn btn-primary btn-white" href="{{ URL::route('reject-requirement', array($jobPosts->id)) }}" title="Reject Job Post">
+                                    Reject
+                                  </a>
                                 @endif
                                 @if($jobPosts->status !=3  && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
                                   <a  class="btn btn-primary btn-white" href="{{ URL::route('close-requirement', array($jobPosts->id)) }}" title="Close Job Post">
                                     Close
                                   </a>
                                 @endif
-                                @if($jobPosts->status == 3 && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
+                                @if(($jobPosts->status == 3 || $jobPosts->status == 4) && (Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(1)))
                                   <a  class="btn btn-primary btn-white" href="{{ URL::route('reopen-requirement', array($jobPosts->id)) }}" title="Reopen Job Post">
                                     Reopen
                                   </a>
