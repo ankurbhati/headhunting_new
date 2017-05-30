@@ -219,6 +219,39 @@ class SaleController extends HelperController {
 
 	/**
 	 *
+	 * rejectRequirement() : rejectRequirement
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function rejectRequirement($id) {
+		if($_SERVER['REQUEST_METHOD'] == 'GET' && (Auth::user()->hasRole(3) || Auth::user()->hasRole(1)) ) {
+			$jobPost = JobPost::find($id);
+			$jobPost->status = 4;
+			$jobPost->feedback = Input::get('feedback');
+			$jobPost->save();
+
+			/* Save Notification */
+			$description = Config::get('notification.job_post_rejection');
+			$authUser = Auth::user();
+			$formatted_description = sprintf(
+				$description,
+				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
+			);
+			$to_notify_user = array($jobPost->created_by);
+			$lead = $this->getTeamLeadForUser($jobPost->created_by);
+			if(!empty($lead) && Auth::user()->id != $lead->id) {
+				array_push($to_notify_user, $lead->id);
+			}
+			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			Session::flash('flashmessagetxt', 'Job Rejected Successfully!!'); 
+		}
+		return Redirect::route('list-requirement');
+	}
+
+	/**
+	 *
 	 * reopenRequirement() : reopenRequirement
 	 *
 	 * @return Object : View
@@ -282,11 +315,12 @@ class SaleController extends HelperController {
 	 */
 	public function listRequirement($id=0) {
 
+		$job_post_creation_filter = '';
 		$q = JobPost::query();
 		$usersAddedBy = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('status', '=', 1)->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 3);
 				})->get();
-		$users = array();
+		$users = array('-1'=> 'Please select');
 		foreach( $usersAddedBy as $key => $value) {
 			$users[$value->id] = $value->first_name." ".$value->last_name." (".$value->email.")";
 		}
@@ -320,8 +354,15 @@ class SaleController extends HelperController {
 			$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
 		}
 
-		if(!empty(Input::get('created_by'))){
-			$q->where('created_by', '=', Input::get('created_by'));	
+		if(!empty(Input::get('created_by'))) {
+			$job_post_creation_filter = Input::get('created_by');
+			if($job_post_creation_filter !='-1') {
+				$q->where('created_by', '=', $job_post_creation_filter);	
+			}
+			Cookie::queue('job_post_creation_filter', $job_post_creation_filter);
+		} else if(Cookie::get('job_post_creation_filter') != '-1') {
+			$job_post_creation_filter = Cookie::get('job_post_creation_filter');
+			$q->where('created_by', '=', $job_post_creation_filter);
 		}
 
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
@@ -354,7 +395,7 @@ class SaleController extends HelperController {
 		$jobPost = $q->paginate(100);
 
 
-		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id, 'users' => $users));
+		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id, 'users' => $users, 'job_post_creation_filter' => $job_post_creation_filter));
 	}
 
 
@@ -367,12 +408,13 @@ class SaleController extends HelperController {
 	 */
 	public function pendingRequirementList($id=0) {
 
+		$job_post_creation_filter = '';
 		$q = JobPost::query();
 		$q->where('status', '=', 1);
 		$usersAddedBy = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('status', '=', 1)->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 3);
 				})->get();
-		$users = array();
+		$users = array('-1'=> 'Please select');
 		foreach( $usersAddedBy as $key => $value) {
 			$users[$value->id] = $value->first_name." ".$value->last_name." (".$value->email.")";
 		}
@@ -405,9 +447,13 @@ class SaleController extends HelperController {
 			$q->where('type_of_employment', '=', Input::get('type_of_employment'));	
 		}
 
-		if(!empty(Input::get('created_by'))){
-			$q->where('created_by', '=', Input::get('created_by'));	
+		if(!empty(Input::get('created_by'))) {
+			$job_post_creation_filter = Input::get('created_by');
+			if($job_post_creation_filter !='-1') {
+				$q->where('created_by', '=', $job_post_creation_filter);	
+			}
 		}
+
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
 			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
@@ -436,7 +482,7 @@ class SaleController extends HelperController {
 		}
 
 		$jobPost = $q->paginate(100);
-		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id, 'users' => $users));	
+		return View::make('sales.listRequirements')->with(array('title' => 'List Requirement - Headhunting', 'jobPost' => $jobPost, 'id' => $id, 'users' => $users, 'job_post_creation_filter'=> $job_post_creation_filter));	
 	}
 
 	/**
@@ -985,6 +1031,43 @@ class SaleController extends HelperController {
 		$jpsStatus_obj->mail_content = $mail_content;
 		$jpsStatus_obj->save();
 		return $jpsStatus_obj;
+	}
+
+	public function rejectSubmittle($id) {
+		if($_SERVER['REQUEST_METHOD'] == 'GET' ) {
+			$candidate_application = CandidateApplication::find($id);
+			$candidate = Candidate::find($candidate_application->candidate_id);
+			$lead = $this->getTeamLeadForUser($candidate_application->submitted_by);
+			$authUser = Auth::user();
+			if($authUser->id==$candidate_application->submitted_by || $authUser->hasRole(1) || (!empty($lead) && $lead->id = $authUser->id)) {
+
+				$candidate_application->status = 10;
+				$candidate_application->save();
+
+				$jpsStatus_obj = $this->JobPostSubmittleStatus($candidate_application->id, 10, '');
+
+				/* Save Notification */
+				$to_notify_user = array();
+				$description = Config::get('notification.job_post_submittle_rejected_by_manager');
+				if(Auth::user()->id != $candidate_application->submitted_by) {
+					array_push($to_notify_user, $candidate_application->submitted_by);
+				}
+				$job_post = JobPost::find($candidate_application->job_post_id);
+				$to_notify_user = array($job_post->created_by);
+				if(!empty($lead) && $authUser->id != $lead->id) {
+					array_push($to_notify_user, $lead->id);
+				}
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
+					'<a href="/view-candidate/'.$candidate->id.'">'.$candidate->first_name." ".$candidate->last_name.'</a>',
+					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>'
+				);
+	  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+				Session::flash('flashmessagetxt', 'Candidate Recommendation Rejected Successfully!!'); 
+			}
+		}
+		return Redirect::route('list-submittel');
 	}
 
 	public function approveSubmittle($id) {

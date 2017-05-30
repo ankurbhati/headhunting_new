@@ -17,7 +17,7 @@ class CandidateController extends HelperController {
 		$country = Country::all()->lists('country', 'id');
 		$visa = Visa::all()->lists('title', 'id');
 		//$vendor = Vendor::all()->lists('vendor_domain', 'id');
-		$work_states = WorkStates::all()->lists('title', 'id');
+		$work_states = WorkStates::where('id', '!=', 1)->lists('title', 'id');
 
 		return View::make('Candidate.newCandidate')->with(array('title' => 'Add Candidate', 'country' => $country, 'visa' => $visa//, 'vendor' => $vendor
 			, 'work_state' => $work_states));
@@ -37,16 +37,16 @@ class CandidateController extends HelperController {
 			$validate=Validator::make (
 				Input::all(), array(
 						'email' => 'required|email|max:50|email|unique:candidates,email',
-						'first_name' => 'max:50',
-						'last_name' => 'max:50',
-						'phone' => 'max:14',
-						'city' => 'max:100',
+						'first_name' => 'required|max:50',
+						'last_name' => 'required|max:50',
+						'phone' => 'required|max:14',
+						'city' => 'required|max:100',
 						'country_id' => 'max:9',
-						'state_id' => 'max:9',
-						'designation' => 'max:255',
-						'rate' => 'numeric',
+						'state_id' => 'required|max:9',
+						'designation' => 'required|max:255',
+						'rate' => 'required|numeric',
 						'third_party_id' => 'email|max:247',
-						'visa_id' => 'max:1'
+						'visa_id' => 'required|max:1'
 				)
 			);
 
@@ -314,7 +314,7 @@ class CandidateController extends HelperController {
 
 			$candidate = Candidate::with(array('visa', 'createdby', 'city', 'state', 'country', 'workstate'))->where('id', '=', $id)->get();
 			$visa = Visa::all()->lists('title', 'id');
-			$work_states = WorkStates::all()->lists('title', 'id');
+			$work_states = WorkStates::where('id', '!=', 1)->lists('title', 'id');
 
 			if(!$candidate->isEmpty()) {
 				$candidate = $candidate->first();
@@ -352,16 +352,16 @@ class CandidateController extends HelperController {
 			$validate=Validator::make (
 				Input::all(), array(
 						'email' => 'required|email|max:50|email',
-						'first_name' => 'max:50',
-						'last_name' => 'max:50',
-						'phone' => 'max:14',
-						'city' => 'max:100',
+						'first_name' => 'required|max:50',
+						'last_name' => 'required|max:50',
+						'phone' => 'required|max:14',
+						'city' => 'required|max:100',
 						'country_id' => 'max:9',
-						'state_id' => 'max:9',
-						'designation' => 'max:255',
-						'rate' => 'numeric',
+						'state_id' => 'required|max:9',
+						'designation' => 'required|max:255',
+						'rate' => 'required|numeric',
 						'third_party_id' => 'email|max:247',
-						'visa_id' => 'max:1'
+						'visa_id' => 'required|max:1'
 				)
 			);
 			if($validate->fails()) {

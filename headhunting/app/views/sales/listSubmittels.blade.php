@@ -123,6 +123,9 @@
                                 <a href="{{ URL::route('approve-submittle', array($candidateApplication->id)) }}" title="Approve Candidate Recomendation"  class="btn btn-secondary btn-white">
                                   Approve Submittels
                                 </a>
+                                <a href="{{ URL::route('reject-submittle', array($candidateApplication->id)) }}" title="Reject Candidate Recomendation"  class="btn btn-secondary btn-white">
+                                  Reject Submittels
+                                </a>
                               @endif
                               @if ( ($candidateApplication->status == 1 || $candidateApplication->status == 3 || $candidateApplication->status == 5 || $candidateApplication->status == 6) && ($login_user->id == $candidateApplication->requirement->created_by))
                                 <a href="javascript:void(0);" class="updatejobstatus btn btn-primary btn-white" data-status="{{$candidateApplication->status}}" data-candapp="{{$candidateApplication->id}}"  class="btn btn-secondary btn-white" title="Update Status">

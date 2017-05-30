@@ -71,7 +71,7 @@
     <div class="form-group">
         {{ Form::label('city', 'City: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('city', $candidate->city_id, array('class' =>
+        <div class="col-sm-8">{{ Form::text('city', $candidate->city->name, array('class' =>
             'form-control', 'placeholder' => 'Enter Candidates City', 'required'=>"true")); }} 
             <span class='errorlogin email-login'>{{$errors->first('city');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>

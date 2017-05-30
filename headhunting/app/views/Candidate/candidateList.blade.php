@@ -107,7 +107,7 @@
                             </td>
 		                        <td>
 		                        	<a href="{{ URL::route('view-candidate', array('id' => $candidate->id)) }}" title="View Profile" class="btn btn-primary btn-white">View</a>
-                              @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8))
+                              @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) || Auth::user()->hasRole(4))
 		                        	  <a href="{{ URL::route('edit-candidate', array($candidate->id)) }}" title="Edit Profile" class="btn btn-primary btn-white">Edit</a>
                               @endif
 		                        	@if(Auth::user()->hasRole(1) || Auth::user()->hasRole(3) || Auth::user()->hasRole(5) || Auth::user()->hasRole(7) || Auth::user()->hasRole(8))
