@@ -125,7 +125,7 @@
                                   <a class="btn btn-primary btn-white" href="{{ URL::route('approve-requirement', array($jobPosts->id)) }}" title="Approve Job Post">
                                     Approve
                                   </a>
-                                  <a class="btn btn-primary btn-white" href="{{ URL::route('reject-requirement', array($jobPosts->id)) }}" title="Reject Job Post">
+                                  <a class="btn btn-primary btn-white btn-red" href="{{ URL::route('reject-requirement', array($jobPosts->id)) }}" title="Reject Job Post">
                                     Reject
                                   </a>
                                 @endif

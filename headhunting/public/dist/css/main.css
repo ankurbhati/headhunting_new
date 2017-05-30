@@ -9651,4 +9651,10 @@ header .navbar {
 .submit_endclient-form-rate .nicEdit-main {
   max-height:100px !important;
 }
+
 /*# sourceMappingURL=main.css.map */
+.btn.btn-primary.btn-white.btn-red {
+  background-color:red;
+  border-color: #fff;
+  color:#fff;
+}
