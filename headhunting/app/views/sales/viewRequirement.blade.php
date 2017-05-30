@@ -84,6 +84,14 @@
 						{{($jobPost->status == 3)?"Closed"."-".$feedbacks[$jobPost->feedback]:"Open";}}
 					</div>
 			</div>
+
+			<div class="row"><div class="col-sm-4 view-label">
+	        Added By:
+	        </div><div class="col-sm-8 view-value ">
+					@if($jobPost->user){{$jobPost->user->first_name." ".$jobPost->user->last_name."-".$jobPost->user->email}}@else {{"-"}} @endif 
+	        </div>
+	    	</div>
+
 			</div>
 			</div>
 
