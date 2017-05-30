@@ -26,7 +26,7 @@
     	<div class="home">
 			@include('shared.new-header')
 			<div class="content-wrapper ofBody">
-				<div class="fill container">
+				<div class="fill container-fluid">
 					<div class="container-body">
 				        <div id="status-area">
 			        		<!--<span class="flash_message " style="display: inline;">This is a message!</span>-->

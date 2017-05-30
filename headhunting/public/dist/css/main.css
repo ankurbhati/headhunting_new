@@ -9648,5 +9648,7 @@ header .navbar {
 
 .error {
   color: #ee0000 !important; }
-
+.submit_endclient-form-rate .nicEdit-main {
+  max-height:100px !important;
+}
 /*# sourceMappingURL=main.css.map */

@@ -25,7 +25,7 @@
 			<div class="row"><div class="col-sm-4 view-label">
 					Client:
 					</div><div class="col-sm-8 view-value ">
-						@if($jobPost->client && ($jobPost->created_by == Auth::user()->id || Auth::user()->hasRole(1))){{$jobPost->client->first_name." ".$jobPost->client->last_name."-".$jobPost->client->email}}@else {{"*****"}} @endif
+						@if($jobPost->client && ($jobPost->created_by == Auth::user()->id || Auth::user()->isMyTeamById($jobPost->created_by) || Auth::user()->hasRole(1))){{$jobPost->client->first_name." ".$jobPost->client->last_name."-".$jobPost->client->email}}@else {{"*****"}} @endif
 					</div>
 			</div>
 			<div class="row"><div class="col-sm-4 view-label">
