@@ -437,7 +437,8 @@ if($('#msa-group').length > 0) {
 
 				$('#mail_sub').val(sub);
 				$('#mail_cont').val(mail_cont);
-				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif', maxHeight : 200}).panelInstance('mail_cont');
+				$('#mail_cont').attr('rows', '2');
+				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif', height : 100}).panelInstance('mail_cont');
 			} else {
 				$('.submit_endclient-form-rate').hide();
 			}

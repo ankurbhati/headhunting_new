@@ -54,14 +54,16 @@
 		        	{{($user->gender == 0)?"Female":"Male"}}
 		        </div>
 			</div>
-		    <div class="row">
-		    	<div class="col-sm-4 view-label">
-		        	Role:
-		        </div>
-		        <div class="col-sm-8 view-value">
-		        	{{$user->userRoles[0]->roles->role}}
-		        </div>
-		    </div>
+			@if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
+			    <div class="row">
+			    	<div class="col-sm-4 view-label">
+			        	Role:
+			        </div>
+			        <div class="col-sm-8 view-value">
+			        	{{$user->userRoles[0]->roles->role}}
+			        </div>
+			    </div>
+		    @endif
 		  </div>
 	  </div>
 	  <div class="col-sm-7 box">

@@ -191,7 +191,7 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a href="#">Admin</a>
+                <a href="#">Reports</a>
                 <ul class="dropdown-menu">
                   @if(Auth::user()->hasRole(1))
                       <li class="dropdown padd-left-15">

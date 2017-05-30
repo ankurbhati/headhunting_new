@@ -63,7 +63,7 @@
                             <br/>
                             Submitted By
                         </th>
-                        <th>Message</th>
+                        <th>Feedback</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -83,9 +83,6 @@
                               <input type="hidden" name="requirement_title_{{$candidateApplication->id}}" value = "{{$candidateApplication->requirement->title}}">
                               <span class="sr-only">Job Post: APT-0{{$candidateApplication->requirement->id}} - {{$candidateApplication->requirement->title}}</span><br>
                               <div class="sr-only toMail_{{$candidateApplication->id}}">
-
-                                  <br>
-                                  <br>
                                   <span>Name: {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}</span><br>
                                   <span>Contact number: {{$candidateApplication->candidate->phone}}</span><br>
                                   <span>Location: 
@@ -151,7 +148,7 @@
                             <br/>
                             Submitted By
                         </th>
-                        <th>Message</th>
+                        <th>Feedback</th>
                         <th>Action</th>
                       </tr>
                     </tfoot>
