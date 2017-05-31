@@ -77,6 +77,7 @@
                               <b>{{($jobPosts->type_of_employment == 1)?"Contractual":(($jobPosts->type_of_employment == 2)?"Permanent": "Contract to hire");}}</b><br/>
                               {{($jobPosts->city)?$jobPosts->city->name:''}}, {{$jobPosts->state?$jobPosts->state->state:''}}<br/>
                               <span class="text-label">Posted at : </span>{{($jobPosts->created_at != "" && $jobPosts->created_at != "0000-00-00 00:00:00")?date("d M, Y H:i", strtotime($jobPosts->created_at)):"-"}}<br/>
+                              <span class="text-label">Last Updated At: </span>{{($jobPosts->updated_at != "" && $jobPosts->updated_at != "0000-00-00 00:00:00")?date("d M, Y H:i", strtotime($jobPosts->updated_at)):"-"}}<br/>
                               </td>
               								<td>@if($jobPosts->user){{$jobPosts->user->first_name." ".$jobPosts->user->last_name."-".$jobPosts->user->email}}@else {{"-"}} @endif <br/>
                               <br/>

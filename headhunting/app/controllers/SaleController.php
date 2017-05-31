@@ -326,12 +326,12 @@ class SaleController extends HelperController {
 		}
 		if($id == 0) {
 			$q->with(array('country', 'state', 'client', 'user'))
-			  ->orderBy('updated_at', 'desc');
+			  ->orderBy('updated_at', 'DESC');
 		} else {
 			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->orderBy('updated_at', 'desc');
+			})->orderBy('updated_at', 'DESC');
 		}
 
 		Log::info(Auth::user()->hasRole(3));
@@ -699,7 +699,7 @@ class SaleController extends HelperController {
 			return Redirect::to('dashboard');
 		}
 
-		$q = CandidateApplication::query();
+		$q = CandidateApplication::query()->orderBy('updated_at', 'DESC');
 
 		$y = CandidateApplication::query();
 		$submittle_status = Config::get('app.job_post_submittle_status');
@@ -719,6 +719,8 @@ class SaleController extends HelperController {
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 		}
+
+
 	    
 		if($id == 0) {
 			if ($user_role == 2) { // sales- show submittles of job created by him
