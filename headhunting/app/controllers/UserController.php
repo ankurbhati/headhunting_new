@@ -561,7 +561,9 @@ class UserController extends HelperController {
 				if($user->save()) {
 					$userRoles = UserRole::where("user_id", "=", $id)->first();
 					$userRoles->setConnection('master');
-					$userRoles->role_id = Input::get('roles');
+					if(Input::has('roles') != '') {
+						$userRoles->role_id = Input::get('roles');	
+					}
 					$userRoles->user_id = $user->id;
 					if($userRoles->save()) {
 						if(Input::has("mentor_id")) {

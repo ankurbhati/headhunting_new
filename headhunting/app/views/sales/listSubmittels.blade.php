@@ -10,10 +10,27 @@
                 {{ Form::open(array('class' => 'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
 
                 <div class="form-group">
+                    {{ Form::label('job_title', 'Job Title: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::text('job_title', "", array('class' =>
+                          'form-control', 'placeholder' => 'Enter Job Title')); }}
+                        <span class='errorlogin email-login'>{{$errors->first('job_title');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     {{ Form::label('submitted_by', 'Submitted By: ', array('class' => 'col-sm-3
                     control-label')); }}
                     <div class="col-sm-4">{{ Form::select('submitted_by', array('' => 'Please select one Submitter') + $addedByList, "", array('class' => 'form-control')) }}
                         <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('submitted_to', 'Submitted To: ', array('class' => 'col-sm-3
+                    control-label')); }}
+                    <div class="col-sm-4">{{ Form::select('submitted_to', array('' => 'Please select one job owner') + $addedToList, "", array('class' => 'form-control')) }}
+                        <span class='errorlogin email-login'>{{$errors->first('submitted_to');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
                 </div>
 

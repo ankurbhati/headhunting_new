@@ -373,6 +373,9 @@ if($('#msa-group').length > 0) {
 			if($('#signature').length>0){
 				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('signature');
 			}
+			if($('#job_post_comment').length>0){
+				new nicEditor({fullPanel : true, iconsPath : '/	nicEdit/nicEditorIcons.gif'}).panelInstance('job_post_comment');
+			}
 	});
 
 	// Get the modal

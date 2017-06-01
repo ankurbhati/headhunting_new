@@ -702,12 +702,29 @@ class SaleController extends HelperController {
 		$q = CandidateApplication::query();
 
 		$y = CandidateApplication::query();
+		$z = JobPost::query();
 		$submittle_status = Config::get('app.job_post_submittle_status');
 
 		$addedByList = $y->leftJoin('users', function($join){
 			$join->on('submitted_by', '=', 'users.id');
 		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
 
+		$addedToList = $z->leftJoin('users', function($join){
+			$join->on('created_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(created_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if(!empty(Input::get('job_title'))) {
+			$job_title = Input::get('job_title');
+			$q->whereHas('requirement', function($q) use($job_title){
+				$q->where('title',  'like', "%".$job_title."%");
+			});
+		}
+		if(!empty(Input::get('submitted_to'))) {
+			$submitted_to = Input::get('submitted_to');
+			$q->whereHas('requirement', function($q) use($submitted_to){
+    			$q->where('created_by',  '=', $submitted_to);
+			});
+		}
 		if(!empty(Input::get('submitted_by'))) {
 			$q->where('submitted_by', '=', Input::get('submitted_by'));	
 		}
@@ -762,7 +779,7 @@ class SaleController extends HelperController {
 		#DB::enableQueryLog();
 		#dd(DB::getQueryLog());
 		//print_r(count($candidateApplications));die();
-		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user));
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'addedToList' => $addedToList));
 	}
 
 
@@ -786,11 +803,29 @@ class SaleController extends HelperController {
 		$q = CandidateApplication::query();	
 
 		$y = CandidateApplication::query();
+		$z = JobPost::query();
 		$submittle_status = Config::get('app.job_post_submittle_status');
 
 		$addedByList = $y->leftJoin('users', function($join){
 			$join->on('submitted_by', '=', 'users.id');
 		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		$addedToList = $z->leftJoin('users', function($join){
+			$join->on('created_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(created_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if(!empty(Input::get('job_title'))) {
+			$job_title = Input::get('job_title');
+			$q->whereHas('requirement', function($q) use($job_title){
+				$q->where('title',  'like', "%".$job_title."%");
+			});
+		}
+		if(!empty(Input::get('submitted_to'))) {
+			$submitted_to = Input::get('submitted_to');
+			$q->whereHas('requirement', function($q) use($submitted_to){
+    			$q->where('created_by',  '=', $submitted_to);
+			});
+		}
 
 		if(!empty(Input::get('submitted_by'))) {
 			$q->where('submitted_by', '=', Input::get('submitted_by'));	
@@ -846,7 +881,7 @@ class SaleController extends HelperController {
 		
 		$team = $this->getTeamUsers(Auth::user()->id);
 		
-		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'status_search' => $status_search));
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'status_search' => $status_search, 'addedToList' => $addedToList));
 	}
 
 
@@ -870,12 +905,29 @@ class SaleController extends HelperController {
 		$q = CandidateApplication::query();
 
 		$y = CandidateApplication::query();
+		$z = JobPost::query();
 		$submittle_status = Config::get('app.job_post_submittle_status');
 
 		$addedByList = $y->leftJoin('users', function($join){
 			$join->on('submitted_by', '=', 'users.id');
 		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
 
+		$addedToList = $z->leftJoin('users', function($join){
+			$join->on('created_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(created_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if(!empty(Input::get('job_title'))) {
+			$job_title = Input::get('job_title');
+			$q->whereHas('requirement', function($q) use($job_title){
+				$q->where('title',  'like', "%".$job_title."%");
+			});
+		}
+		if(!empty(Input::get('submitted_to'))) {
+			$submitted_to = Input::get('submitted_to');
+			$q->whereHas('requirement', function($q) use($submitted_to){
+    			$q->where('created_by',  '=', $submitted_to);
+			});
+		}
 		if(!empty(Input::get('submitted_by'))) {
 			$q->where('submitted_by', '=', Input::get('submitted_by'));	
 		}
@@ -930,7 +982,7 @@ class SaleController extends HelperController {
 		
 		$team = $this->getTeamUsers(Auth::user()->id);
 		
-		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'status_search' => $status_search));
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'status_search' => $status_search, 'addedToList' => $addedToList));
 	}
 
 	/**

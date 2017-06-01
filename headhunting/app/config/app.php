@@ -203,4 +203,5 @@ return array(
 		'9'=>'On Hold By End Client',
 		'10' => 'Rejected By Recruiter Manager'
 	),
+	'dummy_client_id' => 12
 );

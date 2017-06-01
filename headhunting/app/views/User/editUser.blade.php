@@ -27,16 +27,28 @@
             <div class="form-group">
                 {{ Form::label('first_name', 'First Name: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('first_name', $user->first_name, array('class' =>
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('first_name', $user->first_name, array('class' =>
                     'form-control', 'placeholder' => 'Enter Employee First Name', 'required')); }} 
+                @else 
+                {{ Form::text('first_name', $user->first_name, array('class' =>
+                    'form-control', 'placeholder' => 'Enter Employee First Name', 'readonly')); }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('first_name');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
             <div class="form-group">
                 {{ Form::label('last_name', 'Last Name: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('last_name', $user->last_name, array('class' =>
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('last_name', $user->last_name, array('class' =>
                     'form-control', 'placeholder' => 'Enter Employee Last Name', 'required')); }} 
+                @else
+                {{ Form::text('last_name', $user->last_name, array('class' =>
+                    'form-control', 'placeholder' => 'Enter Employee Last Name', 'readonly')); }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('last_name');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
@@ -44,8 +56,14 @@
             <div class="form-group">
                 {{ Form::label('designation', 'Designation: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('designation', $user->designation, array('class' =>
-                    'form-control', 'placeholder' => 'Enter Employee Designation')); }}  
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('designation', $user->designation, array('class' =>
+                    'form-control', 'placeholder' => 'Enter Employee Designation')); }}
+                @else
+                {{ Form::text('designation', $user->designation, array('class' =>
+                    'form-control', 'placeholder' => 'Enter Employee Designation', 'readonly')); }}  
+                @endif
                     <span class='errorlogin'>{{$errors->first('designation');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
@@ -53,37 +71,65 @@
             <div class="form-group">
                 {{ Form::label('doj', 'Date Of Joining: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('doj', (($user->doj != "" && $user->doj != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($user->doj)):""), array('class' =>
-                    'form-control date-mask', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('doj', (($user->doj != "" && $user->doj != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($user->doj)):""), array('class' =>
+                    'form-control date-mask', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }}
+                @else
+                {{ Form::text('doj', (($user->doj != "" && $user->doj != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($user->doj)):""), array('class' =>
+                    'form-control date-mask', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask', 'readonly')); }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('doj');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
             <div class="form-group">
                 {{ Form::label('dor', 'Date Of Release: ', array('class' => 'col-sm-3 date-mask
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('dor', (($user->dor != "" && $user->dor != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($user->dor)):""), array('class' =>
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('dor', (($user->dor != "" && $user->dor != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($user->dor)):""), array('class' =>
                     'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }} 
+                @else
+                {{ Form::text('dor', (($user->dor != "" && $user->dor != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($user->dor)):""), array('class' =>
+                    'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask', 'readonly')); }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('dor');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
             <div class="form-group">
                 {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('status', array(1  =>'Active', 2=> 'Decativate'), $user->status, array('class' => 'form-control')) }} 
-                    <span class='errorlogin'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::select('status', array(1  =>'Active', 2=> 'Decativate'), $user->status, array('class' => 'form-control')) }} 
+                @else
+                {{ Form::select('status', array(1  =>'Active', 2=> 'Decativate'), $user->status, array('class' => 'form-control', 'readonly')) }}
+                @endif
+                <span class='errorlogin'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf
+                </span>
                 </div>
             </div>
             <div class="form-group">
                 {{ Form::label('roles', 'Roles: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('roles', $roles, $user->getRole(), array('class' => 'form-control', 'required')) }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::select('roles', $roles, $user->getRole(), array('class' => 'form-control', 'required')) }} 
+                @else
+                {{ Form::select('roles', $roles, $user->getRole(), array('class' => 'form-control', 'readonly')) }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('roles');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
             <div class="form-group" id="mentor_id_view" style="display:none;">
                 {{ Form::label('mentor_id', 'Mentor: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('mentor_id', array("", 'Select Your Mentor'), '', array('class' => 'form-control', 'data-type' => 'edit')) }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::select('mentor_id', array("", 'Select Your Mentor'), '', array('class' => 'form-control', 'data-type' => 'edit')) }}
+                @else
+                 {{ Form::select('mentor_id', array("", 'Select Your Mentor'), '', array('class' => 'form-control', 'data-type' => 'edit', 'readonly')) }}
+                @endif
                     <span class='errorlogin email-login'>{{$errors->first('mentor_id');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
@@ -103,7 +149,12 @@
             <div class="form-group">
                 {{ Form::label('gender', 'Gender: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('gender', array(0  =>'Female', 1=> 'Male'), $user->gender, array('class' => 'form-control', 'required')) }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::select('gender', array(0  =>'Female', 1=> 'Male'), $user->gender, array('class' => 'form-control', 'required')) }} 
+                @else
+                {{ Form::select('gender', array(0  =>'Female', 1=> 'Male'), $user->gender, array('class' => 'form-control', 'readonly')) }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('gender');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
@@ -115,7 +166,12 @@
             <div class="form-group">
                 {{ Form::label('country_id', 'Country: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('country_id', $country, $user->country_id, array('class' => 'form-control', 'id' => 'country_id')) }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::select('country_id', $country, $user->country_id, array('class' => 'form-control', 'id' => 'country_id')) }} 
+                @else
+                {{ Form::select('country_id', $country, $user->country_id, array('class' => 'form-control', 'id' => 'country_id', 'readonly')) }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('country_id');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
             </div>
@@ -123,7 +179,12 @@
             <div class="form-group">
                 {{ Form::label('state_id', 'State: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::select('state_id', array('' => "Select State"), "", array('class' => 'form-control', 'id' => 'state_id')) }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::select('state_id', array('' => "Select State"), "", array('class' => 'form-control', 'id' => 'state_id')) }} 
+                @else
+                {{ Form::select('state_id', array('' => "Select State"), "", array('class' => 'form-control', 'id' => 'state_id', 'readonly')) }} 
+                @endif
                     <span class='errorlogin'>{{$errors->first('state_id');}}@if(!empty($message)){{$message}}@endIf</span>
                 </div>
                 <input type="hidden" value="{{$user->state_id}}" id="state">
@@ -132,20 +193,35 @@
             <div class="form-group">
                 {{ Form::label('city', 'City: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('city',$user->city, array('class' => 'form-control', 'placeholder' => 'Enter City')); }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('city',$user->city, array('class' => 'form-control', 'placeholder' => 'Enter City')); }} 
+                @else
+                {{ Form::text('city',$user->city, array('class' => 'form-control', 'placeholder' => 'Enter City', 'readonly')); }} 
+                @endif
                 </div>
             </div>
         	<div class="form-group">
                 {{ Form::label('address', 'Address: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('address',$user->address, array('class' => 'form-control', 'placeholder' => 'ex. Hno: 1, Jor Bagh')); }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('address',$user->address, array('class' => 'form-control', 'placeholder' => 'ex. Hno: 1, Jor Bagh')); }} 
+                @else
+                {{ Form::text('address',$user->address, array('class' => 'form-control', 'placeholder' => 'ex. Hno: 1, Jor Bagh', 'readonly')); }} 
+                @endif
                 </div>
             </div>
                 
             <div class="form-group">
                 {{ Form::label('zipcode', 'Zipcode: ', array('class' => 'col-sm-3
                 control-label')); }}
-                <div class="col-sm-8">{{ Form::text('zipcode',$user->zipcode, array('class' => 'form-control', 'placeholder' => 'ex. 110001', "data-inputmask"=>'"mask": "999999"', "data-mask")); }} 
+                <div class="col-sm-8">
+                @if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
+                {{ Form::text('zipcode',$user->zipcode, array('class' => 'form-control', 'placeholder' => 'ex. 110001', "data-inputmask"=>'"mask": "999999"', "data-mask")); }} 
+                @else
+                {{ Form::text('zipcode',$user->zipcode, array('class' => 'form-control', 'placeholder' => 'ex. 110001', "data-inputmask"=>'"mask": "999999"', "data-mask", 'readonly')); }}
+                @endif
                 </div>
             </div>
 

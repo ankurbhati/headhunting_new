@@ -26,7 +26,7 @@
 		<div class="form-group">
 				{{ Form::label('title', 'Add More Comment: ', array('class' => 'col-sm-12')); }}
 				<div class="col-sm-12">
-					{{ Form::textarea('comment', '', array('class' =>	'form-control', 'placeholder' => 'Enter Comment', 'required')); }}
+					{{ Form::textarea('comment', '', array('class' =>	'form-control', 'id' => 'job_post_comment', 'placeholder' => 'Enter Comment')); }}
 					{{ Form::hidden('job_post_id', $jobPost->id); }}
 					<span class='errorlogin email-login'>{{$errors->first('comment');}}@if(!empty($message)){{$message}}@endIf</span>
 				</div>
