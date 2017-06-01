@@ -374,7 +374,7 @@ class HelperController extends BaseController {
         });
     }
 
-    public function saveNotification($description=None, $user_ids=array(), $action_url=None, $bussiness_head=False) {
+    public function saveNotification($description=None, $user_ids=array(), $action_url=None, $bussiness_head=False, $subject='Notification Mail') {
         if($bussiness_head) {
             $user = $this->getBussinessHead();
             if($user){
@@ -392,7 +392,7 @@ class HelperController extends BaseController {
             try{
                 $user = User::find($user_id);
                 $body_content = 'Hi '.$user->first_name.',<br/>'.$description.'<br/>';
-                $this->sendNotificationMail($body_content, $user);
+                $this->sendNotificationMail($body_content, $user, $subject);
             } catch(Exception $e) {
                 print $e->getMessage();
             }

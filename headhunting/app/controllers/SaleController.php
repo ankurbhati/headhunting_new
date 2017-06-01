@@ -113,7 +113,13 @@ class SaleController extends HelperController {
 			if(!empty($lead) && Auth::user()->id != $lead->id) {
 				array_push($to_notify_user, $lead->id);
 			}
-  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			$subject_description = sprintf(
+				$description,
+				$authUser->first_name." ".$authUser->last_name,
+				$job_post->title,
+				$assigned_user->first_name." ".$assigned_user->last_name
+			);
+  			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 
 			Session::flash('flashmessagetxt', 'Assigned Successfully!!'); 
 			if(Auth::user()->id == $jobPostAssignment->assigned_to_id) {
@@ -173,12 +179,17 @@ class SaleController extends HelperController {
 				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
 				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 			);
+			$subject_description = sprintf(
+				$description,
+				$authUser->first_name." ".$authUser->last_name,
+				$jobPost->title
+			);
 			$to_notify_user = array($jobPost->created_by);
 			$lead = $this->getTeamLeadForUser($jobPost->created_by);
 			if(!empty($lead) && Auth::user()->id != $lead->id) {
 				array_push($to_notify_user, $lead->id);
 			}
-			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 			Session::flash('flashmessagetxt', 'Job Closed Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
@@ -206,12 +217,17 @@ class SaleController extends HelperController {
 				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
 				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 			);
+			$subject_description = sprintf(
+				$description,
+				$authUser->first_name." ".$authUser->last_name,
+				$jobPost->title
+			);
 			$to_notify_user = array($jobPost->created_by);
 			$lead = $this->getTeamLeadForUser($jobPost->created_by);
 			if(!empty($lead) && Auth::user()->id != $lead->id) {
 				array_push($to_notify_user, $lead->id);
 			}
-			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 			Session::flash('flashmessagetxt', 'Job Approved Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
@@ -239,12 +255,17 @@ class SaleController extends HelperController {
 				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
 				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 			);
+			$subject_description = sprintf(
+				$description,
+				$authUser->first_name." ".$authUser->last_name,
+				$jobPost->title
+			);
 			$to_notify_user = array($jobPost->created_by);
 			$lead = $this->getTeamLeadForUser($jobPost->created_by);
 			if(!empty($lead) && Auth::user()->id != $lead->id) {
 				array_push($to_notify_user, $lead->id);
 			}
-			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 			Session::flash('flashmessagetxt', 'Job Rejected Successfully!!'); 
 		}
 		return Redirect::route('list-requirement');
@@ -271,15 +292,20 @@ class SaleController extends HelperController {
 				'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
 				'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 			);
+			$subject_description = sprintf(
+				$description,
+				$authUser->first_name." ".$authUser->last_name,
+				$jobPost->title
+			);
 			$to_notify_user = array($jobPost->created_by);
 			$lead = $this->getTeamLeadForUser($jobPost->created_by);
 			if(!empty($lead) && Auth::user()->id != $lead->id) {
 				array_push($to_notify_user, $lead->id);
 			}
   			if(Auth::user()->hasRole(1) ) {
-				$this->saveNotification($formatted_description, $to_notify_user, '', False);
+				$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 			} else {
-				$this->saveNotification($formatted_description, $to_notify_user, '', True);
+				$this->saveNotification($formatted_description, $to_notify_user, '', True, $subject_description);
 			}
 			Session::flash('flashmessagetxt', 'Job Reopened Successfully!!'); 
 		}
@@ -562,11 +588,16 @@ class SaleController extends HelperController {
 						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
 						'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 					);
+					$subject_description = sprintf(
+						$description,
+						$authUser->first_name." ".$authUser->last_name,
+						$jobPost->title
+					);
 					$lead = $this->getTeamLeadForUser(Auth::user()->id);
 					if($lead){
-						$this->saveNotification($formatted_description, [$lead->id], '', True);	
+						$this->saveNotification($formatted_description, [$lead->id], '', True, $subject_description);	
 					} else {
-						$this->saveNotification($formatted_description, [], '', True);
+						$this->saveNotification($formatted_description, [], '', True, $subject_description);
 					}
 
 					Session::flash('flashmessagetxt', 'Job Posted Successfully!!'); 
@@ -1041,6 +1072,11 @@ class SaleController extends HelperController {
 						'<a href="/view-employee/'.$authUser->id.'">'.$authUser->first_name." ".$authUser->last_name.'</a>',
 						'<a href="/view-requirement/'.$jobPost->id.'">'.$jobPost->title.'</a>'
 					);
+					$subject_description = sprintf(
+						$description,
+						$authUser->first_name." ".$authUser->last_name,
+						$jobPost->title
+					);
 					$to_notify_user = array($jobPost->created_by);
 					$lead = $this->getTeamLeadForUser($jobPost->created_by);
 					if(!empty($lead) && Auth::user()->id != $lead->id) {
@@ -1057,9 +1093,9 @@ class SaleController extends HelperController {
 					Log::info(json_encode($to_notify_user));
 
 		  			if(Auth::user()->hasRole(1) ) {
-						$this->saveNotification($formatted_description, $to_notify_user, '', False);
+						$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 					} else {
-						$this->saveNotification($formatted_description, $to_notify_user, '', True);
+						$this->saveNotification($formatted_description, $to_notify_user, '', True, $subject_description);
 					}
 
 					if(!empty($view) && $view == 1) {
@@ -1115,7 +1151,13 @@ class SaleController extends HelperController {
 					'<a href="/view-candidate/'.$candidate->id.'">'.$candidate->first_name." ".$candidate->last_name.'</a>',
 					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>'
 				);
-	  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+				$subject_description = sprintf(
+					$description,
+					$authUser->first_name." ".$authUser->last_name,
+					$candidate->first_name." ".$candidate->last_name,
+					$job_post->title
+				);
+	  			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 				Session::flash('flashmessagetxt', 'Candidate Recommendation Rejected Successfully!!'); 
 			}
 		}
@@ -1152,7 +1194,13 @@ class SaleController extends HelperController {
 					'<a href="/view-candidate/'.$candidate->id.'">'.$candidate->first_name." ".$candidate->last_name.'</a>',
 					'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>'
 				);
-	  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+				$subject_description = sprintf(
+					$description,
+					$authUser->first_name." ".$authUser->last_name,
+					$candidate->first_name." ".$candidate->last_name,
+					$job_post->title
+				);
+	  			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 				Session::flash('flashmessagetxt', 'Candidate Recommendation Approved Successfully!!'); 
 			}
 		}
@@ -1260,7 +1308,13 @@ class SaleController extends HelperController {
 						'<a href="/view-requirement/'.$job_post->id.'">'.$job_post->title.'</a>',
 						'"'.$submittle_status[$status].'"'
 					);
-		  			$this->saveNotification($formatted_description, $to_notify_user, '', False);
+					$subject_description = sprintf(
+						$description,
+						$authUser->first_name." ".$authUser->last_name,
+						$job_post->title,
+						'"'.$submittle_status[$status].'"'
+					);
+		  			$this->saveNotification($formatted_description, $to_notify_user, '', False, $subject_description);
 					Session::flash('flashmessagetxt', 'Candidate Recommendation Updated Successfully!!'); 
 				}
 			}

@@ -685,7 +685,13 @@ class CandidateController extends HelperController {
 				if(!empty($lead) && Auth::user()->id != $lead->id) {
 					array_push($to_notify_user, $lead->id);
 				}
-	  			$this->saveNotification($formatted_description, $to_notify_user, '<a href="/list-submittel/'.$jobId.'"></a>', True);
+				$subject_description = sprintf(
+					$description,
+					$authUser->first_name." ".$authUser->last_name,
+					$candidate->first_name." ".$candidate->last_name,
+					$job_post->title
+				);
+	  			$this->saveNotification($formatted_description, $to_notify_user, '<a href="/list-submittel/'.$jobId.'"></a>', True, $subject_description);
 				Session::flash('flashmessagetxt', 'Submitted Successfully!!');
 				return Redirect::route('list-submittel', array('id' => $jobId));
 			} else {
