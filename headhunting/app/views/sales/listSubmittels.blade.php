@@ -69,19 +69,14 @@
                     <thead>
                       <tr>
                         <th>Job Id /<br> Job Title / <br>Type Of Employment</th>
-                        <th>Candidate Name / <br/>
-                            Candidate Email
+                        <th>Candidate Name
                         </th>
                         <th>Status</th>
                         <th>Client Rate/<br>
                             Recruter's Rate
                         </th>
-                        <th>Submitted At /
-                            <br/>
-                            Submitted By
-                        </th>
-                        <th>Added By
-                        </th>
+                        <th>Submitted By <br>Submitted At /<br> Last Updated At</th>
+                        <th>Added By</th>
                         <th>Feedback</th>
                         <th>Action</th>
                       </tr>
@@ -97,7 +92,7 @@
                             </td>
             								<td>
                               <a href="{{ URL::route('view-candidate', array('id' => $candidateApplication->candidate->id)) }}" target="_blank">
-                                {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}<br/>{{$candidateApplication->candidate->email}}
+                                {{$candidateApplication->candidate->first_name. " ".$candidateApplication->candidate->last_name}}
                               </a>
                               <input type="hidden" name="requirement_id_{{$candidateApplication->id}}" value = "APT-0{{$candidateApplication->requirement->id}}">
                               <input type="hidden" name="requirement_title_{{$candidateApplication->id}}" value = "{{$candidateApplication->requirement->title}}">
@@ -126,13 +121,15 @@
                                 {{'('.(date("Y-m-d", strtotime($candidateApplication->interview_scheduled_date))).')'}}
                               @endif
                             </td>
-                            <td>{{!empty($candidateApplication->client_rate)?"$".$candidateApplication->client_rate:"-"}}<br>
-                            {{!empty($candidateApplication->submission_rate)?"$".$candidateApplication->submission_rate:"-"}}
-                            </td>
                             <td>
-                            {{$candidateApplication->submittedBy->first_name." ".$candidateApplication->submittedBy->last_name}}
-                            <br/>
-                            {{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}</td>
+                            <span class="text-label">Client's Rate: </span>{{!empty($candidateApplication->client_rate)?"$".$candidateApplication->client_rate:"-"}}<br>
+                            <span class="text-label">Recruiter's Rate: </span>{{!empty($candidateApplication->submission_rate)?"$".$candidateApplication->submission_rate:"-"}}
+                            </td>
+                            <td>{{$candidateApplication->submittedBy->first_name." ".$candidateApplication->submittedBy->last_name}}<br>
+                            {{($candidateApplication->created_at != "" && $candidateApplication->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($candidateApplication->created_at)):"-"}}
+                            / <br>
+                            <span class="text-label">Last Updated: </span><br>{{($candidateApplication->updated_at != "" && $candidateApplication->updated_at != "0000-00-00 00:00:00")?date("Y-m-d H:i", strtotime($candidateApplication->updated_at)):"-"}}
+                            </td>
                             <td>
                               @if($candidateApplication->requirement->user){{$candidateApplication->requirement->user->first_name." ".$candidateApplication->requirement->user->last_name."-".$candidateApplication->requirement->user->email}}@else {{"-"}} @endif 
                             </td>
@@ -170,10 +167,7 @@
                         <th>Client Rate/<br>
                             Recruter's Rate
                         </th>
-                        <th>Submitted At /
-                            <br/>
-                            Submitted By
-                        </th>
+                        <th>Submitted By <br>Submitted At /<br> Last Updated At</th>
                         <th>Added By</th>
                         <th>Feedback</th>
                         <th>Action</th>

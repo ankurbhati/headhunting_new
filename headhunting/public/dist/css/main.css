@@ -200,7 +200,7 @@ html {
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.42857; }
 
 input,
@@ -9657,4 +9657,10 @@ header .navbar {
   background-color:red;
   border-color: #fff;
   color:#fff;
+}
+
+.text-label {
+  color:#eee;
+  font-weight:700;
+  font-size:11px;
 }

@@ -88,10 +88,10 @@
         </div>
     </div>
 	<div class="form-group">
-        {{ Form::label('rate', 'Rate/hr: ', array('class' => 'col-sm-3
+        {{ Form::label('rate', 'Rate/hr $: ', array('class' => 'col-sm-3
         control-label')); }}
-        <div class="col-sm-8">{{ Form::text('rate', $jobPost->rate, array('class' =>
-            'form-control', 'placeholder' => '$ per hour', 'required')); }}
+        <div class="col-sm-8">{{ Form::input('number', 'rate', $jobPost->rate, array('class' =>
+            'form-control', 'placeholder' => 'rate per hour integer only (ex: 65)', 'required')); }}
             <span class='errorlogin'>{{$errors->first('rate');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
