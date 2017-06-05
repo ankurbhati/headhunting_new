@@ -328,9 +328,9 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for list-requirement
 	 */
-	Route::match(array('GET', 'POST'), '/pending-requirement/{id?}', array(
-			'as'    =>    'pending-requirement',
-			'uses'    =>    'SaleController@pendingRequirementList'
+	Route::match(array('GET', 'POST'), '/filter-requirement/{id?}/{status?}', array(
+			'as'    =>    'filter-requirement',
+			'uses'    =>    'SaleController@filterRequirementList'
 	));
 
 	/**

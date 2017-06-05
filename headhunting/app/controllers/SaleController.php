@@ -432,11 +432,19 @@ class SaleController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
-	public function pendingRequirementList($id=0) {
+	public function filterRequirementList($id=0, $status=0) {
 
 		$job_post_creation_filter = '';
 		$q = JobPost::query();
-		$q->where('status', '=', 1);
+		if($status == -1) {
+			$q->where('status', '=', 2);
+			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
+			{
+			    $q->where('assigned_to_id','>',0);
+			}, '=', 0)->orderBy('updated_at', 'desc');
+		} else {
+			$q->where('status', '=', $status);
+		}
 		$usersAddedBy = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('status', '=', 1)->whereHas('userRoles', function($q){
 				    $q->where('role_id', '<=', 3);
 				})->get();
@@ -965,7 +973,7 @@ class SaleController extends HelperController {
 			$q->where('submitted_by', '=', Input::get('submitted_by'));	
 		}
 
-		$q->where('status', '=', array_search('Selected By End Client', $submittle_status));
+		$q->where('status', '=', array_search('Purchase Order', $submittle_status));
 
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
 			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');

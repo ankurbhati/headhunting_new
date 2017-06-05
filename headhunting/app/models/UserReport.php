@@ -31,4 +31,5 @@ class UserReport extends Eloquent {
     
     	return $this->belongsTo('User','user_id','id');
     }
+
 }

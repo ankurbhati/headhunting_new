@@ -198,7 +198,7 @@ return array(
 		'4'=>'Rejected By Prime Vendor',
 		'5'=>'Submitted To End Client',
 		'6'=>'Interview Scheduled',
-		'7'=>'Selected By End Client',
+		'7'=>'Purchase Order',
 		'8'=>'Rejected By End Client',
 		'9'=>'On Hold By End Client',
 		'10' => 'Rejected By Recruiter Manager'

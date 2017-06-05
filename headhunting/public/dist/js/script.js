@@ -396,7 +396,7 @@ if($('#msa-group').length > 0) {
 			'Rejected By Prime Vendor',
 			'Submitted To End Client',
 			'Interview Scheduled',
-			'Selected By End Client',
+			'Purchase Order',
 			'Rejected By End Client',
 			'On Hold By End Client',
 		];
