@@ -1494,25 +1494,33 @@ class UserController extends HelperController {
 		}
 		$count = 1;
 		$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
+
 		$q = UserReport::query();
 		// $total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
 		// while(empty($total_report_sent)) {
 		// 	$count++;
 		// 	$current_date = date("Y-m-d", time() - $count * 60 * 60 * 24);
 		// 	$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
-  //       }
+  		// }
 
-		if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		//if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			if(!empty(Input::get('for_date'))) {
-				$forDateTime = datetime::createfromformat('m/d/Y',Input::get('for_date'))->format('Y-m-d');
-				$q->where('for_date', '=', $forDateTime);
-			} else {
-				$q->where('for_date', '=', $current_date);
+				$current_date = datetime::createfromformat('m/d/Y',Input::get('for_date'))->format('Y-m-d');
 			}
-		} else {
-			$q->where('for_date', '=', $current_date);
-		}
+			if(!empty(Input::get('status'))) {
+				if(Input::get('status') == 2) {
+					$y = User::query();
+					$q->where('for_date', '=', $current_date);
+					$user_reports = $q->lists('user_id');
+					$y->whereNotIn('id', $user_reports);
+					$users = $y->paginate(100);
+					return View::make('User.userReportList')->with(array('title' => 'User Reports', 'users' => $users, 'current_date'=>$current_date));
+				}
+			}
+		//}
+		$q->where('for_date', '=', $current_date);
+		
 		$user_reports = $q->paginate(100);
 		return View::make('User.userReportList')->with(array('title' => 'User Reports', 'user_reports' => $user_reports));
 	}
