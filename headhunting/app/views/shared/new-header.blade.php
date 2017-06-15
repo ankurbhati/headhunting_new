@@ -154,8 +154,20 @@
                   </li>
                   @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8))
                     <li class="dropdown">
-                      <a href="{{ URL::route('third-party-organisation-list') }}">
+                      <a href="{{ URL::route('third-party-organisation-list', array('id'=>0)) }}">
                       NCA/MSA List</a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="{{ URL::route('third-party-organisation-list', array('id'=>1)) }}">
+                      NCA List</a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="{{ URL::route('third-party-organisation-list', array('id'=>2)) }}">
+                      MSA List</a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="{{ URL::route('third-party-organisation-list', array('id'=>3)) }}">
+                      No NCA/MSA List</a>
                     </li>
                     <li class="dropdown">
                       <a href="{{ URL::route('add-third-party-organisation') }}">

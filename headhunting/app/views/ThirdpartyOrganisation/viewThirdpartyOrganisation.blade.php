@@ -15,6 +15,7 @@
 	        	{{$org->domain}}
 	        </div>
 	    </div>
+	    @if($category==0|| $category==1)
 	    <div class="row"><div class="col-sm-4">
 	        NCA Document:
 	        </div><div class="col-sm-8">
@@ -37,6 +38,8 @@
 	        	{{($org->nca_activation_date != "" && $org->nca_activation_date != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($org->nca_activation_date)):"-"}}
 	        </div>
 	    </div>
+	    @endif
+	    @if($category==0|| $category==2)
 	    <div class="row"><div class="col-sm-4">
 	        MSA Document:
 	        </div>
@@ -60,6 +63,7 @@
 	        	{{($org->msa_activation_date != "" && $org->msa_activation_date != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($org->msa_activation_date)):"-"}}
 	        </div>
 	    </div>
+	    @endif
 	    <div class="row"><div class="col-sm-4">
 	        Created At:
 	        </div><div class="col-sm-8">

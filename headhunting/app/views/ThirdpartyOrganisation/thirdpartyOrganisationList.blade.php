@@ -5,7 +5,18 @@
             <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Organisations List</h3>
+                  <h3 class="box-title">
+                    @if($id == 0)
+                      NCA/MSA List
+                    @elseif($id == 1)
+                      NCA List
+                    @elseif($id == 2)
+                      MSA List
+                    @elseif($id == 3)
+                      No NCA/MSA List
+                    @endif
+
+                  </h3>
                 </div><!-- /.box-header -->
 
                 {{ Form::open(array('class' =>
@@ -32,7 +43,7 @@
             <span class='errorlogin email-login'>{{$errors->first('domain');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
+    @if($id == 0 || $id == 1)
     <div class="form-group">
         {{ Form::label('nca_description', 'NCA Description: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -41,7 +52,8 @@
             <span class='errorlogin email-login'>{{$errors->first('nca_description');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
-
+    @endif
+    @if($id == 0 || $id == 2)
     <div class="form-group">
         {{ Form::label('msa_description', 'MSA Description: ', array('class' => 'col-sm-3
         control-label')); }}
@@ -50,6 +62,7 @@
             <span class='errorlogin email-login'>{{$errors->first('msa_description');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+    @endif
 
     <div class="form-group">
         {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
@@ -84,10 +97,10 @@
                       <tr>
                         <th>Name</th>
                         <th>Domain</th>
-                        <th>NCA Document</th>
-                        <th>MSA Document</th>
-                        <th>NCA Activation Date</th>
-                        <th>MSA Activation Date</th>
+                        @if($id==0||$id==1)<th>NCA Document</th>@endif
+                        @if($id==0||$id==2)<th>MSA Document</th>@endif
+                        @if($id==0||$id==1)<th>NCA Activation Date</th>@endif
+                        @if($id==0||$id==2)<th>MSA Activation Date</th>@endif
                         <th>Added At</th>
                         <th>Action</th>
                       </tr>
@@ -97,6 +110,7 @@
 		                    <tr>
 								<td>{{$org->name}}</td>
 								<td>{{$org->domain}}</td>
+                @if($id==0||$id==1)
                 @if($org->nca_document && file_exists(public_path('/uploads/documents/'.$org->id.'/'.$org->nca_document)))
                   <td>
                     <a href="{{'/uploads/documents/'.$org->id.'/'.$org->nca_document}}" title="Download NCA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>NCA Document</a>
@@ -104,6 +118,8 @@
                 @else
                   <td>-</td>
                 @endif
+                @endif
+                @if($id==0||$id==2)
 								@if($org->msa_document && file_exists(public_path('/uploads/documents/'.$org->id.'/'.$org->msa_document)))
                   <td>
                     <a href="{{'/uploads/documents/'.$org->id.'/'.$org->msa_document}}" title="Download MSA Document" target="_blank"><i class="glyphicon glyphicon-download"></i>MSA Document</a>
@@ -111,15 +127,20 @@
                 @else
                   <td>-</td>
                 @endif
+                @endif
+                @if($id==0||$id==1)
                 <td>{{($org->nca_activation_date != "" && $org->nca_activation_date != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($org->nca_activation_date)):"-"}}</td>
+                @endif
+                @if($id==0||$id==2)
                 <td>{{($org->msa_activation_date != "" && $org->msa_activation_date != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($org->msa_activation_date)):"-"}}</td>
+                @endif
                 <td>{{($org->created_at != "" && $org->created_at != "0000-00-00 00:00:00")?date("Y-m-d", strtotime($org->created_at)):"-"}}</td>
 
 									<td>
-										<a href="{{ URL::route('view-third-party-organisation', array('id' => $org->id)) }}" class="btn btn-primary btn-white" title="View Organisation">View</a>
-										  <a href="{{ URL::route('edit-third-party-organisation', array($org->id)) }}"  class="btn btn-primary btn-white" title="Edit Organisation">Edit</a>
+										<a href="{{ URL::route('view-third-party-organisation', array('id' => $org->id, 'category'=> $id)) }}" class="btn btn-primary btn-white" title="View Organisation">View</a>
+										  <a href="{{ URL::route('edit-third-party-organisation', array('id' => $org->id, 'category'=> $id))  }}"  class="btn btn-primary btn-white" title="Edit Organisation">Edit</a>
 									@if(Auth::user()->getRole() <= 1 || Auth::user()->hasRole(8) )
-										<a href="{{ URL::route('delete-third-party-organisation', array($org->id)) }}" class="btn btn-secondary btn-white"  title="Delete Organisation">Delete</a>
+										<a href="{{ URL::route('delete-third-party-organisation', array('id' => $org->id, 'category'=> $id)) }}" class="btn btn-secondary btn-white"  title="Delete Organisation">Delete</a>
 									@endif
 								</td>
 	              </tr>
@@ -131,10 +152,10 @@
                       <tr>
                         <th>Name</th>
                         <th>Domain</th>
-                        <th>NCA Document</th>
-                        <th>MSA Document</th>
-                        <th>NCA Activation Date</th>
-                        <th>MSA Activation Date</th>
+                        @if($id==0||$id==1)<th>NCA Document</th>@endif
+                        @if($id==0||$id==2)<th>MSA Document</th>@endif
+                        @if($id==0||$id==1)<th>NCA Activation Date</th>@endif
+                        @if($id==0||$id==2)<th>MSA Activation Date</th>@endif
                         <th>Added At</th>
                         <th>Action</th>
                       </tr>

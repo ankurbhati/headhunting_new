@@ -813,7 +813,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET' , 'POST'), '/third-party-organisations', array(
+	Route::match(array('GET' , 'POST'), '/third-party-organisations/{id}', array(
 			'as'    =>    'third-party-organisation-list',
 			'uses'    =>    'ThirdpartyOrganisationController@thirdpartyOrganisationList'
 	));
@@ -821,7 +821,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET'), '/view-third-party-organisation/{id}', array(
+	Route::match(array('GET'), '/view-third-party-organisation/{id}/{category}', array(
 		'as'    =>    'view-third-party-organisation',
 		'uses'    =>    'ThirdpartyOrganisationController@viewThirdpartyOrganisation'
 	));
@@ -829,7 +829,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET'), '/delete-third-party-organisation/{id}', array(
+	Route::match(array('GET'), '/delete-third-party-organisation/{id}/{category}', array(
 			'as'    =>    'delete-third-party-organisation',
 			'uses'    =>    'ThirdpartyOrganisationController@deleteThirdpartyOrganisation'
 	));
@@ -837,7 +837,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for edit Vendor
 	 */
-	Route::match(array('GET'), '/edit-third-party-organisation/{id}', array(
+	Route::match(array('GET'), '/edit-third-party-organisation/{id}/{category}', array(
 			'as'    =>    'edit-third-party-organisation',
 			'uses'    =>    'ThirdpartyOrganisationController@editThirdpartyOrganisation'
 	));
@@ -845,7 +845,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for edit Vendor
 	 */
-	Route::match(array('POST'), '/edit-third-party-organisation/{id}', array(
+	Route::match(array('POST'), '/edit-third-party-organisation/{id}/{category}', array(
 			'as'    =>    'update-third-party-organisation',
 			'uses'    =>    'ThirdpartyOrganisationController@updateThirdpartyOrganisation'
 	));
