@@ -9,7 +9,7 @@
         control-label')); }}
         <div class="col-sm-8">
         {{ Form::text('name', $org->name, array('class' =>
-            'form-control', 'placeholder' => 'Enter Organisation Name', 'required', 'readonly')); }}
+            'form-control', 'placeholder' => 'Enter Organisation Name', 'required')); }}
         <span class='errorlogin'>{{$errors->first('name');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
@@ -52,7 +52,7 @@
             {{ Form::label('nca_activation_date', 'NCA Activation Date: ', array('class' => 'col-sm-3
             control-label')); }}
             <div class="col-sm-8">{{ Form::text('nca_activation_date', ($org->nca_activation_date != "" && $org->nca_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($org->nca_activation_date)):"", array('class' =>
-                'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }} 
+                'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'yyyy/mm/dd'", 'data-mask')); }} 
                 <span class='errorlogin'>{{$errors->first('nca_activation_date');}}@if(!empty($message)){{$message}}@endIf</span>
             </div>
         </div>
@@ -88,7 +88,7 @@
             {{ Form::label('msa_activation_date', 'MSA Activation Date: ', array('class' => 'col-sm-3
             control-label')); }}
             <div class="col-sm-8">{{ Form::text('msa_activation_date', ($org->msa_activation_date != "" && $org->msa_activation_date != "0000-00-00 00:00:00")?date("d/m/Y", strtotime($org->msa_activation_date)):"", array('class' =>
-                'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'dd/mm/yyyy'", 'data-mask')); }} 
+                'form-control', 'placeholder' => 'ex. 10/08/2016', 'data-inputmask'=>"'alias': 'yyyy/mm/dd'", 'data-mask')); }} 
                 <span class='errorlogin'>{{$errors->first('msa_activation_date');}}@if(!empty($message)){{$message}}@endIf</span>
             </div>
         </div>
@@ -96,7 +96,7 @@
     @endif
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit('Update', array('class' => 'btn
-            btn-info pull-right', 'id' => 'update-button') ); }}</div> 
+            btn-primary btn-white pull-right', 'id' => 'update-button') ); }}</div> 
     </div>
 {{ Form::close() }}
 </div>
