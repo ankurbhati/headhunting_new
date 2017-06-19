@@ -22,6 +22,7 @@
         <span class='errorlogin'>{{$errors->first('domain');}}@if(!empty($message)){{$message}}@endIf</span>
         </div>
     </div>
+    @if($category == 0 || $category == 1 || $category == 3)
     <div id="nca-group">
         <div class="form-group">
             {{ Form::label('nca_document', 'Upload Nca Document: ', array('class' => 'col-sm-3
@@ -56,7 +57,8 @@
             </div>
         </div>
     </div>
-
+    @endif
+    @if($category == 0 || $category == 2 || $category == 3)
     <div id="msa-group">
         <div class="form-group">
             {{ Form::label('msa_document', 'Upload Msa Document: ', array('class' => 'col-sm-3
@@ -91,7 +93,7 @@
             </div>
         </div>
     </div>
-    
+    @endif
     <div class="form-group row ">
         <div class="col-sm-11">{{ Form::submit('Update', array('class' => 'btn
             btn-info pull-right', 'id' => 'update-button') ); }}</div> 
