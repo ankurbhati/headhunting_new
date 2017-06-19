@@ -1489,7 +1489,7 @@ class UserController extends HelperController {
 
 		date_default_timezone_set('Asia/Kolkata');
 		$auth_user = Auth::user();
-		if(!$auth_user->hasRole(1)) {
+		if(!$auth_user->hasRole(1) && !$auth_user->hasRole(8)) {
 			return Redirect::route('dashboard-view');
 		}
 		$count = 1;
