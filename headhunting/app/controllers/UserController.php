@@ -1405,34 +1405,37 @@ class UserController extends HelperController {
 	}
 
 	public function crobJobForUserReports() {
-		date_default_timezone_set('Asia/Kolkata');
+
 		//$current_date = date('Y-m-d', time());
-		$current_date = date("Y-m-d", time() - 60 * 60 * 24);
+		$current_date = date("Y-m-d");
+
 		//$yesterday_date = date("Y-m-d", time() - 60 * 60 * 24);
+		Log::info("cron called for Reports");
 		$total_report_sent = UserReport::where('for_date', '=', $current_date)->count();
-		if($total_report_sent) {
+		Log::info("Yotal Reports Sent ". $total_report_sent);
+		//if($total_report_sent) {
 			$business_head = $this->getBussinessHead();
 			$users = UserReport::where('for_date', '=', $current_date)->lists('user_id');
-            $defaulters = User::whereNotIn('id', $users)->whereHas('userRoles', function($q) {
-    			$q->whereNotIn('role_id', array(1,2,7,8));
+            $defaulters = User::whereNotIn('id', $users)->where('status', '=', 1)->whereHas('userRoles', function($q) {
+    			$q->whereNotIn('role_id', array(1,7,8));
 			})->select('first_name', 'last_name', 'email')->lists('email');
     
             $body_content = 'hi, <br/><br/>';
-            $body_content .= '<table><tbody><th style="border: 1px solid grey;">Defaulter Emails For '.$current_date.'</th>';
+            $body_content .= '<table><tbody><th style="border: 1px solid grey; background-color:red;color:white;">Defaulter Emails For '.$current_date.'</th>';
             foreach($defaulters as $defaulter) {
             	$body_content .= '<tr><td style="border: 1px solid grey;">'.$defaulter.'</td></tr>';
             }
             $body_content .= '</tbody></table>';
             //print $body_content;
             try{
-            	//$this->sendNotificationMail($body_content, $business_head, $subject='Employee Reports For'.$current_date);
+            	$this->sendNotificationMail($body_content, $business_head, $subject='Employee Reports For '.$current_date);
             }catch(Exception $e){
             	print $e->getMessage();
             }
 			print 'In crobJobForUserReports';exit();
-		}else{
-			// do nothing as its a holiday
-		}
+		// }else{
+		// 	// do nothing as its a holiday
+		// }
 	}
 
 	
@@ -1489,7 +1492,7 @@ class UserController extends HelperController {
 
 		date_default_timezone_set('Asia/Kolkata');
 		$auth_user = Auth::user();
-		if(!$auth_user->hasRole(1)) {
+		if(!$auth_user->hasRole(1) && !$auth_user->hasRole(8)) {
 			return Redirect::route('dashboard-view');
 		}
 		$count = 1;

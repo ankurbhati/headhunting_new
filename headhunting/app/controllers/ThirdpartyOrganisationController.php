@@ -133,8 +133,8 @@ class ThirdpartyOrganisationController extends HelperController {
 		} else if ($id == 2) { // fetch only MSA
 			$q->where('msa_document', '!=', "");
 		} else if ($id == 3) { // fetch neither NCA nor MSA
-			$q->where('nca_document', '=', '')->orWhereNull('nca_document');
-			$q->where('msa_document', '=', '')->orWhereNull('msa_document');
+			$q->where('nca_document', '=', null);
+			$q->where('msa_document', '=', null);
 		} else if ($id == 0) { // Show all
 
 		}
@@ -298,6 +298,7 @@ class ThirdpartyOrganisationController extends HelperController {
 				
 				$org->nca_description = Input::get('nca_description');
 				$org->msa_description = Input::get('msa_description');
+				$org->name = Input::get('name');
 				$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
 				$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
 				Log::info('ffffffffffffffffffff');

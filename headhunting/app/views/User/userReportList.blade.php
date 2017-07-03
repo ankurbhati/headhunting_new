@@ -59,16 +59,20 @@
                     <tbody>
                       @if (isset($users))
                       @foreach($users as $user)
+                        @if($user->hasRole(2) || $user->hasRole(3) || $user->hasRole(4) || $user->hasRole(5))
                           <tr>
                             <td>{{$user->first_name." ".$user->last_name}}</td>
                             <td>{{$user->email}}</td>
                             <td>-</td>
                             <td>{{$current_date}}</td>
+                          </tr>
+                        @endif
                       @endforeach
                       @endif
 
                       @if (isset($user_reports))
                       @foreach($user_reports as $user_report)
+                        @if($user_reports->user->hasRole(2) || $user_reports->user->hasRole(3) || $user_reports->user->hasRole(4) || $user_reports->user->hasRole(5))
                           <tr>
                             <td>{{$user_report->user->first_name." ".$user_report->user->last_name}}</td>
                             <td>{{$user_report->user->email}}</td> 
@@ -81,6 +85,7 @@
                             <td>{{($user_report->created_at != "" && $user_report->created_at != "0000-00-00 00:00:00")?date("Y-m-d H:i:s", strtotime($user_report->created_at)):"-"}}</td>
                             <td>{{($user_report->updated_at != "" && $user_report->updated_at != "0000-00-00 00:00:00")?date("Y-m-d H:i:s", strtotime($user_report->updated_at)):"-"}}</td>
                           </tr>
+                          @endif
                       @endforeach
                       @endif
                     </tbody>

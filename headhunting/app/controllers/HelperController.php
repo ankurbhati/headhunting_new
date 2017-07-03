@@ -369,6 +369,7 @@ class HelperController extends BaseController {
         Mail::send([], [], function($message) use(&$body_content, &$user, &$subject)
         {
             $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+                    //->bcc(array('nakul.suneja@live.com'))
                     ->subject($subject)
                     ->setBody($body_content, 'text/html');
         });

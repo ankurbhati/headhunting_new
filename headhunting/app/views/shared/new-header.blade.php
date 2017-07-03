@@ -55,39 +55,32 @@
             <li class="dropdown">
                 <a href="#">Sales</a>
                 <ul class="dropdown-menu">
-                @if(Auth::user()->getRole() != 4 && Auth::user()->getRole() != 5)
-                  <li class="dropdown">
-                    <a href="{{ URL::route('list-requirement') }}">
-                      Posted Requirements
-                    </a>
-                  </li>
-                @endif
                 @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3))
                   <li class="dropdown">
                     <a href="{{ URL::route('post-requirement') }}">Post Requirement</a></li>
                 @endif
-                @if(Auth::user()->getRole() != 4)
+                @if(Auth::user()->getRole() != 4 && Auth::user()->getRole() != 5)
+                  <li class="dropdown">
+                    <a href="{{ URL::route('list-requirement') }}">
+                      All Requirements
+                    </a>
+                  </li>
+                @endif
+                @if(Auth::user()->getRole() != 4 && Auth::user()->getRole() != 5)
                   <li class="dropdown">
                     <a href="{{ URL::route('filter-requirement', ['status' => '1', 'id' =>'0']) }}">
                       Pending Requirements
                     </a>
                   </li>
                 @endif
-                @if(Auth::user()->getRole() != 4)
-                  <li class="dropdown">
-                    <a href="{{ URL::route('filter-requirement', ['status' => '2', 'id' =>'0']) }}">
-                      Open Requirements
-                    </a>
-                  </li>
-                @endif
-                @if(Auth::user()->getRole() != 4)
+                @if(Auth::user()->getRole() != 4 && Auth::user()->getRole() != 5)
                   <li class="dropdown">
                     <a href="{{ URL::route('filter-requirement', ['status' => '3', 'id' =>'0']) }}">
                       Closed Requirements
                     </a>
                   </li>
                 @endif
-                @if(Auth::user()->getRole() != 4)
+                @if(Auth::user()->getRole() != 4 && Auth::user()->getRole() != 5)
                   <li class="dropdown">
                     <a href="{{ URL::route('filter-requirement', ['status' => '-1', 'id' =>'0']) }}">
                       Approved Requirements

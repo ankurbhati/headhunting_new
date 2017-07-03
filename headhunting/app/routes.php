@@ -27,6 +27,11 @@ Route::match(array('GET'), '/send-mail-from-cron/{option?}', array(
 		'uses'    =>    'UserController@sendMailFromCron'
 ));
 
+Route::match(array('GET'), '/crob-job-for-user-reports', array(
+	'as'    =>    'crob-job-for-user-reports',
+	'uses'    =>    'UserController@crobJobForUserReports'
+));
+
 /**
  * Routes For REST API for New Payment Form.
  */
@@ -860,10 +865,7 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'SaleController@updateSubmittleStatus'
 	));
 
-	Route::match(array('GET'), '/crob-job-for-user-reports', array(
-			'as'    =>    'crob-job-for-user-reports',
-			'uses'    =>    'UserController@crobJobForUserReports'
-	));
+	
 
 	/**
 	 * Routes For REST API for New Payment Form.

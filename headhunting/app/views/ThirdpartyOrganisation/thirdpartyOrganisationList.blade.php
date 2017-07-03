@@ -138,28 +138,19 @@
 
 									<td>
 										<a href="{{ URL::route('view-third-party-organisation', array('id' => $org->id, 'category'=> $id)) }}" class="btn btn-primary btn-white" title="View Organisation">View</a>
-										  <a href="{{ URL::route('edit-third-party-organisation', array('id' => $org->id, 'category'=> $id))  }}"  class="btn btn-primary btn-white" title="Edit Organisation">Edit</a>
+                    @if($id ==3)
+                      <a href="{{ URL::route('edit-third-party-organisation', array('id' => $org->id, 'category'=> 1))  }}"  class="btn btn-primary btn-white" title="Edit Organisation">Add NCA</a>
+                      <a href="{{ URL::route('edit-third-party-organisation', array('id' => $org->id, 'category'=> 2))  }}"  class="btn btn-primary btn-white" title="Edit Organisation">Add MSA</a>
+                    @else
+                      <a href="{{ URL::route('edit-third-party-organisation', array('id' => $org->id, 'category'=> $id))  }}"  class="btn btn-primary btn-white" title="Edit Organisation">Edit</a>
+                    @endif
 									@if(Auth::user()->getRole() <= 1 || Auth::user()->hasRole(8) )
 										<a href="{{ URL::route('delete-third-party-organisation', array('id' => $org->id, 'category'=> $id)) }}" class="btn btn-secondary btn-white"  title="Delete Organisation">Delete</a>
 									@endif
 								</td>
 	              </tr>
-	                   	@empty
-	                   		<p>No Organisation</p>
-						@endforelse
+						    @endforeach
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Name</th>
-                        <th>Domain</th>
-                        @if($id==0||$id==1)<th>NCA Document</th>@endif
-                        @if($id==0||$id==2)<th>MSA Document</th>@endif
-                        @if($id==0||$id==1)<th>NCA Activation Date</th>@endif
-                        @if($id==0||$id==2)<th>MSA Activation Date</th>@endif
-                        <th>Added At</th>
-                        <th>Action</th>
-                      </tr>
-                    </tfoot>
                   </table>
                   <div>
                         <p style="padding:1.9em 1.2em 0px 0px;">Total no of Third Parties Sources :  <span class="text-bold">{{$orgs->getTotal()}}</span></p>
