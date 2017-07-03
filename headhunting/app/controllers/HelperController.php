@@ -378,7 +378,7 @@ class HelperController extends BaseController {
         if($bussiness_head) {
             $user = $this->getBussinessHead();
             if($user){
-                $this->saveNotification($description, [$user->id], $action_url);
+                $this->saveNotification($description, [$user->id], $action_url, False, $subject);
             }
         }
         foreach($user_ids as $user_id) {

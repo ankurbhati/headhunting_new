@@ -35,9 +35,12 @@
     	<!--<div class="col-sm-5">
     		<a href="{{'/downloads/client/client.csv'}}" class="btn btn-secondary btn-white pull-left">Download Clients Csv Template</a>
         </div>-->
-        <div class="col-sm-12">
+        <div class="col-sm-7">
         	{{ Form::submit('Upload Report', array('class' => 'btn
             btn-primary btn-white center-input', 'id' => 'login-button') ); }}
+        </div>
+        <div class="col-sm-5">
+        <a href="{{'/downloads/report/Report.xlsx'}}" class="btn btn-info pull-left">Download Third Party Csv Template</a>
         </div>
    </div>
    @if(Session::has('upload_result'))
