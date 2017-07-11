@@ -34,10 +34,9 @@ class ThirdpartyOrganisationController extends HelperController {
 							'name' => 'max:100'
 					)
 			);
-			
+			$id = Input::get('hidden_id');
 			if($validate->fails()) {
-
-				return Redirect::to('add-third-party-organisation')
+				return Redirect::to("third-party-organisations/$id/0")
 							   ->withErrors($validate)
 							   ->withInput();
 			} else {
@@ -50,20 +49,24 @@ class ThirdpartyOrganisationController extends HelperController {
 					$org = new ThirdpartyOrganisation();
 					$org->name = Input::get('name');
 					$org->domain = $domain;
-					$org->nca_description = Input::get('nca_description');
-					$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
-					$org->msa_description = Input::get('msa_description');
-					$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+					if($id == 1) { // fetch only NCA
+						$org->nca_description = Input::get('nca_description');
+						$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+					} 
+					if($id == 2) {
+						$org->msa_description = Input::get('msa_description');
+						$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+					}
 					
 					// Checking Authorised or not
 					if($org->save()) {
 
-						if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+						if($id == 1 && isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
 							list($msg, $fileType) = $this->check_resume_validity("nca_document");
 							if($msg){
 								# error
 								Session::flash('nca_document_error', $msg);
-								return Redirect::route('add-third-party-organisation')->withInput();
+								return Redirect::route('third-party-organisation-list', array('id'=>$id, 'edit'=>0))->withInput();
 							} else {
 								# No error					
 								list($msg, $target_file) = $this->upload_document($org, "nca_document");
@@ -76,12 +79,12 @@ class ThirdpartyOrganisationController extends HelperController {
 							}
 						}
 
-						if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
+						if($id == 2 && isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
 							list($msg, $fileType) = $this->check_resume_validity("msa_document");
 							if($msg){
 								# error
 								Session::flash('msa_document_error', $msg);
-								return Redirect::route('add-third-party-organisation')->withInput();
+								return Redirect::route('third-party-organisation-list', array('id'=>$id, 'edit'=>0))->withInput();
 							} else {
 								# No error					
 								list($msg, $target_file) = $this->upload_document($org, "msa_document");
@@ -107,9 +110,9 @@ class ThirdpartyOrganisationController extends HelperController {
 						$this->saveActivity('11', $formatted_description);
 
 						Session::flash('flashmessagetxt', 'Added Successfully!!');
-						return Redirect::to('third-party-organisations/0');
+						return Redirect::to("third-party-organisations/$id/0");
 					} else {
-						return Redirect::to('add-third-party-organisation')->withInput();
+						return Redirect::to("third-party-organisations/$id/0")->withInput();
 					}
 				}
 			}
@@ -124,7 +127,7 @@ class ThirdpartyOrganisationController extends HelperController {
 	 * @return Object : View
 	 *
 	 */
-	public function thirdpartyOrganisationList($id) {
+	public function thirdpartyOrganisationList($id, $edit=0) {
 
 		$q = ThirdpartyOrganisation::query();
 
@@ -137,6 +140,17 @@ class ThirdpartyOrganisationController extends HelperController {
 			$q->where('msa_document', '=', null);
 		} else if ($id == 0) { // Show all
 
+		}
+
+		if($edit == 0) {
+			$org = new ThirdpartyOrganisation();
+		} else {
+			$org = ThirdpartyOrganisation::where('id', '=', $edit)->get();
+			if(!$org->isEmpty()) {
+				$org = $org->first();
+				//return View::make('ThirdpartyOrganisation.editThirdpartyOrganisation')
+				//		   ->with(array('title' => 'Edit Organisation', 'org' => $org, 'category' => $category));
+			}
 		}
 		
 		if(!empty(Input::get('name'))) {
@@ -200,7 +214,7 @@ class ThirdpartyOrganisationController extends HelperController {
 
 		$orgs = $q->paginate(100);
 
-		return View::make('ThirdpartyOrganisation.thirdpartyOrganisationList')->with(array('title' => 'Organisation List', 'orgs' => $orgs, 'id' => $id));
+		return View::make('ThirdpartyOrganisation.thirdpartyOrganisationList')->with(array('title' => 'Organisation List', 'orgs' => $orgs, 'id' => $id, 'org' => $org));
 	}
 
 
@@ -279,7 +293,7 @@ class ThirdpartyOrganisationController extends HelperController {
 			);
 
 			if($validate->fails()) {
-				return Redirect::route('edit-third-party-organisation', array('id' => $id,'category'=>$category))
+				return Redirect::route('third-party-organisations', array('id' =>$category,'edit'=>$id))
 								->withErrors($validate)
 								->withInput();
 			} else {
@@ -295,14 +309,17 @@ class ThirdpartyOrganisationController extends HelperController {
 					}
 					$thirdparty->email = $email;
 				}*/
-				
-				$org->nca_description = Input::get('nca_description');
-				$org->msa_description = Input::get('msa_description');
+				if($category == 1) {
+					$org->nca_description = Input::get('nca_description');	
+					$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+				}
+				if($category == 2) {
+					$org->msa_description = Input::get('msa_description');
+					$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+				}
 				$org->name = Input::get('name');
-				$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
-				$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
 				Log::info('ffffffffffffffffffff');
-				if(isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
+				if($category == 1 && isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
 					Log::info('dddddddddddddddddd');
 					list($msg, $fileType) = $this->check_resume_validity("nca_document");
 					Log::info('AAAAAAAAAAAAAAAAAAAAA');
@@ -310,7 +327,7 @@ class ThirdpartyOrganisationController extends HelperController {
 						Log::info('BBBBBBBBBBBBBBBBB');
 						# error
 						Session::flash('nca_document_error', $msg);
-						return Redirect::route('add-third-party')->withInput();
+						return Redirect::route('third-party-organisations', array('id' =>$category,'edit'=>$id))->withInput();
 					} else {
 						Log::info('cccccccccccccccccccccccc');
 						# No error					
@@ -325,12 +342,12 @@ class ThirdpartyOrganisationController extends HelperController {
 					}
 				}
 
-				if(isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
+				if($category == 2 && isset($_FILES['msa_document']['tmp_name']) && !empty($_FILES['msa_document']['tmp_name'])) {
 					list($msg, $fileType) = $this->check_resume_validity("msa_document");
 					if($msg){
 						# error
 						Session::flash('msa_document_error', $msg);
-						return Redirect::route('edit-third-party-organisation')->withInput();
+						return Redirect::route('third-party-organisations', array('id' =>$category,'edit'=>$id))->withInput();
 					} else {
 						# No error					
 						list($msg, $target_file) = $this->upload_document($org, "msa_document");
@@ -346,9 +363,9 @@ class ThirdpartyOrganisationController extends HelperController {
 				// Checking Authorised or not
 				if($org->save()) {
 					Session::flash('flashmessagetxt', 'Updated Successfully!!');					
-					return Redirect::route('third-party-organisation-list', array('id'=>$category));
+					return Redirect::route('third-party-organisation-list', array('id'=>$category, 'edit'=>0));
 				} else {
-					return Redirect::route('edit-third-party-organisation', array('id'=>$id, 'category'=>$category))->withInput();
+					return Redirect::route('third-party-organisation-list', array('id' =>$category,'edit'=>$id));
 				}
 			}
 		}
@@ -367,7 +384,7 @@ class ThirdpartyOrganisationController extends HelperController {
 			$org = ThirdpartyOrganisation::find($id);
 			if($org->delete()) {
 				Session::flash('flashmessagetxt', 'Deleted Successfully!!');
-				return Redirect::route('third-party-organisation-list', array('id'=>$category));
+				return Redirect::route('third-party-organisation-list', array('id'=>$category, 'edit'=>0));
 			}
 		}
 	}

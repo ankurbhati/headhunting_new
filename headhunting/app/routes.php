@@ -818,7 +818,7 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes For REST API for new Vendor
 	 */
-	Route::match(array('GET' , 'POST'), '/third-party-organisations/{id}', array(
+	Route::match(array('GET' , 'POST'), '/third-party-organisations/{id}/{edit}', array(
 			'as'    =>    'third-party-organisation-list',
 			'uses'    =>    'ThirdpartyOrganisationController@thirdpartyOrganisationList'
 	));
