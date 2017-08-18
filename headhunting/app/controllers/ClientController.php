@@ -363,9 +363,9 @@ class ClientController extends HelperController {
 	public function deleteClient($id) {
 		//if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3)) {
 			if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
-				$client = Client::where('id', '=', $id)->get()->first();
-				$job_posts = JobPost::where('client_id', '=', '10');
-				if($job_posts) {
+				$client = Client::where('id', '=', $id)->first();
+				$job_posts = JobPost::where('client_id', '=', $client->id);
+				if(!$job_posts->get()->isEmpty()) {
 					$job_posts->update(['client_id' => Config::get('app.dummy_client_id')]);	
 				}
 				if( !empty($client) && 	MailGroupMember::where('user_id', '=', $client->id)->where('group_id', '=', 1)->delete() && $client->delete()) {

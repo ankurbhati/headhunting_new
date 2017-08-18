@@ -51,11 +51,19 @@ class ThirdpartyOrganisationController extends HelperController {
 					$org->domain = $domain;
 					if($id == 1) { // fetch only NCA
 						$org->nca_description = Input::get('nca_description');
-						$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+						if(Input::has('nca_activation_date') && Input::get('nca_activation_date') != "") {
+							$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+						} else {
+							$org->nca_activation_date = date("Y-m-d H:i:s");
+						}
 					} 
 					if($id == 2) {
 						$org->msa_description = Input::get('msa_description');
-						$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+						if(Input::has('msa_activation_date') && Input::get('msa_activation_date') != "") {
+							$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+						} else {
+							$org->msa_activation_date = date("Y-m-d H:i:s");
+						}
 					}
 					
 					// Checking Authorised or not
@@ -309,31 +317,34 @@ class ThirdpartyOrganisationController extends HelperController {
 					}
 					$thirdparty->email = $email;
 				}*/
-				if($category == 1) {
-					$org->nca_description = Input::get('nca_description');	
-					$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
-				}
-				if($category == 2) {
+
+				if($id == 1) { // fetch only NCA
+					$org->nca_description = Input::get('nca_description');
+					if(Input::has('nca_activation_date') && Input::get('nca_activation_date') != "") {
+						$org->nca_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('nca_activation_date')));
+					} else {
+						$org->nca_activation_date = date("Y-m-d H:i:s");
+					}
+				} 
+				if($id == 2) {
 					$org->msa_description = Input::get('msa_description');
-					$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+					if(Input::has('msa_activation_date') && Input::get('msa_activation_date') != "") {
+						$org->msa_activation_date = date("Y-m-d H:i:s", strtotime(Input::get('msa_activation_date')));
+					} else {
+						$org->msa_activation_date = date("Y-m-d H:i:s");
+					}
 				}
 				$org->name = Input::get('name');
-				Log::info('ffffffffffffffffffff');
 				if($category == 1 && isset($_FILES['nca_document']['tmp_name']) && !empty($_FILES['nca_document']['tmp_name'])) {
-					Log::info('dddddddddddddddddd');
 					list($msg, $fileType) = $this->check_resume_validity("nca_document");
-					Log::info('AAAAAAAAAAAAAAAAAAAAA');
 					if($msg){
-						Log::info('BBBBBBBBBBBBBBBBB');
 						# error
 						Session::flash('nca_document_error', $msg);
 						return Redirect::route('third-party-organisations', array('id' =>$category,'edit'=>$id))->withInput();
 					} else {
-						Log::info('cccccccccccccccccccccccc');
 						# No error					
 						list($msg, $target_file) = $this->upload_document($org, "nca_document");
 						if($msg) {
-							Log::info('ddddddddddd');
 							//error, delete candidate or set flash message
 						} else {
 							$tmp = explode("/", $target_file);
