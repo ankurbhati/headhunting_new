@@ -220,6 +220,143 @@ class ClientController extends HelperController {
 
 	/**
 	 *
+	 * transferAllClient() : Transfer All Client
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function transferAllClient($id) {
+
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
+			$users = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))
+			->where('status', '=', 1)
+			->whereHas('userRoles', function($q) use ($id){
+					$q->where('role_id', '>=', 2)
+					->where('role_id', '<=', 3)
+					->where('user_id', '!=', $id);
+			})->orderBy('first_name')->paginate(100);
+			return View::make('Client.listSalesAllEmployee')->with(array('title' => 'Transfer To Sales List', 'users' => $users, 'id' => $id));
+		} else {
+			return Redirect::route('dashboard-view');
+		}
+	}
+
+	/**
+	 *
+	 * transferAllClientToUser() : Transfer Client To User
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function transferAllClientToUser($id, $userId) {
+
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
+			$clients = Client::where('created_by', '=', $id)->get();
+			
+				if(count($clients) > 0) {
+					foreach($clients as $client) {
+						$client->created_by = $userId;
+						$client->save();
+					}
+
+					$user = User::find($id);
+					$description = Config::get('notification.client_transfered');
+					$authUser = Auth::user();
+					$formatted_description = sprintf(
+						$description,
+						' of Employee '.$user->first_name." ".$user->last_name
+					);
+					$subject_description = sprintf(
+						$description,
+						' of Employee '.$user->first_name." ".$user->last_name
+					);
+					$to_notify_user = array($userId);
+					$lead = $this->getTeamLeadForUser($userId);
+					if(!empty($lead) && Auth::user()->id != $lead->id) {
+						array_push($to_notify_user, $lead->id);
+					}
+
+					$this->saveNotification($formatted_description, $to_notify_user, '', !Auth::user()->hasRole(1), $subject_description);
+
+					Session::flash('flashmessagetxt', 'Clients Transfered Successfully!!');
+				} else {
+					Session::flash('flashmessagetxt', 'No Clients Assigned!!');
+				}
+				return Redirect::to('clients');
+		} else {
+			return Redirect::route('dashboard-view');
+		}
+	}
+
+
+	/**
+	 *
+	 * transferClient() : Transfer Client
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function transferClient($id) {
+
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
+			$client = Client::find($id);
+			$users = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))
+						->where('status', '=', 1)
+						->whereHas('userRoles', function($q) use ($client){
+							$q->where('role_id', '>=', 2)
+							->where('role_id', '<=', 3)
+							->where('user_id', '!=', $client->created_by);
+					})->orderBy('first_name')->paginate(100);
+			return View::make('Client.listSalesEmployee')->with(array('title' => 'Transfer To Sales List', 'users' => $users, 'clientId' => $id));
+		} else {
+			return Redirect::route('dashboard-view');
+		}
+	}
+
+	/**
+	 *
+	 * transferClientToUser() : Transfer Client To User
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function transferClientToUser($id, $userId) {
+
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8)) {
+			$client = Client::find($id);
+			$client->created_by = $userId;
+			if($client->save()) {
+				
+
+				$description = Config::get('notification.client_transfered');
+				$authUser = Auth::user();
+				$formatted_description = sprintf(
+					$description,
+					'<a href="/view-client/'.$client->id.'">'.$client->first_name." ".$client->last_name." ".$client->company_name.'</a>'
+				);
+				$subject_description = sprintf(
+					$description,
+					'<a href="/view-client/'.$client->id.'">'.$client->first_name." ".$client->last_name." ".$client->company_name.'</a>'
+				);
+				$to_notify_user = array($userId);
+				$lead = $this->getTeamLeadForUser($userId);
+				if(!empty($lead) && Auth::user()->id != $lead->id) {
+					array_push($to_notify_user, $lead->id);
+				}
+
+				$this->saveNotification($formatted_description, $to_notify_user, '', !Auth::user()->hasRole(1), $subject_description);
+
+				Session::flash('flashmessagetxt', 'Client Transfered Successfully!!'); 
+				return Redirect::to('clients');
+			}
+		} else {
+			return Redirect::route('dashboard-view');
+		}
+	}
+
+
+	/**
+	 *
 	 * viewClient() : View Client
 	 *
 	 * @return Object : View
@@ -386,14 +523,27 @@ class ClientController extends HelperController {
 
 		$response = array();
     	$response['error'] = false;
+		$response['client_transferable'] = false;
 		// Server Side Validation.
 		$validate=Validator::make (
 			Input::all(), array(
 					'email' => 'required|email|max:50|email|unique:clients,email',
 			)
 		);
-
 		if($validate->fails()) {
+			if($validate->errors()->first('email') == "The email has already been taken.") {
+				$client = Client::where('email', 'like', Input::get('email'))->first();
+				if($client->created_at < date("Y-m-d H:i:s",strtotime("-16 day"))) {
+					$jobPosts = JobPost::where('client_id', '=', $client->id);
+					if($jobPosts->exists()) {
+						if(!$jobPosts->where('created_at', '>', date("Y-m-d H:i:s",strtotime("-46 day")))->exists()) {
+							$response['client_transferable'] = true;	
+						}
+					} else {
+						$response['client_transferable'] = true;			
+					}
+				}
+			}
 			$response['error'] = true;
     		$response['message'] = 'Client Already Exists';
 		} else {

@@ -1026,6 +1026,107 @@ class SaleController extends HelperController {
 		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'status_search' => $status_search, 'addedToList' => $addedToList));
 	}
 
+
+	/**
+	 *
+	 * listSubmittel() : listSubmittel
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function primeSubmittel($id=0) {
+
+		$login_user = Auth::user();
+		$team = $this->getTeamUsers($login_user->id);
+		$user_role = $login_user->getRole();
+		# Redirecting user if not allowed
+		if($user_role > 5) {
+			return Redirect::to('dashboard');
+		}
+		$status_search = false;
+		$q = CandidateApplication::query();
+
+		$y = CandidateApplication::query();
+		$z = JobPost::query();
+		$submittle_status = Config::get('app.job_post_submittle_status');
+
+		$addedByList = $y->leftJoin('users', function($join){
+			$join->on('submitted_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(submitted_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		$addedToList = $z->leftJoin('users', function($join){
+			$join->on('created_by', '=', 'users.id');
+		})->select(DB::raw('DISTINCT(created_by) as id'), DB::raw('CONCAT(users.first_name, " ", users.last_name) as name'))->lists('name', 'id');
+
+		if(!empty(Input::get('job_title'))) {
+			$job_title = Input::get('job_title');
+			$q->whereHas('requirement', function($q) use($job_title){
+				$q->where('title',  'like', "%".$job_title."%");
+			});
+		}
+		if(!empty(Input::get('submitted_to'))) {
+			$submitted_to = Input::get('submitted_to');
+			$q->whereHas('requirement', function($q) use($submitted_to){
+    			$q->where('created_by',  '=', $submitted_to);
+			});
+		}
+		if(!empty(Input::get('submitted_by'))) {
+			$q->where('submitted_by', '=', Input::get('submitted_by'));	
+		}
+
+		$q->where('status', '=', array_search('Forwarded To Prime Vendor', $submittle_status));
+
+		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
+			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
+			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
+			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
+		}
+        
+        if($id == 0) {
+			if ($user_role == 2) { // sales- show submittles of job created by him
+				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user){
+    				$q->where('created_by',  '=', $login_user->id);
+				})->paginate(100);
+			} else if ($user_role == 3) { // sales manager - show either created by him or his team
+				array_push($team, $login_user->id);
+				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user, $team){
+    				$q->whereIn('created_by',  $team);
+				})->paginate(100);
+			} else if ($user_role == 4) { // recruter- show submitted by him only
+				$addedByList = array();
+				$candidateApplications = $q->where('submitted_by',  '=', $login_user->id)->paginate(100);
+			} else if ($user_role == 5) { // recruter manager
+				array_push($team, $login_user->id);
+				$candidateApplications = $q->whereIn('submitted_by', $team)->paginate(100);
+			} else {
+				$candidateApplications = $q->with(array('requirement'))->paginate(100);	
+			}
+		} else {
+			if ($user_role == 2) { // sales- show submittles of job created by him
+				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user){
+    				$q->where('created_by',  '=', $login_user->id);
+				})->where('job_post_id', '=', $id)->paginate(100);
+			} else if ($user_role == 3) { // sales manager - show either created by him or his team
+				array_push($team, $login_user->id);
+				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user, $team){
+    				$q->whereIn('created_by',  $team);
+				})->where('job_post_id', '=', $id)->paginate(100);
+			} else if ($user_role == 4) { // recruter- show submitted by him only
+				$addedByList = array();
+				$candidateApplications = $q->where('submitted_by',  '=', $login_user->id)->where('job_post_id', '=', $id)->paginate(100);
+			} else if ($user_role == 5) { // recruter manager
+				array_push($team, $login_user->id);
+				$candidateApplications = $q->whereIn('submitted_by', $team)->where('job_post_id', '=', $id)->paginate(100);
+			} else {
+				$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
+			}
+		}
+		
+		$team = $this->getTeamUsers(Auth::user()->id);
+		
+		return View::make('sales.listSubmittels')->with( array('title' => 'List Job Submittels - Headhunting', 'candidateApplications' => $candidateApplications, 'submittle_status'=>$submittle_status, 'addedByList' => $addedByList, 'team' => $team, 'login_user' => $login_user, 'status_search' => $status_search, 'addedToList' => $addedToList));
+	}
+
 	/**
 	 *
 	 * addCommentView() : addCommentView

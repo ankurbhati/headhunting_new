@@ -9,62 +9,68 @@
                 </div>
               {{ Form::open(array('class' =>
               'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
-
-                  <div class="form-group">
-                      {{ Form::label('email', 'E-Mail: ', array('class' => 'col-sm-3
+              <div class="form-group">
+                  <div class="col-xs-4">
+                    {{ Form::label('email', 'E-Mail: ', array('class' => '
                       control-label')); }}
-                      <div class="col-sm-8">{{ Form::text('email', "", array('class' =>
+                    {{ Form::text('email', "", array('class' =>
                           'form-control', 'placeholder' => 'Enter Your Email')); }} 
-                          <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
-                      </div>
+                    <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
                   </div>
 
-                  <div class="form-group">
-                      {{ Form::label('first_name', 'First Name: ', array('class' => 'col-sm-3
+                  <div class="col-xs-4">
+                      {{ Form::label('first_name', 'First Name: ', array('class' => '
                       control-label')); }}
-                      <div class="col-sm-8">{{ Form::text('first_name', "", array('class' =>
+                      {{ Form::text('first_name', "", array('class' =>
                           'form-control', 'placeholder' => 'Enter Employee First Name')); }} 
                           <span class='errorlogin email-login'>{{$errors->first('first_name');}}@if(!empty($message)){{$message}}@endIf</span>
-                      </div>
                   </div>
-                  <div class="form-group">
-                      {{ Form::label('last_name', 'Last Name: ', array('class' => 'col-sm-3
+                  <div class="col-xs-4">
+                      {{ Form::label('last_name', 'Last Name: ', array('class' => '
                       control-label')); }}
-                      <div class="col-sm-8">{{ Form::text('last_name', "", array('class' =>
+                      {{ Form::text('last_name', "", array('class' =>
                           'form-control', 'placeholder' => 'Enter Employee Last Name')); }} 
                           <span class='errorlogin email-login'>{{$errors->first('last_name');}}@if(!empty($message)){{$message}}@endIf</span>
-                      </div>
                   </div>
-
-                  <div class="form-group">
-                      {{ Form::label('designation', 'Designation: ', array('class' => 'col-sm-3
+</div>
+<div class="form-group">
+                  <div class="col-xs-4">
+                      {{ Form::label('designation', 'Designation: ', array('class' => '
                       control-label')); }}
-                      <div class="col-sm-8">{{ Form::text('designation', "", array('class' =>
+                      {{ Form::text('designation', "", array('class' =>
                           'form-control', 'placeholder' => 'Enter Employee Designation')); }}  
                           <span class='errorlogin email-login'>{{$errors->first('designation');}}@if(!empty($message)){{$message}}@endIf</span>
-                      </div>
                   </div>
                   
-                  <div class="form-group">
-                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
+                  <div class="col-xs-4">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        {{ Form::label('from_date', 'Added At:', array('class' => 'pull-left
                     control-label')); }}
-                    <div class="col-sm-4">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
+                      </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-sm-6">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
-                    <div class="col-sm-4">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
+                    <div class="col-sm-6">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
                         <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
                     </div>
                   </div>
 
-                  <div class="form-group row ">
+                  <div class="col-xs-4 margin-top-25">
+                    <div class="row">
                     <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
-                    <div class="col-sm-3">
-                        {{ Form::button('Search', array('class' => 'btn btn-primary btn-white', 'id' => 'search-button', 'style'=>"float:right") ); }}
+                    <div class="col-sm-6">
+                        {{ Form::button('Search', array('class' => 'btn pull-left btn-primary btn-white', 'id' => 'search-button', 'style'=>"float:right") ); }}
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                         {{ Form::button('Download Csv', array('class' => 'btn btn-secondary btn-white', 'id' => 'download-button', 'style'=>"float:right") ); }}
                     </div>
+                    </div>
                   </div>
+    </div>
               {{ Form::close() }}
 
 
@@ -100,6 +106,10 @@
 		                        	@if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
 		                        		<a href="{{ URL::route('delete-member', array($user->id)) }}" title="Delete Profile" class="btn btn-secondary btn-white">Delete</a>
 		                        	@endif
+
+                              @if((Auth::user()->getRole() == 1 || Auth::user()->hasRole(8)) && ($user->hasRole(3) || $user->hasRole(2)))
+		                        		<a href="{{ URL::route('transfer-all-client', array($user->id)) }}" title="Tranfer All Clients" class="btn btn-primary btn-white">Transfer Clients</a>
+		                        	@endif
 		                        	@if(Auth::user()->getRole() == 1 || Auth::user()->hasRole(8))
 		                        		<a href="{{ URL::route('change-password', array('id' => $user->id)) }}" title="Change Password" class="btn btn-primary btn-white">Change Password</a>
 		                        	@endif
@@ -107,15 +117,6 @@
 		                      </tr>
       						@endforeach
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Email<br>Full Name</th>
-                        <th>Designation</th>
-                        <th>Roles</th>
-                        <th>Added At</th>
-                        <th>Action</th>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

@@ -31,10 +31,6 @@
 				        <div id="status-area">
 			        		<!--<span class="flash_message " style="display: inline;">This is a message!</span>-->
 			        	</div>
-			        	<ol class="breadcrumb">
-				            <li><a href="{{ URL::route('dashboard-view') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-				            <li class="active">Dashboard</li>
-						</ol>
 		        			@yield('content')
 	        		</div>
         		</div>

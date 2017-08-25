@@ -292,6 +292,14 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'SaleController@selectedListSubmittel'
 	));
 
+	/**
+	 * Routes for list-submittel
+	 */
+	Route::match(array('GET'), '/prime-submittel/{id?}', array(
+			'as'    =>    'prime-submittel',
+			'uses'    =>    'SaleController@primeSubmittel'
+	));
+
 	Route::match(array('POST'), '/list-submittel/{id?}', array(
 			'as'    =>    'list-submittel',
 			'uses'    =>    'SaleController@listSubmittel'
@@ -467,6 +475,38 @@ Route::group(array('before' => 'auth'), function() {
 	Route::match(array('GET'), '/view-client/{id}', array(
 		'as'    =>    'view-client',
 		'uses'    =>    'ClientController@viewClient'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('GET'), '/client-transfer/{id}/{userId}', array(
+		'as'    =>    'client-transfer',
+		'uses'    =>    'ClientController@transferClientToUser'
+	));
+
+	/**
+	 * Routes For REST API for new Client
+	 */
+	Route::match(array('GET'), '/client-all-transfer/{id}/{userId}', array(
+		'as'    =>    'client-all-transfer',
+		'uses'    =>    'ClientController@transferAllClientToUser'
+	));
+
+	/**
+	 * Routes For REST API for transfer All Client
+	 */
+	Route::match(array('GET'), '/transfer-all-client/{id}', array(
+		'as'    =>    'transfer-all-client',
+		'uses'    =>    'ClientController@transferAllClient'
+	));
+	
+	/**
+	 * Routes For REST API for transfer Client
+	 */
+	Route::match(array('GET'), '/transfer-client/{id}', array(
+		'as'    =>    'transfer-client',
+		'uses'    =>    'ClientController@transferClient'
 	));
 
 	/**

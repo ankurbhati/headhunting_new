@@ -151,4 +151,14 @@ class JobPost extends Eloquent {
         }
         return $names;
     }
+
+    public function getClass() {
+        $status = Config::get('notification.job_post_class')[$this->status];
+        if($this->status == 2) {
+            if($this->candidateApplications() > 0) {
+                $status = "job-submittels";
+            }
+        }
+        return $status;
+    }
 }

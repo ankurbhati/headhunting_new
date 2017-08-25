@@ -8,59 +8,63 @@
                   <h3 class="box-title">Job Submittels</h3>
                 </div><!-- /.box-header -->
                 {{ Form::open(array('class' => 'form-horizontal','id' => 'login-form',  'method' => 'GET')) }}
-
                 <div class="form-group">
-                    {{ Form::label('job_title', 'Job Title: ', array('class' => 'col-sm-3
-                    control-label')); }}
-                    <div class="col-sm-4">{{ Form::text('job_title', "", array('class' =>
-                          'form-control', 'placeholder' => 'Enter Job Title')); }}
-                        <span class='errorlogin email-login'>{{$errors->first('job_title');}}@if(!empty($message)){{$message}}@endIf</span>
-                    </div>
-                </div>
+                  <div class="col-xs-4">
+                      {{ Form::label('job_title', 'Job Title: ', array('class' => '
+                      control-label')); }}
+                      {{ Form::text('job_title', "", array('class' =>
+                            'form-control', 'placeholder' => 'Enter Job Title')); }}
+                          <span class='errorlogin email-login'>{{$errors->first('job_title');}}@if(!empty($message)){{$message}}@endIf</span>
+                  </div>
 
+                  <div class="col-xs-4">
+                      {{ Form::label('submitted_by', 'Submitted By: ', array('class' => '
+                      control-label')); }}
+                      {{ Form::select('submitted_by', array('' => 'Please select one Submitter') + $addedByList, "", array('class' => 'form-control')) }}
+                          <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
+                  </div>
+
+                  <div class="col-xs-4">
+                      {{ Form::label('submitted_to', 'Submitted To: ', array('class' => '
+                      control-label')); }}
+                      {{ Form::select('submitted_to', array('' => 'Please select one job owner') + $addedToList, "", array('class' => 'form-control')) }}
+                          <span class='errorlogin email-login'>{{$errors->first('submitted_to');}}@if(!empty($message)){{$message}}@endIf</span>
+                  </div>
+                </div>
                 <div class="form-group">
-                    {{ Form::label('submitted_by', 'Submitted By: ', array('class' => 'col-sm-3
-                    control-label')); }}
-                    <div class="col-sm-4">{{ Form::select('submitted_by', array('' => 'Please select one Submitter') + $addedByList, "", array('class' => 'form-control')) }}
-                        <span class='errorlogin email-login'>{{$errors->first('submitted_by');}}@if(!empty($message)){{$message}}@endIf</span>
-                    </div>
-                </div>
+                  @if(!(isset($status_search)))
+                  <div class="col-xs-4">
+                      {{ Form::label('status', 'Status: ', array('class' => '
+                      control-label')); }}
+                      {{ Form::select('status', $submittle_status, "", array('class' => 'form-control')) }}
+                          <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
+                  </div>
+                  @endif
 
-                <div class="form-group">
-                    {{ Form::label('submitted_to', 'Submitted To: ', array('class' => 'col-sm-3
-                    control-label')); }}
-                    <div class="col-sm-4">{{ Form::select('submitted_to', array('' => 'Please select one job owner') + $addedToList, "", array('class' => 'form-control')) }}
-                        <span class='errorlogin email-login'>{{$errors->first('submitted_to');}}@if(!empty($message)){{$message}}@endIf</span>
-                    </div>
-                </div>
+                  <div class="col-xs-4">
+                      <div class="row">
+                        <div class="col-xs-12">
+                          {{ Form::label('from_date', 'Added At:', array('class' => 'pull-left
+                        control-label')); }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">{{ Form::text('from_date', "", array('placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                        <div class="col-sm-6">{{ Form::text('to_date', "", array('placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                      </div>
+                  </div>
 
-                @if(!(isset($status_search)))
-                <div class="form-group">
-                    {{ Form::label('status', 'Status: ', array('class' => 'col-sm-3
-                    control-label')); }}
-                    <div class="col-sm-4">{{ Form::select('status', $submittle_status, "", array('class' => 'form-control')) }}
-                        <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
-                    </div>
-                </div>
-                @endif
-
-                <div class="form-group">
-                    {{ Form::label('from_date', 'Added At:', array('class' => 'col-sm-3
-                    control-label')); }}
-                    <div class="col-sm-2">{{ Form::text('from_date', "", array('placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
-                        <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
-                    </div>
-                    <div class="col-sm-2">{{ Form::text('to_date', "", array('placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
-                        <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
-                    </div>
-                </div>
-
-                <div class="form-group row ">
-                    <div class="col-sm-11" style="text-align:center;">{{ Form::submit('Search', array('class' => 'btn
-                        btn-primary btn-white', 'id' => 'login-button') ); }}</div>
-
+                  <div class="col-xs-4">
+                      {{ Form::submit('Search', array('class' => 'btn pull-left margin-top-25
+                          btn-primary btn-white', 'id' => 'login-button') ); }}
+                  </div>
                </div>
             {{ Form::close() }}
+
                 <div class="box-body">
                   <div>
                         <p class="result-total"><span class="text-bold">{{$candidateApplications->getTotal()}} results</span></p>
@@ -157,22 +161,6 @@
 						      @endforeach
 
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Job Id /<br> Job Title / <br>Type Of Employment</th>
-                        <th>Candidate Name / <br/>
-                            Candidate Email
-                        </th>
-                        <th>Status</th>
-                        <th>Client Rate/<br>
-                            Recruter's Rate
-                        </th>
-                        <th>Submitted By <br>Submitted At /<br> Last Updated At</th>
-                        <th>Added By</th>
-                        <th>Feedback</th>
-                        <th>Action</th>
-                      </tr>
-                    </tfoot>
                   </table>
                   
                   <div id="myModal" class="modal container">
@@ -225,8 +213,7 @@
                       </div>
                     </div>
                   </div>
-
-                  @if (count($candidateApplications) > 100)
+                  @if (count($candidateApplications) > 0)
                     <div>
                        
                       {{ $candidateApplications->links() }}

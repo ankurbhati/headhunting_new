@@ -582,8 +582,13 @@ function validateClient(e) {
 	    }).done(function(response) {
 	        var $email = $('#client-email');
 	        if(response.error) {
-	        	$email.removeClass('success').addClass('error');
-	        	$email.next().text('Email Id either invalid or exists in database');
+				if(!response.client_transferable) {
+					$email.removeClass('success').addClass('error');
+					$email.next().text('Email Id either invalid or exists in database');
+				} else {
+					$email.removeClass('error').addClass('success');
+					$email.next().text('Please reachout to your admin as this client is transferable');
+				}
 	        } else {
 	        	$email.removeClass('error').addClass('success');
 	        	$email.next().text('');
