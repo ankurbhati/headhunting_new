@@ -8,7 +8,16 @@
 $(function () {
   "use strict";
 
-  $.ajax('')
+	// for adding sn to table
+	var table = document.getElementsByTagName('table');
+	if(table.length > 0) {
+		table = table[0];
+		var rows = table.getElementsByTagName('tr');
+		$(rows[0]).prepend('<th>Sno</th>');
+		for (var i = 1, len = rows.length; i < len; i++){
+			$(rows[i]).prepend('<td></td>');
+		}
+	  }
 
   if($("#candidate-form").length > 0) {
   	$("#candidate-form").on('change', '#email', validateCandidate);
