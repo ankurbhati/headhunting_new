@@ -766,6 +766,23 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'ThirdpartyController@blockThirdparty'
 	));
 
+
+		/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/unblock-client/{id}', array(
+			'as'    =>    'unblock-client',
+			'uses'    =>    'ClientController@unblockClient'
+	));
+
+	/**
+	 * Routes For REST API for new Vendor
+	 */
+	Route::match(array('GET'), '/block-client/{id}', array(
+			'as'    =>    'block-client',
+			'uses'    =>    'ClientController@blockClient'
+	));
+
 	/**
 	 * Routes For REST API for states
 	 */
