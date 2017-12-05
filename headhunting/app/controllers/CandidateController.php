@@ -16,11 +16,9 @@ class CandidateController extends HelperController {
 	{
 		$country = Country::all()->lists('country', 'id');
 		$visa = Visa::all()->lists('title', 'id');
-		//$vendor = Vendor::all()->lists('vendor_domain', 'id');
 		$work_states = WorkStates::where('id', '!=', 1)->lists('title', 'id');
 
-		return View::make('Candidate.newCandidate')->with(array('title' => 'Add Candidate', 'country' => $country, 'visa' => $visa//, 'vendor' => $vendor
-			, 'work_state' => $work_states));
+		return View::make('Candidate.newCandidate')->with(array('title' => 'Add Candidate', 'country' => $country, 'visa' => $visa, 'work_state' => $work_states));
 	}
 
 	/**
@@ -264,7 +262,9 @@ class CandidateController extends HelperController {
 	    })->leftJoin('users', function($join){
 			$join->on('added_by', '=', 'users.id');
 		})
-	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path', DB::raw('CONCAT(users.first_name, " ", users.last_name) as added_by_name'))->paginate(100);
+	    ->select('candidates.*', 'candidate_resumes.resume', 'candidate_resumes.resume_path', DB::raw('CONCAT(users.first_name, " ", users.last_name) as added_by_name'))
+		->orderBy('updated_at', 'DESC')
+		->paginate(100);
 		return View::make('Candidate.candidateList')->with(array('title' => 'Candidates List', 'candidates' => $candidates, 'visa'=>$visa, 'addedBy' => $addedByList));
 	}
 
@@ -729,7 +729,7 @@ class CandidateController extends HelperController {
 		// Server Side Validation.
 		$validate=Validator::make (
 			Input::all(), array(
-					'email' => 'required|email|max:50|email|unique:candidates,email',
+				'email' => 'required|email|max:50|email|unique:candidates,email',
 			)
 		);
 

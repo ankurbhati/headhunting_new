@@ -37,9 +37,14 @@ class SaleController extends HelperController {
 				$count[$value->id] = $value->country;
 			}
 			if(Auth::user()->hasRole(1)){
-				$clients = Client::all();
+				$clients = Client::where('status', '=', 1)
+								 ->orderBy('updated_at', 'DESC')
+								 ->get();
 			} else {
-				$clients = Client::where('created_by', '=', Auth::user()->id)->get();	
+				$clients = Client::where('created_by', '=', Auth::user()->id)
+								 ->where('status', '=', 1)
+								 ->orderBy('updated_at', 'DESC')
+								 ->get();	
 			}
 			$client = array();
 			foreach( $clients as $key => $value) {
@@ -775,9 +780,6 @@ class SaleController extends HelperController {
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
 			$q->whereBetween('created_at', [$fromDateTime, $toDateTime]);
 		}
-
-
-	    
 		if($id == 0) {
 			if ($user_role == 2) { // sales- show submittles of job created by him
 				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user){
@@ -799,22 +801,30 @@ class SaleController extends HelperController {
 			}
 		} else {
 			if ($user_role == 2) { // sales- show submittles of job created by him
-				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user){
-    				$q->where('created_by',  '=', $login_user->id);
-				})->where('job_post_id', '=', $id)->paginate(100);
+				$candidateApplications = $q->whereHas('requirement', function($q) use ($login_user) {
+											$q->where('created_by',  '=', $login_user->id);
+										 })->where('job_post_id', '=', $id)
+										   ->paginate(100);
 			} else if ($user_role == 3) { // sales manager - show either created by him or his team
 				array_push($team, $login_user->id);
-				$candidateApplications = $q->whereHas('requirement', function($q) use($login_user, $team){
-    				$q->whereIn('created_by',  $team);
-				})->where('job_post_id', '=', $id)->paginate(100);
+				$candidateApplications = $q->whereHas('requirement', function($q) use ($login_user, $team) {
+    											$q->whereIn('created_by',  $team);
+											})->where('job_post_id', '=', $id)
+											->paginate(100);
 			} else if ($user_role == 4) { // recruter- show submitted by him only
 				$addedByList = array();
-				$candidateApplications = $q->where('submitted_by',  '=', $login_user->id)->where('job_post_id', '=', $id)->paginate(100);
+				$candidateApplications = $q->where('submitted_by',  '=', $login_user->id)
+										   ->where('job_post_id', '=', $id)
+										   ->paginate(100);
 			} else if ($user_role == 5) { // recruter manager
 				array_push($team, $login_user->id);
-				$candidateApplications = $q->whereIn('submitted_by', $team)->where('job_post_id', '=', $id)->paginate(100);
+				$candidateApplications = $q->whereIn('submitted_by', $team)
+										   ->where('job_post_id', '=', $id)
+										   ->paginate(100);
 			} else {
-				$candidateApplications = $q->with(array('candidate', 'requirement'))->where('job_post_id', '=', $id)->paginate(100);
+				$candidateApplications = $q->with(array('candidate', 'requirement'))
+										   ->where('job_post_id', '=', $id)
+										   ->paginate(100);
 			}
 		}
 		#DB::enableQueryLog();
@@ -1374,29 +1384,34 @@ class SaleController extends HelperController {
 			       			Config::set('mail.host', "192.168.123.2");
 
 
-			       			Log::info("Mail Sent for Submittels.");
-							//Log::info("Client Email: ".$client->email);
-							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension, &$lead) {
-							//$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
-							$message->to(trim($authUser->email), $authUser->first_name.' '.$authUser->last_name)
-									->cc($lead->email, $lead->first_name.' '.$lead->last_name)
-							    	->subject($mail_subject)
-							    	->setBody($body_content, 'text/html')
-							    	->attach(
-										\Swift_Attachment::fromPath(public_path("/uploads/resumes/".$candidate->id."/".$resume->resume_path), $mime)
-									->setFilename("resume.".$fileExtension));
-							});	
+							if(Config::get('app.env') === 'prod') {
+								Log::info("Mail Sent for Submittels.");
+								//Log::info("Client Email: ".$client->email);
+								Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$candidate, &$client, &$resume, &$mime, &$fileExtension, &$lead) {
+								//$message->to(trim($client->email), $client->first_name.' '.$client->last_name)
+								$message->to(trim($authUser->email), $authUser->first_name.' '.$authUser->last_name)
+										->cc($lead->email, $lead->first_name.' '.$lead->last_name)
+										->subject($mail_subject)
+										->setBody($body_content, 'text/html')
+										->attach(
+											\Swift_Attachment::fromPath(public_path("/uploads/resumes/".$candidate->id."/".$resume->resume_path), $mime)
+										->setFilename("resume.".$fileExtension));
+								});
+							}	
 						} else {
 							//$thirdPartyBccList = array();
 							Config::set('mail.username', $authUser->email);
 							Config::set('mail.from.address', $authUser->email);
 							Config::set('mail.from.name', $authUser->first_name .' '.$authUser->last_name );
 			       			Config::set('mail.password', $authUser->email_password);
-							Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$client, &$authUser) {
-							$message->to(trim($authUser->email), $authUser->first_name.' '.$authUser->last_name)
-							    	->subject($mail_subject)
-							    	->setBody($body_content, 'text/html');
-							});
+
+							if(Config::get('app.env') === 'prod') {
+								Mail::send([], [], function($message) use( &$authUser, &$body_content, &$mail_subject, &$client, &$authUser) {
+								$message->to(trim($authUser->email), $authUser->first_name.' '.$authUser->last_name)
+										->subject($mail_subject)
+										->setBody($body_content, 'text/html');
+								});
+							}
 						}
 						
 					} else {

@@ -318,18 +318,20 @@ class HelperController extends BaseController {
      */
     public function sendMail($data, $template, $user, $subject) {
 
-    	// use Mail::send function to send email passing the data and using the $user variable in the closure
-    	try {
+        if(Config::get('app.env') === 'prod') {
+            // use Mail::send function to send email passing the data and using the $user variable in the closure
+            try {
 
-    		Mail::send($template, $data, function($message) use ($user) {
+                Mail::send($template, $data, function($message) use ($user) {
 
-    			$message->to($user->email, $user->username)->subject($subject);
-    		});
-    	}
-    	catch(\Exception $e) {
+                    $message->to($user->email, $user->username)->subject($subject);
+                });
+            }
+            catch(\Exception $e) {
 
-    		Log::info('Mail error! '.$subject. $e->getCode());
-    	}
+                Log::info('Mail error! '.$subject. $e->getCode());
+            }
+        }
     }
 
 
@@ -366,13 +368,15 @@ class HelperController extends BaseController {
         Config::set('mail.from.address', "crm@apetan.com");
         Config::set('mail.from.name', "crm" );
         Config::set('mail.host', "192.168.123.2");
-        Mail::send([], [], function($message) use(&$body_content, &$user, &$subject)
-        {
-            $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
-                    //->bcc(array('nakul.suneja@live.com'))
-                    ->subject($subject)
-                    ->setBody($body_content, 'text/html');
-        });
+        if(Config::get('app.env') === 'prod') {
+            Mail::send([], [], function($message) use(&$body_content, &$user, &$subject)
+            {
+                $message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+                        //->bcc(array('nakul.suneja@live.com'))
+                        ->subject($subject)
+                        ->setBody($body_content, 'text/html');
+            });
+        }
     }
 
     public function saveNotification($description=None, $user_ids=array(), $action_url=None, $bussiness_head=False, $subject='Notification Mail') {

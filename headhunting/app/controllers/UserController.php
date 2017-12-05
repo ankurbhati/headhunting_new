@@ -181,29 +181,49 @@ class UserController extends HelperController {
 		$users = array();
 		$currentUserRole = Auth::user()->getRole();
 		if($currentUserRole === 1 || $currentUserRole === 8) {
-			$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
-				    $q->where('role_id', '<', 6)
-				      ->where('user_id', '!=', Auth::user()->id);
-			})->paginate(100);
+			if($id > 0) {
+				// $ids = User::select(array('id'))
+				// 		   ->where('status', '=', 1)
+				// 		   ->whereHas('userRoles', function($q){
+				// 				$q->whereIn('role_id', array(5, 2));
+				// 			})
+				// 			->get();
+				// $queries = DB::getQueryLog();
+				// $last_query = end($queries);
+				// Log::info("Last Query ".json_encode($last_query));
+
+				// Log::info('User Ids ::::: '.json_encode($ids));
+				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))
+								->whereHas('userRoles', function($q){
+									$q->whereIn('role_id', array(5, 2));
+								})
+								->where('status', '=', 1)->paginate(100);
+			} else {
+				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))
+								->whereHas('userRoles', function($q){
+									$q->where('role_id', '<', 6)
+									  ->where('user_id', '!=', Auth::user()->id);
+								})->where('status', '=', 1)->paginate(100);
+			}
+
 		} else if($id == 0) {
 			$users = UserPeer::with(array('user', 'peer.userRoles'))->where("peer_id", "=", Auth::user()->id)->paginate(100);
 		}
 		if($id > 0) {
 			$jobPost = JobPost::find($id);
+			Log::info("Cruent Job Role :::: ".$currentUserRole);
 			if($currentUserRole == 2 || $currentUserRole == 3) {
+
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '=', 5);
-				})->paginate(100);
+				})->where('status', '=', 1)->paginate(100);
 			} else if($currentUserRole == 5) {
+
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('id', '!=', Auth::user()->id)->whereHas('userRoles', function($q){
 				    $q->where('role_id', '=', 4);
 				})->whereHas('userHasPeer', function($q){
 				    $q->where('peer_id', '=', Auth::user()->id);
-				})->paginate(100);
-
-				$queries = DB::getQueryLog();
-		        $last_query = end($queries);
-		        Log::info("Last Query ".json_encode($last_query));
+				})->where('status', '=', 1)->paginate(100);
 			}
 		}
 
@@ -599,7 +619,7 @@ class UserController extends HelperController {
 	 *
 	 */
 	public function home() {
-		// $jobPosts = JobPost::where('status', '=', '2')->where('created_at', 'like', date('Y-m-d')."%")->get();
+
 		return View::make('User.home')->with(array('title' => 'Dashboard'));
 	}
 
@@ -1037,26 +1057,30 @@ class UserController extends HelperController {
 						if(!filter_var($user->email, FILTER_VALIDATE_EMAIL) === false) {
 							array_push($emails, $user->email);
 							if($model != 'Thirdparty') {
-								Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
-								{
+								if(Config::get('app.env') === 'prod') {
+									Mail::send([], [], function($message) use(&$mass_mail, &$user, &$body_content)
+									{
 
 
 
-									$message->to(trim($user->email), $user->first_name . " " . $user->last_name)
-									    	->subject($mass_mail->subject)
-										    ->setBody($body_content, 'text/html');
-								});
+										$message->to(trim($user->email), $user->first_name . " " . $user->last_name)
+												->subject($mass_mail->subject)
+												->setBody($body_content, 'text/html');
+									});
+								}
 							}
 						}
                 	}
 					if($model == 'Thirdparty' && count($emails) > 0) {
-						Mail::send([], [], function($message) use(&$mass_mail, &$authUser, &$body_content, &$emails)
-						{
-						    $message->to(trim($authUser->email), $authUser->first_name . " " . $authUser->last_name)
-								    ->bcc($emails)
-								    ->subject($mass_mail->subject)
-								    ->setBody($body_content, 'text/html');
-						});
+						if(Config::get('app.env') === 'prod') {
+							Mail::send([], [], function($message) use(&$mass_mail, &$authUser, &$body_content, &$emails)
+							{
+								$message->to(trim($authUser->email), $authUser->first_name . " " . $authUser->last_name)
+										->bcc($emails)
+										->subject($mass_mail->subject)
+										->setBody($body_content, 'text/html');
+							});
+						}
 					}
 					$mass_mail->status = 3;
 					$mass_mail->save();
@@ -1529,26 +1553,7 @@ class UserController extends HelperController {
 	}
 
 	public function selfTest(){
-		print 'In self test';
-		$user = Auth::user();
-		Mail::send([], [], function($message) use( &$user) {
-			$message->to(trim('ankurbhati03@gmail.com'), 'Ankur Bhati')
-			    	->subject('TEST')
-			    	->setBody('Hi ankur', 'text/html')
-			    	->attach(
-						\Swift_Attachment::fromPath(public_path("/uploads/reports/5/58dc1ab009cfb.pdf"), 'application/pdf')
-					->setFilename("myfilename.pdf"));
-		});
-		print 'In first mail';
-		/*Mail::send([], [], function($message) use( &$user) {
-			$message->to(trim('ankurbhati03@gmail.com'), 'Ankur Bhati')
-			    	->subject('TEST')
-			    	->attach(
-						\Swift_Attachment::fromPath(public_path("/uploads/reports/5/58dc1ab009cfb.pdf"), 'application/pdf')->setFilename("myfilename.pdf")
-					)
-				    ->setBody('Hi ankur', 'text/html');
-		});*/
-		print 'After mail';
+		// testing not required
 	}
 
 

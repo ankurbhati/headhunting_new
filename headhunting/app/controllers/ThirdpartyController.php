@@ -307,9 +307,9 @@ class ThirdpartyController extends HelperController {
 			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
 				{
 				    $q->where('user_id','=', Auth::user()->id);
-				})->paginate(100);
+				})->orderBy('updated_at', 'DESC')->paginate(100);
 		} else {
-			$thirdparties = $q->paginate(100);
+			$thirdparties = $q->orderBy('updated_at', 'DESC')->paginate(100);
 		}
 
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));
@@ -590,7 +590,7 @@ class ThirdpartyController extends HelperController {
 
 	/**
 	 *
-	 * deleteVendor() : Delete Vendor
+	 * unblockThirdparty() : Unblock Third party for Business 
 	 *
 	 * @return Object : View
 	 *
@@ -607,7 +607,7 @@ class ThirdpartyController extends HelperController {
 
 	/**
 	 *
-	 * deleteVendor() : Delete Vendor
+	 * blockThirdparty() : blockThirdparty
 	 *
 	 * @return Object : View
 	 *
@@ -623,6 +623,13 @@ class ThirdpartyController extends HelperController {
 	}
 	
 	
+	/**
+	 *
+	 * check_resume_validity() : check_resume_validity
+	 *
+	 * @return Object : View
+	 *
+	 */
 	private function check_resume_validity($doc_param) {
 		$msg = false;
 		$fileType = pathinfo($_FILES[$doc_param]["name"],PATHINFO_EXTENSION);
@@ -640,6 +647,8 @@ class ThirdpartyController extends HelperController {
 		return array($msg, $fileType);
 	}
 
+
+	
 	private function upload_document($thirdparty, $doc_param) {
 		$msg = false;
 		$fileType = pathinfo($_FILES[$doc_param]["name"],PATHINFO_EXTENSION);

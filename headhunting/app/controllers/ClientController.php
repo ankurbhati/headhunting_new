@@ -173,6 +173,11 @@ class ClientController extends HelperController {
 		if(!empty(Input::get('email'))) {
 			$q->where('email', 'like', "%".Input::get('email')."%");
 		} 
+
+		if(!empty(Input::get('status'))) {
+			$q->where('status', '=', Input::get('status'));
+		}
+
 		if(!empty(Input::get('first_name'))){
 			$q->where('first_name', 'like', "%".Input::get('first_name')."%");	
 		}
@@ -182,9 +187,11 @@ class ClientController extends HelperController {
 		if(!empty(Input::get('phone'))) {
 			$q->where('phone', 'like', "%".Input::get('phone')."%");	
 		}
+
 		if(!empty(Input::get('phone_ext'))) {
 			$q->where('phone_ext', 'like', "%".Input::get('phone_ext')."%");	
 		}
+
 		if(!empty(Input::get('from_date')) && !empty(Input::get('to_date'))) {
 			$fromDateTime = datetime::createfromformat('m/d/Y',Input::get('from_date'))->format('Y-m-d 00:00:00');
 			$toDateTime = datetime::createfromformat('m/d/Y', Input::get('to_date'))->format('Y-m-d 23:59:59');
@@ -212,7 +219,7 @@ class ClientController extends HelperController {
 	        return $this->convertToCSV($data, $options);
 		}
 		
-		$clients = $q->paginate(100);
+		$clients = $q->orderBy('updated_at', 'DESC')->paginate(100);
 
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}
@@ -533,7 +540,7 @@ class ClientController extends HelperController {
 		if($validate->fails()) {
 			if($validate->errors()->first('email') == "The email has already been taken.") {
 				$client = Client::where('email', 'like', Input::get('email'))->first();
-				if($client->created_at < date("Y-m-d H:i:s",strtotime("-16 day"))) {
+				if($client->updated_at < date("Y-m-d H:i:s",strtotime("-16 day"))) {
 					$jobPosts = JobPost::where('client_id', '=', $client->id);
 					if($jobPosts->exists()) {
 						if(!$jobPosts->where('created_at', '>', date("Y-m-d H:i:s",strtotime("-46 day")))->exists()) {
@@ -550,5 +557,47 @@ class ClientController extends HelperController {
 			$response['message'] = 'success';
 		}
 		return $this->sendJsonResponseOnly($response);
+	}
+
+	/**
+	 *
+	 * unblockClient() : Unblock Third party for Business 
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function unblockClient($id) {
+		$client = Client::find($id);
+		if(!$client) {
+			Session::flash('flashmessagetxt', 'Client not found!!');
+			return Redirect::route('client-list'); 
+		}
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8) || Auth::user()->id == $client->created_by) {
+			$client->status = 1;
+			$client->save();
+			Session::flash('flashmessagetxt', 'Activated Successfully!!');
+			return Redirect::route('client-list');
+		}
+	}
+
+	/**
+	 *
+	 * blockClient() : Block Client
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function blockClient($id) {
+		$client = Client::find($id);
+		if(!$client) {
+			Session::flash('flashmessagetxt', 'Client not found!!');
+			return Redirect::route('client-list'); 
+		}
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8) || Auth::user()->id == $client->created_by) {
+			$client->status = 2;
+			$client->save();
+			Session::flash('flashmessagetxt', 'Blocked Successfully!!');
+			return Redirect::route('client-list');
+		}
 	}
 }
