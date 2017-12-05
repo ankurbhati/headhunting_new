@@ -142,9 +142,9 @@
                   @endif
                 </ul>
               </li>
-              <li class="dropdown">
-                <a href="#">My Submittels</a>
                   @if(Auth::user()->getRole() <= 5)
+                  <li class="dropdown">
+                    <a href="#">My Submittels</a>
                           <ul class="dropdown-menu">
                             <li  class="dropdown">
                               <a href="{{ URL::route('list-submittel') }}">
@@ -167,8 +167,8 @@
                               </a>
                             </li>
                           </ul>
+                      </li>
                    @endif
-              </li>
               @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(4) || Auth::user()->hasRole(5) || Auth::user()->hasRole(8))
                 <li class="dropdown">
                   <a href="#">Third Party</a>

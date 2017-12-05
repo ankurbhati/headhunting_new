@@ -36,10 +36,27 @@
                 </div>
             <div class="form-group">
                 <div class="col-sm-4">
-                    {{ Form::label('company_name', 'Company: ', array('class' => '
+
+                <div class="row">
+                        <div class="col-xs-8">
+                          {{ Form::label('company_name', 'Company: ', array('class' => '
                     control-label')); }}
-                    {{ Form::text('company_name', "", array('class' => 'form-control')) }} 
-                        <span class='errorlogin email-login'>{{$errors->first('company_name');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                        <div class="col-xs-4">
+                          {{ Form::label('status', 'Status: ', array('class' => '
+                    control-label')); }}
+                        </div>
+                      </div>
+                      <div class="row">
+                    <div class="col-sm-8">{{ Form::text('company_name', "", array('class' => 'form-control')) }} 
+                            <span class='errorlogin email-login'>{{$errors->first('company_name');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    <div class="col-sm-4">{{ Form::select('status', array(0=>"Select Status", 1=>"Approved", 2=> "Blocked"), 0 , array('class' => 'form-control')) }} 
+                        <span class='errorlogin email-login'>{{$errors->first('status');}}@if(!empty($message)){{$message}}@endIf</span>
+                    </div>
+                    </div>
+                    
+                     
                 </div>
 
                 <div class="col-sm-4">
@@ -61,7 +78,7 @@
 
                     <div class="col-sm-4">
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-9">
                             {{ Form::label('from_date', 'Added At:', array('class' => '
                         control-label')); }}
                             </div>
@@ -117,9 +134,15 @@
 		                        <td>
 		                        	<a class="btn btn-primary btn-white" href="{{ URL::route('view-client', array('id' => $client->id)) }}" title="View">View</a>
                               @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
-		                        	  <a class="btn btn-primary btn-white" href="{{ URL::route('edit-client', array($client->id)) }}" title="Edit">Edit</a>
+		                        	    <a class="btn btn-primary btn-white" href="{{ URL::route('edit-client', array($client->id)) }}" title="Edit">Edit</a>
 		                        		<a class="btn btn-secondary btn-white" href="{{ URL::route('delete-client', array($client->id)) }}" title="Delete">Delete</a>
                                         <a class="btn btn-primary btn-white" href="{{ URL::route('transfer-client', array($client->id)) }}" title="Transfer">Transfer</a>
+                                        @if($client->status == 1)
+                                            <a class="btn btn-primary btn-white btn-red " href="{{ URL::route('block-client', array($client->id)) }}" title="Block">Block</a>
+                                        @endif
+                                        @if($client->status == 2)
+                                            <a class="btn btn-secondary btn-white" href="{{ URL::route('unblock-client', array($client->id)) }}" title="UnBlock">UnBlock</a>
+                                        @endif
 		                        	@endif
 		                        </td>
 		                      </tr>
