@@ -256,14 +256,15 @@ if($('#msa-group').length > 0) {
 	    });
   }
 
- 	$('#datepicker').datepicker();
- 	$('.from_date').datepicker();
-
+ 	$('#datepicker').datepicker("setDate", new Date());
+ 	$('.from_date').datepicker("setDate", new Date());
+	$('.from-date-without-default').datepicker();
+	$('.to-date-without-default').datepicker();
  	$('.interview_date').datepicker({ 
 	    defaultDate: new Date(),
         minDate: new Date()
 	});
- 	$('.to_date').datepicker();
+ 	$('.to_date').datepicker("setDate", new Date());
   
 	// Create two variable with the names of the months and days in an array
 	var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 

@@ -58,10 +58,25 @@
                         <th>Name<br>Email<br>Designation</th>
                         <th>Resume</th>
                         <th>Added At</th>
-                        <th>Action</th>
+                        <th>Action </th>
                     </tfoot>
                   </table>
+                  <div style="color:red; display:none;" id="errormsg">Please select candidate</div>
+          <div class="form-group row" style="display:block;">
+              <div class="col-sm-12">
+                <form name="candidate_mass_mail" method="post" action="/mass-mail">
+                  <input type="hidden" name="candidate_list" value="" />
+                  <input type="submit" value="Send Mass Mail" id="login-button" class="btn btn-primary btn-white pull-right">
+                </form>
+              </div>
+         </div>
 
+                  @if (count($candidate_resumes) > 0)
+                    <div>
+                       
+                      {{ $candidate_resumes->appends(Input::except('page'))->links() }}
+                    </div>
+                  @endif
                   <div id="myModal" class="modal container">
 
                     <div class="modal-content box">
@@ -83,25 +98,9 @@
                       </div>
                     </div>
                   </div>
-                  @if (count($candidate_resumes) > 0)
-                    <div>
-                       
-                      {{ $candidate_resumes->links() }}
-                    </div>
-                  @endif
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
             </div><!-- /.col -->
           </div><!-- /.row -->
-          <div style="color:red; display:none;" id="errormsg">Please select candidate</div>
-          <div class="form-group row" style="display:block;">
-              <div class="col-sm-12">
-                <form name="candidate_mass_mail" method="post" action="/mass-mail">
-                  <input type="hidden" name="candidate_list" value="" />
-                  <input type="submit" value="Send Mass Mail" id="login-button" class="btn
-                  btn-info pull-right">
-                </form>
-              </div>
-         </div>
         </section><!-- /.content -->
 @stop

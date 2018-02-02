@@ -70,6 +70,17 @@ class JobPost extends Eloquent {
 
     	return $this->hasMany('CandidateApplication','job_post_id','id')->count();
     }
+    
+    /**
+     *
+     * jobsAssigned : Relation between jobs Assigned.
+     *
+     * @return Object hasMany Relation jobs Assigned.
+     */
+    public function candidateApplication() {
+
+    	return $this->hasMany('CandidateApplication','job_post_id','id');
+    }
 
     /**
      *
@@ -142,11 +153,23 @@ class JobPost extends Eloquent {
 
         $jobsAssigned = $this->jobsAssigned;
         $names = "";
+        $ids = array();
+        $jobSubmittels = $this->candidateApplication;
+        foreach($jobSubmittels as $key => $submittel) {
+            array_push($ids, $submittel->submitted_by);
+        }
+
         foreach($jobsAssigned as $key => $value) {
             if($key > 0) {
                 $names = $names.", ".$value->assignedTo->first_name. " ".$value->assignedTo->last_name;
+                if(Auth::user()->hasRole(1)) {
+                    $names = $names."<a href=''><img style='width:16px; margin:0 3px;' src='/dist/img/x-button.png' title='Remove Assignment'></a>".json_encode($ids);
+                }
             } else {
                 $names = $value->assignedTo->first_name. " ".$value->assignedTo->last_name;
+                if(Auth::user()->hasRole(1)  && !in_array($value->assignedTo->id, $ids) ) {
+                    $names = $names."<a href=''><img style='width:16px; margin:0 3px;' src='/dist/img/x-button.png' title='Remove Assignment'></a>";
+                }
             }
         }
         return $names;
