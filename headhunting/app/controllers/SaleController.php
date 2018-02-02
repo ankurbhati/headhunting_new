@@ -38,12 +38,12 @@ class SaleController extends HelperController {
 			}
 			if(Auth::user()->hasRole(1)){
 				$clients = Client::where('status', '=', 1)
-								 ->orderBy('updated_at', 'DESC')
+								 ->orderBy('created_at', 'DESC')
 								 ->get();
 			} else {
 				$clients = Client::where('created_by', '=', Auth::user()->id)
 								 ->where('status', '=', 1)
-								 ->orderBy('updated_at', 'DESC')
+								 ->orderBy('created_at', 'DESC')
 								 ->get();	
 			}
 			$client = array();
@@ -357,12 +357,12 @@ class SaleController extends HelperController {
 		}
 		if($id == 0) {
 			$q->with(array('country', 'state', 'client', 'user'))
-			  ->orderBy('updated_at', 'DESC');
+			  ->orderBy('created_at', 'DESC');
 		} else {
 			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->orderBy('updated_at', 'DESC');
+			})->orderBy('created_at', 'DESC');
 		}
 
 		Log::info(Auth::user()->hasRole(3));
@@ -446,7 +446,7 @@ class SaleController extends HelperController {
 			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','>',0);
-			}, '=', 0)->orderBy('updated_at', 'desc');
+			}, '=', 0)->orderBy('created_at', 'desc');
 		} else {
 			$q->where('status', '=', $status);
 		}
@@ -459,12 +459,12 @@ class SaleController extends HelperController {
 		}
 
 		if($id == 0) {
-			$q->with(array('country', 'state', 'client', 'user'))->orderBy('updated_at', 'desc');
+			$q->with(array('country', 'state', 'client', 'user'))->orderBy('created_at', 'desc');
 		} else {
 			$q->with(array('country', 'state', 'client', 'user'))->whereHas('jobsAssigned', function($q) use ($id)
 			{
 			    $q->where('assigned_to_id','=', $id);
-			})->orderBy('updated_at', 'desc');
+			})->orderBy('created_at', 'desc');
 		}
 		
 
@@ -743,7 +743,7 @@ class SaleController extends HelperController {
 			return Redirect::to('dashboard');
 		}
 
-		$q = CandidateApplication::query()->orderBy('updated_at', 'DESC');
+		$q = CandidateApplication::query()->orderBy('created_at', 'DESC');
 
 		$y = CandidateApplication::query();
 		$z = JobPost::query();

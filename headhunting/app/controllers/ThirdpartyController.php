@@ -307,9 +307,9 @@ class ThirdpartyController extends HelperController {
 			$thirdparties = $q->whereHas('thirdPartyUsers', function($q)
 				{
 				    $q->where('user_id','=', Auth::user()->id);
-				})->orderBy('updated_at', 'DESC')->paginate(100);
+				})->orderBy('created_at', 'DESC')->paginate(100);
 		} else {
-			$thirdparties = $q->orderBy('updated_at', 'DESC')->paginate(100);
+			$thirdparties = $q->orderBy('created_at', 'DESC')->paginate(100);
 		}
 
 		return View::make('Thirdparty.thirdpartyList')->with(array('title' => 'Third Party List', 'thirdparties' => $thirdparties));

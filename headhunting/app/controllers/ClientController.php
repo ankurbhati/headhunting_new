@@ -219,7 +219,7 @@ class ClientController extends HelperController {
 	        return $this->convertToCSV($data, $options);
 		}
 		
-		$clients = $q->orderBy('updated_at', 'DESC')->paginate(100);
+		$clients = $q->orderBy('created_at', 'DESC')->paginate(100);
 
 		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
 	}

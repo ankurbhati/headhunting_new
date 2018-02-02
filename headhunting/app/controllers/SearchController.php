@@ -162,7 +162,7 @@ class SearchController extends HelperController {
 
 			        return $this->convertToCSV($data, $options);
 				}
-
+				$q->orderBy('created_at', 'DESC');
 		    	$candidate_resumes = $q->paginate(100);	
 
 		    	/*
