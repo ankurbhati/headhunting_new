@@ -162,6 +162,15 @@ class ClientController extends HelperController {
 	 *
 	 */
 	public function clientList() {
+
+		$usersAddedBy = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('status', '=', 1)->whereHas('userRoles', function($q){
+				    $q->where('role_id', '<=', 3);
+				})->get();
+		$users = array('-1'=> 'Please select');
+		foreach( $usersAddedBy as $key => $value) {
+			$users[$value->id] = $value->first_name." ".$value->last_name." (".$value->email.")";
+		}
+
 		$q = Client::query();
 		if(!(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))) {
 			$q->where('created_by', '=', Auth::user()->id);
@@ -173,6 +182,11 @@ class ClientController extends HelperController {
 		if(!empty(Input::get('email'))) {
 			$q->where('email', 'like', "%".Input::get('email')."%");
 		} 
+
+
+		if(!empty(Input::get('created_by')) && Input::get('created_by') != '-1') {
+			$q->where('created_by', '=', Input::get('created_by'));
+		}
 
 		if(!empty(Input::get('status'))) {
 			$q->where('status', '=', Input::get('status'));
@@ -221,7 +235,7 @@ class ClientController extends HelperController {
 		
 		$clients = $q->orderBy('created_at', 'DESC')->paginate(100);
 
-		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients));
+		return View::make('Client.clientList')->with(array('title' => 'Clients List', 'clients' => $clients, 'users' => $users));
 	}
 
 

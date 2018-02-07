@@ -84,10 +84,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from_date form-control')) }} 
+                            <div class="col-sm-6">{{ Form::text('from_date', "", array('class' => 'form-control','placeholder' => 'Enter From Date', 'class'=>'from-date-without-default form-control')) }} 
                                 <span class='errorlogin email-login'>{{$errors->first('from_date');}}@if(!empty($message)){{$message}}@endIf</span>
                             </div>
-                            <div class="col-sm-6">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to_date form-control')) }} 
+                            <div class="col-sm-6">{{ Form::text('to_date', "", array('class' => 'form-control','placeholder' => 'Enter To Date', 'class'=>'to-date-without-default form-control')) }} 
                                 <span class='errorlogin email-login'>{{$errors->first('to_date');}}@if(!empty($message)){{$message}}@endIf</span>
                             </div>
 
@@ -95,13 +95,23 @@
                     </div>
                 </div>
                 <div class="form-group margin-top-10">
+                    @if(Auth::user()->hasRole(1))
+                        <div class="col-xs-3">
+                            {{ Form::label('created_by', 'Added By: ', array('class' => '
+                        control-label')); }}
+                            {{ Form::select('created_by', $users, '', array('class' => 'form-control')) }}
+                                <span class='errorlogin'>{{$errors->first('type_of_employment');}}@if(!empty($message)){{$message}}@endIf</span>
+                        </div>
+                    @endif
                     <input type="hidden" value="" id="csv_download_input" name="csv_download_input">
-                    <div class="col-sm-1">
+                    <div class="col-sm-1 margin-top-20">
                         {{ Form::submit('Search', array('class' => 'btn btn-primary pull-left btn-white', 'id' => 'search-button', 'style'=>"float:right") ); }}
                     </div>
-                    <div class="col-sm-3">
-                        {{ Form::button('Download Csv', array('class' => 'btn btn-secondary btn-white', 'id' => 'download-button', 'style'=>"float:right") ); }}
-                    </div>
+                    @if(Auth::user()->hasRole(1))
+                        <div class="col-sm-3 margin-top-20">
+                            {{ Form::button('Download Csv', array('class' => 'btn btn-secondary btn-white', 'id' => 'download-button', 'style'=>"float:right") ); }}
+                        </div>
+                    @endif
                 </div>
             {{ Form::close()}}
 
