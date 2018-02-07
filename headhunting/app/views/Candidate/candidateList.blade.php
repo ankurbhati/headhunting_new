@@ -110,7 +110,7 @@
                               @if(Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8) || Auth::user()->hasRole(4))
 		                        	  <a href="{{ URL::route('edit-candidate', array($candidate->id)) }}" title="Edit Profile" class="btn btn-primary btn-white">Edit</a>
                               @endif
-		                        	@if(Auth::user()->hasRole(1) || Auth::user()->hasRole(3) || Auth::user()->hasRole(5) || Auth::user()->hasRole(7) || Auth::user()->hasRole(8))
+		                        	@if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
 		                        		<a href="{{ URL::route('delete-candidate', array($candidate->id)) }}" title="Delete Profile" class="btn btn-primary btn-white">Delete</a>
 		                        	@endif
                               @if((Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path)))
