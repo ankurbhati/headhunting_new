@@ -68,7 +68,6 @@
                       <tr>
                         <th>Sent By</th>
                         <th>Subject</th>
-                        <th>Description</th>
                         <th>Created At</th>
                         <th>Mail Group</th>
                         <th>limit-lower/limit-upper</th>
@@ -82,7 +81,6 @@
 		                      <tr>
 		                        <td>{{$mass_mail->sendby->first_name." ".$mass_mail->sendby->last_name}}</td>
 		                        <td>{{$mass_mail->subject}}</td>
-		                        <td>{{(strlen($mass_mail->description)>100)?substr($mass_mail->description, 0, 97)."...":$mass_mail->description}}</td>
                             <td>{{$mass_mail->created_at}}</td>
                             <td>@if($mass_mail->mail_group_id == 1){{"Clients"}}@elseif($mass_mail->mail_group_id == 3){{"Third Party"}}@else {{"Candidates"}}@endif</td>
 		                        <td>{{$mass_mail->limit_lower."/".$mass_mail->limit_upper}}</td>
@@ -103,7 +101,6 @@
                     <tfoot>
                       <th>Sent By</th>
                       <th>Subject</th>
-                      <th>Description</th>
                       <th>Created At</th>
                       <th>Mail Group</th>
                       <th>limit-lower/limit-upper</th>
@@ -112,12 +109,9 @@
                       <th>Action</th>
                     </tfoot>
                   </table>
-                   <div>
-                        <p style="padding:1.9em 1.2em 0px 0px;">Total no of Mass Mails :  <span class="text-bold">{{$mass_mails->getTotal()}}</span></p>
-                  </div>
                   @if (count($mass_mails) > 0)
                     <div>
-                       
+                      <span style="float:left; padding:1.9em 1.2em 0px 0px;font-weight: 700;">Pages</span>
                       {{ $mass_mails->links() }}
                     </div>
                   @endif
