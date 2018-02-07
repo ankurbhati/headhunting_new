@@ -50,7 +50,6 @@ class UserController extends HelperController {
 			$rols[$value->id] = $value->role;
 		}
 
-
 		$country = Country::all();
 		$count = array();
 		foreach( $country as $key => $value) {
@@ -194,10 +193,11 @@ class UserController extends HelperController {
 
 				// Log::info('User Ids ::::: '.json_encode($ids));
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))
-								->whereHas('userRoles', function($q){
-									$q->whereIn('role_id', array(5, 2));
-								})
-								->where('status', '=', 1)->paginate(100);
+									->whereHas('userRoles', function($q){
+										$q->whereIn('role_id', array(5, 2));
+									})
+									->where('status', '=', 1)
+									->orderBy('sort')->paginate(100);
 			} else {
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))
 								->whereHas('userRoles', function($q){
@@ -216,7 +216,8 @@ class UserController extends HelperController {
 
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->whereHas('userRoles', function($q){
 				    $q->where('role_id', '=', 5);
-				})->where('status', '=', 1)->paginate(100);
+				})->where('status', '=', 1)
+				->paginate(100);
 			} else if($currentUserRole == 5) {
 
 				$managerUsers = User::select(array('id', 'first_name', 'last_name', 'email', 'designation'))->where('id', '!=', Auth::user()->id)->whereHas('userRoles', function($q){
@@ -581,9 +582,13 @@ class UserController extends HelperController {
 				if($user->save()) {
 					$userRoles = UserRole::where("user_id", "=", $id)->first();
 					$userRoles->setConnection('master');
+					$sort = Config::get('notification.sort');
+					$user->sort = $sort[$userRoles->role_id];
 					if(Input::has('roles') != '') {
-						$userRoles->role_id = Input::get('roles');	
+						$userRoles->role_id = Input::get('roles');
+						$user->sort = $sort[Input::get('roles')];	
 					}
+					$user->save();
 					$userRoles->user_id = $user->id;
 					if($userRoles->save()) {
 						if(Input::has("mentor_id")) {
@@ -776,7 +781,8 @@ class UserController extends HelperController {
 
 					$user->password = Hash::make($password);
 				}
-
+				$sort = Config::get('notification.sort');
+				$user->sort = $sort[Input::get('roles')];  
 				$user->status = 1;
 
 				// Checking Authorised or not
@@ -1556,5 +1562,9 @@ class UserController extends HelperController {
 		// testing not required
 	}
 
+	function cmp($a, $b)
+	{
+    	return strcmp($a->userRoles[0]->roles->role, $b->userRoles[0]->roles->role);
+	}
 
 }
