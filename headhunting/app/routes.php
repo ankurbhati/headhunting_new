@@ -419,6 +419,15 @@ Route::group(array('before' => 'auth'), function() {
 	));
 
 	/**
+	 * Routes for remove-assignment
+	 */
+	Route::match(array('GET'), '/remove-assign-requirement/{id}', array(
+			'as'    =>    'remove-assign-requirement',
+			'uses'    =>    'SaleController@removeAssignedRequirement'
+	));
+	
+
+	/**
 	 * Routes for post-requirement
 	 */
 	Route::match(array('POST'), '/post-requirement', array(

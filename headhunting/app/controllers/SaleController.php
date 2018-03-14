@@ -56,6 +56,23 @@ class SaleController extends HelperController {
 		}
 	}
 
+
+/**
+	 *
+	 * assignRequirement() : assignRequirement
+	 *
+	 * @return Object : View
+	 *
+	 */
+	public function removeAssignedRequirement($id) {
+
+		if(Auth::user()->hasRole(1)) {	
+			$jobPostAssignment = JobPostAssignment::find($id)->delete();
+			Session::flash('flashmessagetxt', 'Removed Successfully!!');
+		}
+		return Redirect::back();
+	}
+
 	/**
 	 *
 	 * assignRequirement() : assignRequirement
@@ -145,7 +162,7 @@ class SaleController extends HelperController {
 	 *
 	 */
 	public function deleteRequirement($id) {
-		if(Auth::user()->hasRole(1)|| Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) {
+		if(Auth::user()->hasRole(1) || Auth::user()->hasRole(2) || Auth::user()->hasRole(3) || Auth::user()->hasRole(8)) {
 			$jobPost = JobPost::find($id)->delete();
 			Session::flash('flashmessagetxt', 'Deleted Successfully!!'); 
 		}

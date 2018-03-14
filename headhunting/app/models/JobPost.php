@@ -163,12 +163,12 @@ class JobPost extends Eloquent {
             if($key > 0) {
                 $names = $names.", ".$value->assignedTo->first_name. " ".$value->assignedTo->last_name;
                 if(Auth::user()->hasRole(1)) {
-                    $names = $names."<a href=''><img style='width:16px; margin:0 3px;' src='/dist/img/x-button.png' title='Remove Assignment'></a>".json_encode($ids);
+                    $names = $names."<a href='/remove-assign-requirement/$value->id'><img style='width:16px; margin:0 3px;' src='/dist/img/x-button.png' title='Remove Assignment'></a>";
                 }
             } else {
                 $names = $value->assignedTo->first_name. " ".$value->assignedTo->last_name;
-                if(Auth::user()->hasRole(1)  && !in_array($value->assignedTo->id, $ids) ) {
-                    $names = $names."<a href=''><img style='width:16px; margin:0 3px;' src='/dist/img/x-button.png' title='Remove Assignment'></a>";
+                if($value->assignedTo->id && Auth::user()->hasRole(1)  && !in_array($value->assignedTo->id, $ids) ) {
+                    $names = $names."<a href='/remove-assign-requirement/$value->id'><img style='width:16px; margin:0 3px;' src='/dist/img/x-button.png' title='Remove Assignment'></a>";
                 }
             }
         }
