@@ -116,6 +116,8 @@
                               @if((Auth::user()->getRole() <= 3 || Auth::user()->hasRole(8)) && $candidate->resume_path && file_exists(public_path('/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path)))
                               <a href="{{'/uploads/resumes/'.$candidate->id.'/'.$candidate->resume_path}}" title="Download Resume" target="_blank" class="btn btn-secondary btn-white">Download Resume</a>
                               @endif
+                                	<a target="_blank" href="{{ URL::route('candidate-application-list', array('id' => $candidate->id)) }}" title="View Profile" class="btn btn-primary btn-white">View Submission History</a>
+                              
 		                        </td>
 		                      </tr>
         						  @endforeach

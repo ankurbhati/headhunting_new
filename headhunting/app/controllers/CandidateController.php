@@ -193,6 +193,16 @@ class CandidateController extends HelperController {
 
 	}
 
+	public function candidateApplicationList($id) {
+		$candidateApplication = CandidateApplication::with(array('candidate', 'requirement', 'submittedBy'))
+													->where('candidate_id', '=', $id)
+													->orderBy('created_at', 'DESC')
+													->get();
+		$submittle_status = Config::get('app.job_post_submittle_status');
+		
+		return View::make('Candidate.candidateApplicationList')->with(array('title' => 'Candidates Application List', 'candidateApplication' => $candidateApplication, 'submittle_status' => $submittle_status));
+	}
+
 
 	/**
 	 *

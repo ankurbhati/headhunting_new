@@ -91,6 +91,8 @@ Route::group(array('before' => 'auth'), function() {
 			'uses'    =>    'CandidateController@jobSubmittel'
 	));
 
+	
+
 	/**
 	 * Routes for post-requirement
 	 */
@@ -580,6 +582,14 @@ Route::group(array('before' => 'auth'), function() {
 	Route::match(array('GET', 'POST'), '/candidates', array(
 			'as'    =>    'candidate-list',
 			'uses'    =>    'CandidateController@candidateList'
+	));
+
+	/**
+	 * Routes For REST API for new Candidate
+	 */
+	Route::match(array('GET'), '/candidate-application-list/{id}', array(
+			'as'    =>    'candidate-application-list',
+			'uses'    =>    'CandidateController@candidateApplicationList'
 	));
 
 	/**
