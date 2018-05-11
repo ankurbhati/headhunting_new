@@ -14,8 +14,13 @@ $(function () {
 		table = table[0];
 		var rows = table.getElementsByTagName('tr');
 		$(rows[0]).prepend('<th>Sno</th>');
+		var page = 0;
+		if(window.location.href.indexOf('page=') >= 0) {
+			page = parseInt(window.location.href.toString().split(window.location.host)[1].split('page=')[1]) - 1
+		}
 		for (var i = 1, len = rows.length; i < len; i++){
-			$(rows[i]).prepend('<td></td>');
+			var no  = i+(page * 100);
+			$(rows[i]).prepend('<td>' + no +'</td>');
 		}
 	  }
 
@@ -25,6 +30,26 @@ $(function () {
   if($("#client-email").length > 0) {
   	$("#client-email").change(validateClient);
   }
+
+
+  function check()
+  {
+  
+	  var pass1 = document.getElementById('mobile');
+  
+  
+	  var message = document.getElementById('message');
+  
+	 var goodColor = "#0C6";
+	  var badColor = "#FF9B37";
+  
+	  if(mobile.value.length!=10){
+  
+		  mobile.style.backgroundColor = badColor;
+		  message.style.color = badColor;
+		  message.innerHTML = "required 10 digits, match requested format!"
+	  }}
+
 	$.ajax({url: "/notifications", method:'post', success: function(result){
 		var $notificationList = $('.notification-container ul');
 		var notifications = '';

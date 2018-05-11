@@ -100,9 +100,9 @@ class ClientController extends HelperController {
 			$validate=Validator::make (
 					Input::all(), array(
 							'email' =>  'required|max:50|email|unique:clients,email',
-							'first_name' => 'required|max:50',
+							'first_name' => 'required|min:4|max:50',
 							'last_name' => 'required|max:50',
-							'phone' => 'max:14',
+							'phone' => 'required|min:10|max:14',
 							'phone_ext' => 'max:10',
 							'company_name' =>  'max:100'
 					), 
@@ -455,9 +455,9 @@ class ClientController extends HelperController {
 			$validate=Validator::make (
 					Input::all(), array(
 							'email' =>  'required|max:50|email',
-							'first_name' => 'required|max:50',
+							'first_name' => 'required|min:4|max:50',
 							'last_name' => 'required|max:50',
-							'phone' => 'max:14',
+							'phone' => 'required|min:10|max:14',
 							'phone_ext' => 'max:10',
 							'company_name' =>  'max:247',
 					)

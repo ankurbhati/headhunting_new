@@ -966,4 +966,13 @@ Route::group(array('before' => 'auth'), function() {
 			'as'    =>    'self-test',
 			'uses'    =>    'UserController@selfTest'
 	));
+
+	/**
+	 * Routes for list-submittel
+	 */
+	Route::match(array('GET'), 'reports', array(
+		'as'    =>    'list-reports',
+		'uses'    =>    'ReportController@listReports'
+	));
+
 });
