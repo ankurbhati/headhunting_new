@@ -118,7 +118,7 @@
 
                 <div class="box-body">
                   <div>
-                        <p class="result-total"><span class="text-bold">{{$clients->getTotal()}} results:</span></p>
+                    <p class="result-total"><span class="text-bold">{{$clients->getTotal()}} results:</span></p>
                   </div>
                   <table id="employeeList" class="table table-bordered table-striped">
                     <thead>
@@ -145,7 +145,6 @@
 		                        	<a class="btn btn-primary btn-white" href="{{ URL::route('view-client', array('id' => $client->id)) }}" title="View">View</a>
                               @if(Auth::user()->hasRole(1) || Auth::user()->hasRole(8))
 		                        	    <a class="btn btn-primary btn-white" href="{{ URL::route('edit-client', array($client->id)) }}" title="Edit">Edit</a>
-		                        		<a class="btn btn-secondary btn-white" href="{{ URL::route('delete-client', array($client->id)) }}" title="Delete">Delete</a>
                                         <a class="btn btn-primary btn-white" href="{{ URL::route('transfer-client', array($client->id)) }}" title="Transfer">Transfer</a>
                                         @if($client->status == 1)
                                             <a class="btn btn-primary btn-white btn-red " href="{{ URL::route('block-client', array($client->id)) }}" title="Block">Block</a>

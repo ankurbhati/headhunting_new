@@ -70,6 +70,14 @@ Route::group(array('before' => 'auth'), function() {
 	/**
 	 * Routes for post-requirement
 	 */
+	Route::match(array('GET'), '/get-users/{id}', array(
+		'as'    =>    'getUsers',
+		'uses'    =>    'ReportController@getTeamUsers'
+	));
+
+	/**
+	 * Routes for post-requirement
+	 */
 	Route::match(array('POST'), '/get-mentor', array(
 			'as'    =>    'getmentor',
 			'uses'    =>    'UserController@getMentor'
@@ -971,8 +979,9 @@ Route::group(array('before' => 'auth'), function() {
 	 * Routes for list-submittel
 	 */
 	Route::match(array('GET'), 'reports', array(
-		'as'    =>    'list-reports',
-		'uses'    =>    'ReportController@listReports'
+		'as'    =>    'get-reports',
+		'uses'    =>    'ReportController@getReport'
 	));
+	
 
 });

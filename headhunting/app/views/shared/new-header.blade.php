@@ -220,6 +220,11 @@
               <li class="dropdown">
                 <a href="#">Reports</a>
                 <ul class="dropdown-menu">
+                    <li class="dropdown padd-left-15">
+                        <a href="{{ URL::route('get-reports') }}">
+                          <span>Reports</span>
+                        </a>
+                      </li>
                   @if(Auth::user()->hasRole(1))
                       <li class="dropdown padd-left-15">
                         <a href="{{ URL::route('salesteam') }}">

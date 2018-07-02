@@ -476,4 +476,24 @@ class HelperController extends BaseController {
         }
         return $userPeers;
     }
+
+    public function getTeamById($id) {
+
+        $userPeers = array();
+        $users = UserPeer::where("peer_id", "=", $id)->select(array('user_id'))->get();
+        foreach($users as $user) {
+            array_push($userPeers, $user->user_id);
+        }
+        return $userPeers;
+    }
+
+    public function getTeamArrayById($id) {
+
+        $userPeers = array();
+        $users = UserPeer::where("peer_id", "=", $id)->with(array('user'))->get();
+        foreach($users as $user) {
+            $userPeers[$user->user_id] = $user->user->first_name." ".$user->user->last_name."(".$user->user->email.")";
+        }
+        return $userPeers;
+    }
 }
