@@ -14,7 +14,7 @@
                     <div class="col-sm-4">
                         {{ Form::label('email', 'E-Mail: ', array('class' => '
                         control-label')); }}
-                        {{ Form::text('email', "", array('class' =>
+                        {{ Form::text('email', "", array('id'=>'client-email', 'class' =>
                             'form-control', 'placeholder' => 'Enter Clients Email')); }} 
                             <span class='errorlogin email-login'>{{$errors->first('email');}}@if(!empty($message)){{$message}}@endIf</span>
                     </div>
