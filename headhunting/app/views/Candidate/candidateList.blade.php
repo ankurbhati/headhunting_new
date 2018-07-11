@@ -98,8 +98,7 @@
                                 </td>
                                 <td>
                                     {{($candidate->workstate->id == 3)?$candidate->workstate->title:$candidate->workstate->title }}{{($candidate->source_id !=
-                                    "" && $candidate->workstate->id == 3)?"(<a href='".URL::route('
-                                        view-third-party ', array('id ' => $candidate->thirdparty->id))."'>".$candidate->thirdparty->email."</a>)":""}}<br>                                    {{$candidate->visa->title}}
+                                    "" && $candidate->workstate->id == 3)?"(<a href='".URL::route('view-third-party', array('id' => $candidate->thirdparty->id))."'>".$candidate->thirdparty->email."</a>)":""}}<br>                                    {{$candidate->visa->title}}
                                 </td>
                                 <td>{{$candidate->added_by_name}}</td>
                                 <td>
