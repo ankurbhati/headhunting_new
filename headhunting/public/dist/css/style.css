@@ -227,3 +227,10 @@ span.highlight {
     background-color: #5cb85c;
     color: white;
 }
+label.required::before {
+    content: '*';
+    color: red;
+    top: -6px;
+    position: relative;
+    font-size: 10px;
+}

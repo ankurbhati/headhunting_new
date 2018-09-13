@@ -9695,3 +9695,10 @@ tr.job-post .btn.btn-secondary.btn-white {
     color: #fff;
 }
 
+label.required::before {
+    content: '*';
+    color: red;
+    top: -6px;
+    position: relative;
+    font-size: 10px;
+}

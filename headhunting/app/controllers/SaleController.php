@@ -407,7 +407,7 @@ class SaleController extends HelperController {
 			if($job_post_creation_filter !='-1') {
 				$q->where('created_by', '=', $job_post_creation_filter);	
 			}
-			Cookie::queue('job_post_creation_filter', $job_post_creation_filter);
+			// Cookie::queue('job_post_creation_filter', $job_post_creation_filter);
 		} else if(Cookie::get('job_post_creation_filter') && Cookie::get('job_post_creation_filter') != '' && Cookie::get('job_post_creation_filter') != '-1') {
 			$job_post_creation_filter = Cookie::get('job_post_creation_filter');
 			$q->where('created_by', '=', $job_post_creation_filter);

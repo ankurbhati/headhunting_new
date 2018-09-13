@@ -88,6 +88,7 @@ class ReportController extends HelperController
 
         if (Input::has('team_id') && Input::get('team_id') > 0) {
             $team = $this->getTeamById(Input::get('team_id'));
+            array_push($team, Input::get('team_id'));
         }
 
         $request = Input::except(array('page'));

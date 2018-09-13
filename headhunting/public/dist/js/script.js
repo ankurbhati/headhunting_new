@@ -325,7 +325,7 @@ $(function () {
 		}).done(function (subcategories) {
 			// subcategories is json, loop over it and populate the subcategory select
 
-			var subcategoryItems = "";
+			var subcategoryItems = "<option value=''>Please Select</option>";
 			$.each(subcategories, function (i, item) {
 				subcategoryItems += "<option value='" + item.id + "'>" + item.state + "</option>";
 			});
@@ -337,16 +337,20 @@ $(function () {
 				$('select#state_id').val($("#state").val());
 			} else {
 
-				$('select#state_id').val(subcategories[0].id);
+				$('select#state_id').val('');
 			}
 		});
 	}
 
 	$('#datepicker').datepicker("setDate", new Date());
 	var $fromDate = new Date();
+	$fromDate.setTime($fromDate.getTime()+$fromDate.getTimezoneOffset()*60*1000);
+	var offset = -300; //Timezone offset for EST in minutes.
+	var $fromDate = new Date($fromDate.getTime() + offset*60*1000);
 	if ($('.from_date').val() != "") {
 		$fromDate = new Date($('.from_date').val());
 	}
+
 	$('.from_date').datepicker("setDate", $fromDate);
 	$('.from-date-without-default').datepicker();
 	$('.to-date-without-default').datepicker();
@@ -356,6 +360,9 @@ $(function () {
 	});
 
 	var $toDate = new Date();
+	$toDate.setTime($fromDate.getTime()+$toDate.getTimezoneOffset()*60*1000);
+	var offset = -300; //Timezone offset for EST in minutes.
+	var $toDate = new Date($toDate.getTime() + offset*60*1000);
 	if ($('.to_date').val() != "") {
 		$toDate = new Date($('.to_date').val());
 	}
